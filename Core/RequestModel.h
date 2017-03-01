@@ -10,12 +10,12 @@
 
 @property (nonatomic, readonly) NSString *requestId;
 @property (nonatomic, readonly) NSDate *timestamp;
-@property (nonatomic, readonly) NSString *url;
+@property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSString *method;
-@property (nonatomic, readonly) NSString *body;
+@property (nonatomic, readonly) NSData *body;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
 
-typedef void(^BuilderBlock)(RequestModelBuilder* _Nonnull builder);
+typedef void(^BuilderBlock)(RequestModelBuilder * _Nonnull builder);
 
 + (nonnull RequestModel *)makeWithBuilder:(BuilderBlock)builderBlock;
 

@@ -8,9 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		32C6F4BF4DB889C37CF9D860 /* CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */; };
+		32C6F4FB32D0E7B1776A956F /* NSURLRequest+CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */; };
 		32C6F635EAD741F06DEFE114 /* Core.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FAAA04CBA3BEA822B3B4 /* Core.m */; };
 		32C6F6701394A28C71893298 /* Core.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32C6F9CD5D62584032E40BFB /* Core.h */; };
+		32C6FA8DE65CCBFABAD267AD /* NSURLRequest+Core.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FFAD1469B8D85A39377C /* NSURLRequest+Core.m */; };
 		32C6FAA874A06BF5A7FA7381 /* RequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F67BC379469363FE4145 /* RequestModel.m */; };
+		32C6FAF16A4C8B9CB6AC9650 /* RequestModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2AB679CB5977743368C /* RequestModelTests.m */; };
 		32C6FB8001D11647831B67E2 /* RequestModelBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4FA804CBAF47086955F /* RequestModelBuilder.m */; };
 		8AC4115A1E65CEB3000E1791 /* libCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFF089CB395D3BFF5070 /* libCore.a */; };
 		C044766C5F3E992EE224EA0A /* libPods-CoreTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C3FE95E82357BFEBD9D7CC /* libPods-CoreTests.a */; };
@@ -41,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		312B33223F508F1401A7B0F4 /* Pods-CoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CoreTests/Pods-CoreTests.release.xcconfig"; sourceTree = "<group>"; };
+		32C6F2AB679CB5977743368C /* RequestModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestModelTests.m; sourceTree = "<group>"; };
 		32C6F44545C8A42DD19D736F /* CoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32C6F48D37DDCD2611B10534 /* RequestModelBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestModelBuilder.h; sourceTree = "<group>"; };
 		32C6F4FA804CBAF47086955F /* RequestModelBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestModelBuilder.m; sourceTree = "<group>"; };
@@ -48,8 +52,11 @@
 		32C6F987416ED53122F6724F /* RequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestModel.h; sourceTree = "<group>"; };
 		32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreTests.m; sourceTree = "<group>"; };
 		32C6F9CD5D62584032E40BFB /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
+		32C6F9D72FB3C2E0E29DAC84 /* NSURLRequest+Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLRequest+Core.h"; sourceTree = "<group>"; };
 		32C6FAAA04CBA3BEA822B3B4 /* Core.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Core.m; sourceTree = "<group>"; };
+		32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+CoreTests.m"; sourceTree = "<group>"; };
 		32C6FF2D1BDE7D01E33F9A88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
+		32C6FFAD1469B8D85A39377C /* NSURLRequest+Core.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+Core.m"; sourceTree = "<group>"; };
 		32C6FFF089CB395D3BFF5070 /* libCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		43C3FE95E82357BFEBD9D7CC /* libPods-CoreTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoreTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53945C3A47653C0428B7C182 /* Pods-CoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CoreTests/Pods-CoreTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -91,6 +98,8 @@
 			children = (
 				32C6FF2D1BDE7D01E33F9A88 /* Info.plist */,
 				32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */,
+				32C6F2AB679CB5977743368C /* RequestModelTests.m */,
+				32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */,
 			);
 			path = CoreTests;
 			sourceTree = "<group>";
@@ -113,6 +122,8 @@
 				32C6F987416ED53122F6724F /* RequestModel.h */,
 				32C6F4FA804CBAF47086955F /* RequestModelBuilder.m */,
 				32C6F48D37DDCD2611B10534 /* RequestModelBuilder.h */,
+				32C6FFAD1469B8D85A39377C /* NSURLRequest+Core.m */,
+				32C6F9D72FB3C2E0E29DAC84 /* NSURLRequest+Core.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -266,6 +277,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				32C6F4BF4DB889C37CF9D860 /* CoreTests.m in Sources */,
+				32C6FAF16A4C8B9CB6AC9650 /* RequestModelTests.m in Sources */,
+				32C6F4FB32D0E7B1776A956F /* NSURLRequest+CoreTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +289,7 @@
 				32C6F635EAD741F06DEFE114 /* Core.m in Sources */,
 				32C6FAA874A06BF5A7FA7381 /* RequestModel.m in Sources */,
 				32C6FB8001D11647831B67E2 /* RequestModelBuilder.m in Sources */,
+				32C6FA8DE65CCBFABAD267AD /* NSURLRequest+Core.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

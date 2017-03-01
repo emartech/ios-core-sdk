@@ -8,8 +8,10 @@
 @implementation RequestModel
 
 + (nonnull RequestModel *)makeWithBuilder:(BuilderBlock)builderBlock {
+    NSParameterAssert(builderBlock);
     RequestModelBuilder *builder = [RequestModelBuilder new];
-
+    builderBlock(builder);
+    NSParameterAssert(builder.url);
     return [[RequestModel alloc] initWithBuilder:builder];
 }
 
@@ -17,6 +19,10 @@
     if (self = [super init]) {
         _requestId = builder.requestId;
         _timestamp = builder.timestamp;
+        _method = builder.method;
+        _url = builder.url;
+        _body = builder.body;
+        _headers = builder.headers;
     }
     return self;
 }
