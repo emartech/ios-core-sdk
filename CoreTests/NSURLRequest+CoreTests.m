@@ -15,7 +15,7 @@ SPEC_BEGIN(NSURLRequestCoreTests)
 
             NSString *url = @"http://www.google.com";
             NSDictionary *headers = @{@"asdasd" : @"dgereg"};
-            NSData *body = [@"fdahsjk" dataUsingEncoding:kCFStringEncodingUTF8];
+            NSData *body = [@"fdahsjk" dataUsingEncoding:NSUTF8StringEncoding];
 
             RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
                 [builder setUrl:url];

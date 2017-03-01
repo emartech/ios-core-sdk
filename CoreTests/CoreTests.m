@@ -63,7 +63,7 @@ SPEC_BEGIN(CoreTest)
                   errorBlock:nil];
                 fail(@"Assertation doesn't called!");
             } @catch(NSException *exception) {
-                NSLog(@"%@", exception);
+                [[theValue(exception) shouldNot] beNil];
             }
         });
 

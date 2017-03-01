@@ -49,7 +49,7 @@ SPEC_BEGIN(BuilderTest)
 
         it(@"should create a model with specified body when setBody is called on builder", ^{
             NSString *urlString = @"http://www.google.com";
-            NSData *data = [urlString dataUsingEncoding:kCFStringEncodingUTF8];
+            NSData *data = [urlString dataUsingEncoding:NSUTF8StringEncoding];
             RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
                 [builder setBody:data];
                 [builder setUrl:@"http://www.google.com"];
@@ -76,7 +76,7 @@ SPEC_BEGIN(BuilderTest)
                 [RequestModel makeWithBuilder:nil];
                 fail(@"Assertation doesn't called!");
             } @catch(NSException *exception) {
-                NSLog(@"%@", exception);
+                [[theValue(exception) shouldNot] beNil];
             }
         });
 
@@ -87,7 +87,7 @@ SPEC_BEGIN(BuilderTest)
                 }];
                 fail(@"Assertation doesn't called!");
             } @catch(NSException *exception) {
-                NSLog(@"%@", exception);
+                [[theValue(exception) shouldNot] beNil];
             }
         });
 
@@ -97,7 +97,7 @@ SPEC_BEGIN(BuilderTest)
                 }];
                 fail(@"Assertation doesn't called!");
             } @catch(NSException *exception) {
-                NSLog(@"%@", exception);
+                [[theValue(exception) shouldNot] beNil];
             }
         });
 

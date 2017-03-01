@@ -6,15 +6,16 @@
 #import "RequestModel.h"
 #import "NSURLRequest+Core.h"
 
-@interface Core() <NSURLSessionDelegate>
+@interface Core () <NSURLSessionDelegate>
 
-@property (nonatomic, strong) NSURLSession *session;
+@property(nonatomic, strong) NSURLSession *session;
 
 @end
 
 @implementation Core
 
 #pragma mark - Init
+
 - (id)init {
     if (self = [super init]) {
         NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -29,6 +30,7 @@
 }
 
 #pragma mark - Public methods
+
 - (void)submit:(RequestModel *)model
   successBlock:(CoreSuccessBlock)successBlock
     errorBlock:(CoreErrorBlock)errorBlock {
@@ -36,14 +38,14 @@
     NSURLRequest *request = [NSURLRequest requestWithRequestModel:model];
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request
                                                      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (error) {
-            if (errorBlock) {
-                errorBlock(model.requestId, error);
-            }
-        } else if (successBlock) {
-            successBlock(model.requestId);
-        }
-    }];
+                                                         if (error && errorBlock) {
+                                                             errorBlock(model.requestId, error);
+                                                         }
+
+                                                         if (!error && successBlock) {
+                                                             successBlock(model.requestId);
+                                                         }
+                                                     }];
     [dataTask resume];
 }
 
