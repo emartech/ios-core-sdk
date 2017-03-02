@@ -2,9 +2,9 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "RequestModelBuilder.h"
+#import "EMSRequestModelBuilder.h"
 
-@implementation RequestModelBuilder
+@implementation EMSRequestModelBuilder
 
 - (id)init {
     if (self = [super init]) {
@@ -15,7 +15,7 @@
     return self;
 }
 
-- (RequestModelBuilder *)setMethod:(HTTPMethod)method {
+- (EMSRequestModelBuilder *)setMethod:(HTTPMethod)method {
     switch (method) {
         case HTTPMethodPOST:
             _method = @"POST";
@@ -27,7 +27,7 @@
     return self;
 }
 
-- (RequestModelBuilder *)setUrl:(NSString *)url {
+- (EMSRequestModelBuilder *)setUrl:(NSString *)url {
     NSURL *urlToCheck = [NSURL URLWithString:url];
     if (urlToCheck && urlToCheck.scheme && urlToCheck.host) {
         _url = urlToCheck;
@@ -35,12 +35,12 @@
     return self;
 }
 
-- (RequestModelBuilder *)setBody:(NSData *)body {
+- (EMSRequestModelBuilder *)setBody:(NSData *)body {
     _body = body;
     return self;
 }
 
-- (RequestModelBuilder *)setHeaders:(NSDictionary<NSString *, NSString *> *)headers {
+- (EMSRequestModelBuilder *)setHeaders:(NSDictionary<NSString *, NSString *> *)headers {
     _headers = headers;
     return self;
 }

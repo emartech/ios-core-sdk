@@ -2,20 +2,20 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "RequestModel.h"
-#import "RequestModelBuilder.h"
+#import "EMSRequestModel.h"
+#import "EMSRequestModelBuilder.h"
 
-@implementation RequestModel
+@implementation EMSRequestModel
 
-+ (nonnull RequestModel *)makeWithBuilder:(BuilderBlock)builderBlock {
++ (nonnull EMSRequestModel *)makeWithBuilder:(BuilderBlock)builderBlock {
     NSParameterAssert(builderBlock);
-    RequestModelBuilder *builder = [RequestModelBuilder new];
+    EMSRequestModelBuilder *builder = [EMSRequestModelBuilder new];
     builderBlock(builder);
     NSParameterAssert(builder.url);
-    return [[RequestModel alloc] initWithBuilder:builder];
+    return [[EMSRequestModel alloc] initWithBuilder:builder];
 }
 
-- (id)initWithBuilder:(RequestModelBuilder *)builder {
+- (id)initWithBuilder:(EMSRequestModelBuilder *)builder {
     if (self = [super init]) {
         _requestId = builder.requestId;
         _timestamp = builder.timestamp;

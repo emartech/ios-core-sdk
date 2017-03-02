@@ -2,21 +2,21 @@
 //  Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "Core.h"
-#import "RequestModel.h"
-#import "NSURLRequest+Core.h"
+#import "EMSRequestManager.h"
+#import "EMSRequestModel.h"
+#import "NSURLRequest+EMSCore.h"
 
-@interface Core () <NSURLSessionDelegate>
+@interface EMSRequestManager () <NSURLSessionDelegate>
 
 @property(nonatomic, strong) NSURLSession *session;
 
 @end
 
-@implementation Core
+@implementation EMSRequestManager
 
 #pragma mark - Init
 
-- (id)init {
+- (id)init{
     if (self = [super init]) {
         NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
         [sessionConfiguration setTimeoutIntervalForRequest:10.0];
@@ -31,7 +31,12 @@
 
 #pragma mark - Public methods
 
-- (void)submit:(RequestModel *)model
+- (void)setAdditionalHeaders:(NSDictionary<NSString *, NSString *> *)additionalHeaders {
+    [self.session.configuration setHTTPAdditionalHeaders:additionalHeaders];
+}
+
+
+- (void)submit:(EMSRequestModel *)model
   successBlock:(CoreSuccessBlock)successBlock
     errorBlock:(CoreErrorBlock)errorBlock {
     NSParameterAssert(model);

@@ -3,25 +3,25 @@
 //
 
 #import "Kiwi.h"
-#import "Core.h"
-#import "RequestModelBuilder.h"
-#import "RequestModel.h"
+#import "EMSRequestManager.h"
+#import "EMSRequestModelBuilder.h"
+#import "EMSRequestModel.h"
 
 SPEC_BEGIN(CoreTest)
 
-    describe(@"Core", ^{
+    describe(@"EMSRequestManager", ^{
 
-        it(@"should do networking with the gained RequestModel and return success", ^{
+        it(@"should do networking with the gained EMSRequestModel and return success", ^{
             NSString *url = @"http://www.google.com";
 
-            RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:url];
                 [builder setMethod:HTTPMethodGET];
             }];
 
             __block NSString *checkableRequestId;
 
-            Core *core = [Core new];
+            EMSRequestManager *core = [EMSRequestManager new];
             [core submit:model
             successBlock:^(NSString *requestId) {
                 checkableRequestId = requestId;
@@ -30,10 +30,10 @@ SPEC_BEGIN(CoreTest)
             [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];
         });
 
-        it(@"should do networking with the gained RequestModel and return failure", ^{
+        it(@"should do networking with the gained EMSRequestModel and return failure", ^{
             NSString *url = @"http://alma.korte.szilva/egyeb/palinkagyumolcsok";
 
-            RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:url];
                 [builder setMethod:HTTPMethodGET];
             }];
@@ -41,7 +41,7 @@ SPEC_BEGIN(CoreTest)
             __block NSString *checkableRequestId;
             __block NSError *checkableError;
 
-            Core *core = [Core new];
+            EMSRequestManager *core = [EMSRequestManager new];
             [core submit:model
             successBlock:nil
               errorBlock:^(NSString *requestId, NSError *error) {
@@ -54,14 +54,14 @@ SPEC_BEGIN(CoreTest)
         });
 
         it(@"should throw an exception, when model is nil", ^{
-            RequestModel *model;
-            Core *core = [Core new];
+            EMSRequestModel *model;
+            EMSRequestManager *core = [EMSRequestManager new];
 
             @try {
                 [core submit:model
                 successBlock:nil
                   errorBlock:nil];
-                fail(@"Assertation doesn't called!");
+                fail(@"Expected exception when model is nil");
             } @catch(NSException *exception) {
                 [[theValue(exception) shouldNot] beNil];
             }

@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32C6F30986F0DAC6691E5353 /* NSString+CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FA6E0EA9D9AAD4DC672F /* NSString+CoreTests.m */; };
 		32C6F4BF4DB889C37CF9D860 /* CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */; };
 		32C6F4FB32D0E7B1776A956F /* NSURLRequest+CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */; };
-		32C6F635EAD741F06DEFE114 /* Core.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FAAA04CBA3BEA822B3B4 /* Core.m */; };
-		32C6F6701394A28C71893298 /* Core.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32C6F9CD5D62584032E40BFB /* Core.h */; };
-		32C6FA8DE65CCBFABAD267AD /* NSURLRequest+Core.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FFAD1469B8D85A39377C /* NSURLRequest+Core.m */; };
-		32C6FAA874A06BF5A7FA7381 /* RequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F67BC379469363FE4145 /* RequestModel.m */; };
+		32C6F635EAD741F06DEFE114 /* EMSRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FAAA04CBA3BEA822B3B4 /* EMSRequestManager.m */; };
+		32C6F6701394A28C71893298 /* EMSRequestManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32C6F9CD5D62584032E40BFB /* EMSRequestManager.h */; };
+		32C6F7DAB7AD3FC4614830AC /* NSString+EMSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2FFE0807076CE0A7E49 /* NSString+EMSCore.m */; };
+		32C6FA8DE65CCBFABAD267AD /* NSURLRequest+EMSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FFAD1469B8D85A39377C /* NSURLRequest+EMSCore.m */; };
+		32C6FAA874A06BF5A7FA7381 /* EMSRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F67BC379469363FE4145 /* EMSRequestModel.m */; };
 		32C6FAF16A4C8B9CB6AC9650 /* RequestModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2AB679CB5977743368C /* RequestModelTests.m */; };
-		32C6FB8001D11647831B67E2 /* RequestModelBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4FA804CBAF47086955F /* RequestModelBuilder.m */; };
+		32C6FB8001D11647831B67E2 /* EMSRequestModelBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4FA804CBAF47086955F /* EMSRequestModelBuilder.m */; };
 		8AC4115A1E65CEB3000E1791 /* libCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFF089CB395D3BFF5070 /* libCore.a */; };
 		C044766C5F3E992EE224EA0A /* libPods-CoreTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C3FE95E82357BFEBD9D7CC /* libPods-CoreTests.a */; };
 /* End PBXBuildFile section */
@@ -36,7 +38,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				32C6F6701394A28C71893298 /* Core.h in CopyFiles */,
+				32C6F6701394A28C71893298 /* EMSRequestManager.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -45,18 +47,22 @@
 /* Begin PBXFileReference section */
 		312B33223F508F1401A7B0F4 /* Pods-CoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CoreTests/Pods-CoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		32C6F2AB679CB5977743368C /* RequestModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestModelTests.m; sourceTree = "<group>"; };
+		32C6F2FFE0807076CE0A7E49 /* NSString+EMSCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+EMSCore.m"; sourceTree = "<group>"; };
 		32C6F44545C8A42DD19D736F /* CoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		32C6F48D37DDCD2611B10534 /* RequestModelBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestModelBuilder.h; sourceTree = "<group>"; };
-		32C6F4FA804CBAF47086955F /* RequestModelBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestModelBuilder.m; sourceTree = "<group>"; };
-		32C6F67BC379469363FE4145 /* RequestModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestModel.m; sourceTree = "<group>"; };
-		32C6F987416ED53122F6724F /* RequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestModel.h; sourceTree = "<group>"; };
+		32C6F48D37DDCD2611B10534 /* EMSRequestModelBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestModelBuilder.h; sourceTree = "<group>"; };
+		32C6F4C29054CE7757EA056D /* CoreSDK.podspec */ = {isa = PBXFileReference; lastKnownFileType = file.podspec; path = CoreSDK.podspec; sourceTree = "<group>"; };
+		32C6F4FA804CBAF47086955F /* EMSRequestModelBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSRequestModelBuilder.m; sourceTree = "<group>"; };
+		32C6F67BC379469363FE4145 /* EMSRequestModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSRequestModel.m; sourceTree = "<group>"; };
+		32C6F987416ED53122F6724F /* EMSRequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestModel.h; sourceTree = "<group>"; };
 		32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreTests.m; sourceTree = "<group>"; };
-		32C6F9CD5D62584032E40BFB /* Core.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Core.h; sourceTree = "<group>"; };
-		32C6F9D72FB3C2E0E29DAC84 /* NSURLRequest+Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLRequest+Core.h"; sourceTree = "<group>"; };
-		32C6FAAA04CBA3BEA822B3B4 /* Core.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Core.m; sourceTree = "<group>"; };
+		32C6F9CD5D62584032E40BFB /* EMSRequestManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EMSRequestManager.h; sourceTree = "<group>"; };
+		32C6F9D72FB3C2E0E29DAC84 /* NSURLRequest+EMSCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLRequest+EMSCore.h"; sourceTree = "<group>"; };
+		32C6FA6E0EA9D9AAD4DC672F /* NSString+CoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+CoreTests.m"; sourceTree = "<group>"; };
+		32C6FAAA04CBA3BEA822B3B4 /* EMSRequestManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EMSRequestManager.m; sourceTree = "<group>"; };
+		32C6FBE25044FFD98747EDF3 /* NSString+EMSCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+EMSCore.h"; sourceTree = "<group>"; };
 		32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+CoreTests.m"; sourceTree = "<group>"; };
 		32C6FF2D1BDE7D01E33F9A88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
-		32C6FFAD1469B8D85A39377C /* NSURLRequest+Core.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+Core.m"; sourceTree = "<group>"; };
+		32C6FFAD1469B8D85A39377C /* NSURLRequest+EMSCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+EMSCore.m"; sourceTree = "<group>"; };
 		32C6FFF089CB395D3BFF5070 /* libCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		43C3FE95E82357BFEBD9D7CC /* libPods-CoreTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoreTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53945C3A47653C0428B7C182 /* Pods-CoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CoreTests/Pods-CoreTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -90,6 +96,7 @@
 				32C6FB39D4ADEE5B9D0DE0DB /* CoreTests */,
 				AC6E885496B2ABEE7DF4C15A /* Pods */,
 				39F75BFAEFD082CED904F2BB /* Frameworks */,
+				32C6F4C29054CE7757EA056D /* CoreSDK.podspec */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,6 +107,7 @@
 				32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */,
 				32C6F2AB679CB5977743368C /* RequestModelTests.m */,
 				32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */,
+				32C6FA6E0EA9D9AAD4DC672F /* NSString+CoreTests.m */,
 			);
 			path = CoreTests;
 			sourceTree = "<group>";
@@ -116,14 +124,16 @@
 		32C6FF9E5946A30CD82FC305 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				32C6F9CD5D62584032E40BFB /* Core.h */,
-				32C6FAAA04CBA3BEA822B3B4 /* Core.m */,
-				32C6F67BC379469363FE4145 /* RequestModel.m */,
-				32C6F987416ED53122F6724F /* RequestModel.h */,
-				32C6F4FA804CBAF47086955F /* RequestModelBuilder.m */,
-				32C6F48D37DDCD2611B10534 /* RequestModelBuilder.h */,
-				32C6FFAD1469B8D85A39377C /* NSURLRequest+Core.m */,
-				32C6F9D72FB3C2E0E29DAC84 /* NSURLRequest+Core.h */,
+				32C6F9CD5D62584032E40BFB /* EMSRequestManager.h */,
+				32C6FAAA04CBA3BEA822B3B4 /* EMSRequestManager.m */,
+				32C6F67BC379469363FE4145 /* EMSRequestModel.m */,
+				32C6F987416ED53122F6724F /* EMSRequestModel.h */,
+				32C6F4FA804CBAF47086955F /* EMSRequestModelBuilder.m */,
+				32C6F48D37DDCD2611B10534 /* EMSRequestModelBuilder.h */,
+				32C6FFAD1469B8D85A39377C /* NSURLRequest+EMSCore.m */,
+				32C6F9D72FB3C2E0E29DAC84 /* NSURLRequest+EMSCore.h */,
+				32C6F2FFE0807076CE0A7E49 /* NSString+EMSCore.m */,
+				32C6FBE25044FFD98747EDF3 /* NSString+EMSCore.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -192,6 +202,7 @@
 		32C6FD5DCDD3973E54DAF412 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = EMS;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Emarsys;
 			};
@@ -279,6 +290,7 @@
 				32C6F4BF4DB889C37CF9D860 /* CoreTests.m in Sources */,
 				32C6FAF16A4C8B9CB6AC9650 /* RequestModelTests.m in Sources */,
 				32C6F4FB32D0E7B1776A956F /* NSURLRequest+CoreTests.m in Sources */,
+				32C6F30986F0DAC6691E5353 /* NSString+CoreTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,10 +298,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				32C6F635EAD741F06DEFE114 /* Core.m in Sources */,
-				32C6FAA874A06BF5A7FA7381 /* RequestModel.m in Sources */,
-				32C6FB8001D11647831B67E2 /* RequestModelBuilder.m in Sources */,
-				32C6FA8DE65CCBFABAD267AD /* NSURLRequest+Core.m in Sources */,
+				32C6F635EAD741F06DEFE114 /* EMSRequestManager.m in Sources */,
+				32C6FAA874A06BF5A7FA7381 /* EMSRequestModel.m in Sources */,
+				32C6FB8001D11647831B67E2 /* EMSRequestModelBuilder.m in Sources */,
+				32C6FA8DE65CCBFABAD267AD /* NSURLRequest+EMSCore.m in Sources */,
+				32C6F7DAB7AD3FC4614830AC /* NSString+EMSCore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

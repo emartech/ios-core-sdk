@@ -3,15 +3,15 @@
 //
 
 #import "Kiwi.h"
-#import "RequestModel.h"
-#import "RequestModelBuilder.h"
+#import "EMSRequestModel.h"
+#import "EMSRequestModelBuilder.h"
 
 SPEC_BEGIN(BuilderTest)
 
     describe(@"Builder", ^{
 
         it(@"should create a model with requestId and timestamp", ^{
-            RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"http://www.google.com"];
             }];
 
@@ -20,7 +20,7 @@ SPEC_BEGIN(BuilderTest)
         });
 
         it(@"should create a model where default method is POST", ^{
-            RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"http://www.google.com"];
             }];
 
@@ -28,7 +28,7 @@ SPEC_BEGIN(BuilderTest)
         });
 
         it(@"should create a model with specified method when setMethod is called on builder", ^{
-            RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setMethod:HTTPMethodGET];
                 [builder setUrl:@"http://www.google.com"];
             }];
@@ -39,7 +39,7 @@ SPEC_BEGIN(BuilderTest)
         it(@"should create a model with specified url when setUrl is called on builder", ^{
             NSString *urlString = @"http://www.google.com";
             NSURL *url = [NSURL URLWithString:urlString];
-            RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:urlString];
             }];
 
@@ -50,7 +50,7 @@ SPEC_BEGIN(BuilderTest)
         it(@"should create a model with specified body when setBody is called on builder", ^{
             NSString *urlString = @"http://www.google.com";
             NSData *data = [urlString dataUsingEncoding:NSUTF8StringEncoding];
-            RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setBody:data];
                 [builder setUrl:@"http://www.google.com"];
             }];
@@ -63,7 +63,7 @@ SPEC_BEGIN(BuilderTest)
                     @"key": @"value",
                     @"key2": @"value2"
             };
-            RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setHeaders:headers];
                 [builder setUrl:@"http://www.google.com"];
             }];
@@ -73,7 +73,7 @@ SPEC_BEGIN(BuilderTest)
 
         it(@"should throw an exception, when builderBlock is nil", ^{
             @try {
-                [RequestModel makeWithBuilder:nil];
+                [EMSRequestModel makeWithBuilder:nil];
                 fail(@"Assertation doesn't called!");
             } @catch(NSException *exception) {
                 [[theValue(exception) shouldNot] beNil];
@@ -82,7 +82,7 @@ SPEC_BEGIN(BuilderTest)
 
         it(@"should throw an exception, when url is invalid", ^{
             @try {
-                [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+                [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"fatal"];
                 }];
                 fail(@"Assertation doesn't called!");
@@ -93,7 +93,7 @@ SPEC_BEGIN(BuilderTest)
 
         it(@"should throw an exception, when url is nil", ^{
             @try {
-                [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+                [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 }];
                 fail(@"Assertation doesn't called!");
             } @catch(NSException *exception) {

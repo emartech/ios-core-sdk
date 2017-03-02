@@ -4,12 +4,9 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
-    HTTPMethodPOST,
-    HTTPMethodGET
-} HTTPMethod;
+@class EMSRequestModelBuilder;
 
-@interface RequestModelBuilder : NSObject
+@interface EMSRequestModel : NSObject
 
 @property (nonatomic, readonly) NSString *requestId;
 @property (nonatomic, readonly) NSDate *timestamp;
@@ -18,9 +15,8 @@ typedef enum {
 @property (nonatomic, readonly) NSData *body;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
 
-- (RequestModelBuilder *)setMethod:(HTTPMethod)method;
-- (RequestModelBuilder *)setUrl:(NSString *)url;
-- (RequestModelBuilder *)setBody:(NSData *)body;
-- (RequestModelBuilder *)setHeaders:(NSDictionary<NSString *, NSString *> *)headers;
+typedef void(^BuilderBlock)(EMSRequestModelBuilder * _Nonnull builder);
+
++ (nonnull EMSRequestModel *)makeWithBuilder:(BuilderBlock)builderBlock;
 
 @end

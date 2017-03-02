@@ -4,15 +4,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class RequestModel;
+@class EMSRequestModel;
 
 typedef void (^CoreErrorBlock)(NSString *requestId, NSError *error);
 typedef void (^CoreSuccessBlock)(NSString *requestId);
 
-@interface Core : NSObject
+@interface EMSRequestManager : NSObject
 
-- (void)submit:(RequestModel *)model
+- (void)setAdditionalHeaders:(NSDictionary<NSString *, NSString *> *)additionalHeaders;
+
+- (void)submit:(EMSRequestModel *)model
   successBlock:(CoreSuccessBlock)successBlock
     errorBlock:(CoreErrorBlock)errorBlock;
+
 
 @end

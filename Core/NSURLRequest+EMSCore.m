@@ -2,13 +2,13 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "NSURLRequest+Core.h"
-#import "RequestModel.h"
+#import "NSURLRequest+EMSCore.h"
+#import "EMSRequestModel.h"
 
 
-@implementation NSURLRequest (Core)
+@implementation NSURLRequest (EMSCore)
 
-+ (NSURLRequest *)requestWithRequestModel:(RequestModel *)requestModel {
++ (NSURLRequest *)requestWithRequestModel:(EMSRequestModel *)requestModel {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestModel.url];
     [request setHTTPMethod:requestModel.method];
     [request setAllHTTPHeaderFields:requestModel.headers];

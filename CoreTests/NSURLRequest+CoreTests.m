@@ -3,21 +3,21 @@
 //
 
 #import "Kiwi.h"
-#import "RequestModel.h"
-#import "RequestModelBuilder.h"
-#import "NSURLRequest+Core.h"
+#import "EMSRequestModel.h"
+#import "EMSRequestModelBuilder.h"
+#import "NSURLRequest+EMSCore.h"
 
 SPEC_BEGIN(NSURLRequestCoreTests)
 
-    describe(@"NSURLRequest+CoreTests requestWithRequestModel:(RequestModel *)model", ^{
+    describe(@"NSURLRequest+CoreTests requestWithRequestModel:(EMSRequestModel *)model", ^{
 
-        it(@"should create an NSUrlRequest from RequestModel", ^{
+        it(@"should create an NSUrlRequest from EMSRequestModel", ^{
 
             NSString *url = @"http://www.google.com";
             NSDictionary *headers = @{@"asdasd" : @"dgereg"};
             NSData *body = [@"fdahsjk" dataUsingEncoding:NSUTF8StringEncoding];
 
-            RequestModel *model = [RequestModel makeWithBuilder:^(RequestModelBuilder *builder) {
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:url];
                 [builder setMethod:HTTPMethodGET];
                 [builder setHeaders:headers];
