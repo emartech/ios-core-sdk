@@ -49,13 +49,13 @@ SPEC_BEGIN(BuilderTest)
 
         it(@"should create a model with specified body when setBody is called on builder", ^{
             NSString *urlString = @"http://www.google.com";
-            NSData *data = [urlString dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *payload = @{@"key": @"value"};
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setBody:data];
+                [builder setPayload:payload];
                 [builder setUrl:@"http://www.google.com"];
             }];
 
-            [[model.body should] equal:data];
+            [[model.payload should] equal:payload];
         });
 
         it(@"should create a model with specified headers when setHeaders is called on builder", ^{

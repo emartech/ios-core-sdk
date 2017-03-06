@@ -15,12 +15,12 @@ typedef enum {
 @property (nonatomic, readonly) NSDate *timestamp;
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSString *method;
-@property (nonatomic, readonly) NSData *body;
+@property (nonatomic, readonly) NSDictionary<NSString *, id> *payload;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
 
 - (EMSRequestModelBuilder *)setMethod:(HTTPMethod)method;
 - (EMSRequestModelBuilder *)setUrl:(NSString *)url;
-- (EMSRequestModelBuilder *)setBody:(NSData *)body;
+- (EMSRequestModelBuilder *)setPayload:(NSDictionary<NSString *, id> *)payload;
 - (EMSRequestModelBuilder *)setHeaders:(NSDictionary<NSString *, NSString *> *)headers;
 
 @end

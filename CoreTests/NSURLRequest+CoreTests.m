@@ -15,19 +15,24 @@ SPEC_BEGIN(NSURLRequestCoreTests)
 
             NSString *url = @"http://www.google.com";
             NSDictionary *headers = @{@"asdasd" : @"dgereg"};
-            NSData *body = [@"fdahsjk" dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *payload = @{@"key": @"value"};
 
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:url];
-                [builder setMethod:HTTPMethodGET];
+                [builder setMethod:HTTPMethodPOST];
                 [builder setHeaders:headers];
-                [builder setBody:body];
+                [builder setPayload:payload];
             }];
 
             NSURLRequest *request = [NSURLRequest requestWithRequestModel:model];
 
+            NSError *error = nil;
+            NSData *body = [NSJSONSerialization dataWithJSONObject:payload
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+
             [[[[request URL] absoluteString] should] equal:url];
-            [[[request HTTPMethod] should] equal:@"GET"];
+            [[[request HTTPMethod] should] equal:@"POST"];
             [[[request allHTTPHeaderFields] should] equal:headers];
             [[[request HTTPBody] should] equal:body];
         });

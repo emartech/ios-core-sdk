@@ -35,8 +35,8 @@
     return self;
 }
 
-- (EMSRequestModelBuilder *)setBody:(NSData *)body {
-    _body = body;
+- (EMSRequestModelBuilder *)setPayload:(NSDictionary<NSString *, id> *)payload {
+    _payload = payload;
     return self;
 }
 

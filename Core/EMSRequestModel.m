@@ -21,7 +21,7 @@
         _timestamp = builder.timestamp;
         _method = builder.method;
         _url = builder.url;
-        _body = builder.body;
+        _payload = builder.payload;
         _headers = builder.headers;
     }
     return self;

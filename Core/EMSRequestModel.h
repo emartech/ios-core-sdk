@@ -12,7 +12,7 @@
 @property (nonatomic, readonly) NSDate *timestamp;
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSString *method;
-@property (nonatomic, readonly) NSData *body;
+@property (nonatomic, readonly) NSDictionary<NSString *, id> *payload;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
 
 typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder * _Nonnull builder);
