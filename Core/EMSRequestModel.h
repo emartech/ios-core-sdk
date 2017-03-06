@@ -15,8 +15,10 @@
 @property (nonatomic, readonly) NSData *body;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
 
-typedef void(^BuilderBlock)(EMSRequestModelBuilder * _Nonnull builder);
+typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder * _Nonnull builder);
 
-+ (nonnull EMSRequestModel *)makeWithBuilder:(BuilderBlock)builderBlock;
++ (nonnull EMSRequestModel *)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock;
+
+- (BOOL)isEqualToModel:(EMSRequestModel *)model;
 
 @end
