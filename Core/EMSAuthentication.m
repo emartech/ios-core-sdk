@@ -2,12 +2,12 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "NSString+EMSCore.h"
+#import "EMSAuthentication.h"
 
-@implementation NSString (EMSCore)
+@implementation EMSAuthentication
 
-+ (NSString *)createBasicAuthWith:(NSString *)username
-                         password:(NSString *)password {
++ (NSString *)createBasicAuthWithUsername:(NSString *)username
+                                 password:(NSString *)password {
     NSParameterAssert(username);
     NSParameterAssert(password);
     NSString *credentials = [NSString stringWithFormat:@"%@:%@", username, password];

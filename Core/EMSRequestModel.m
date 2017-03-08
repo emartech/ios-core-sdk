@@ -49,7 +49,7 @@
         return NO;
     if (self.method != model.method && ![self.method isEqualToString:model.method])
         return NO;
-    if (self.body != model.body && ![self.body isEqualToData:model.body])
+    if (self.payload != model.payload && ![self.payload isEqualToDictionary:model.payload])
         return NO;
     if (self.headers != model.headers && ![self.headers isEqualToDictionary:model.headers])
         return NO;
@@ -61,7 +61,7 @@
     hash = hash * 31u + [self.timestamp hash];
     hash = hash * 31u + [self.url hash];
     hash = hash * 31u + [self.method hash];
-    hash = hash * 31u + [self.body hash];
+    hash = hash * 31u + [self.payload hash];
     hash = hash * 31u + [self.headers hash];
     return hash;
 }
