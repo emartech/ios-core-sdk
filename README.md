@@ -1,1 +1,1 @@
-# ios-mobile-engage-sdk
+# ios-core-sdk
