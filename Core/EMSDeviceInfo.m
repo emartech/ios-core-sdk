@@ -10,6 +10,7 @@
 @implementation EMSDeviceInfo
 
 #define kHardwareIdKey @"kHardwareIdKey"
+#define kSuiteName @"MobileEngage"
 
 + (NSString *)timeZone {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -40,12 +41,13 @@
 }
 
 + (NSString *)hardwareId {
-    NSString *hardwareId = [[NSUserDefaults standardUserDefaults] objectForKey:kHardwareIdKey];
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
+    NSString *hardwareId = [userDefaults objectForKey:kHardwareIdKey];
 
     if(!hardwareId) {
         hardwareId = [self getNewHardwareId];
-        [[NSUserDefaults standardUserDefaults] setObject:hardwareId forKey:kHardwareIdKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        [userDefaults setObject:hardwareId forKey:kHardwareIdKey];
+        [userDefaults synchronize];
     }
 
     return hardwareId;

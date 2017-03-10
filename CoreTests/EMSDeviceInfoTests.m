@@ -23,7 +23,7 @@ SPEC_BEGIN(EMSDeviceInfoTests)
         describe(@"timeZone", ^{
 
             it(@"should not return nil", ^{
-               [[[EMSDeviceInfo timeZone] shouldNot] beNil];
+                [[[EMSDeviceInfo timeZone] shouldNot] beNil];
             });
 
             it(@"should return with the current timeZone", ^{
@@ -65,14 +65,13 @@ SPEC_BEGIN(EMSDeviceInfoTests)
 
         id (^createUserDefaultsMock)() = ^id() {
             id userDefaultsMock = [NSUserDefaults mock];
-
-            [[userDefaultsMock should] receive:@selector(setObject:forKey:) withCountAtLeast:0];
-            [[userDefaultsMock should] receive:@selector(synchronize) withCountAtLeast:0];
-
-            [[NSUserDefaults should] receive:@selector(standardUserDefaults)
+            [[NSUserDefaults should] receive:@selector(alloc)
                                    andReturn:userDefaultsMock
                             withCountAtLeast:0];
-
+            [[userDefaultsMock should] receive:@selector(initWithSuiteName:)
+                                     andReturn:userDefaultsMock
+                              withCountAtLeast:0
+                                     arguments:@"MobileEngage"];
             return userDefaultsMock;
         };
 
@@ -82,26 +81,32 @@ SPEC_BEGIN(EMSDeviceInfoTests)
                 [[[EMSDeviceInfo hardwareId] shouldNot] beNil];
             });
 
-
             it(@"should return idfv if idfa is not available and there is no cached hardwareId", ^{
-                [[createUserDefaultsMock() should] receive:@selector(objectForKey:)
-                                                 andReturn:nil
-                                          withCountAtLeast:0];
+                NSString *idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+
+                id mockUserDefaults = createUserDefaultsMock();
+                [[mockUserDefaults should] receive:@selector(objectForKey:)
+                                         andReturn:nil];
+                [[mockUserDefaults should] receive:@selector(setObject:forKey:)
+                                     withArguments:idfv, @"kHardwareIdKey"];
+                [[mockUserDefaults should] receive:@selector(synchronize)];
 
                 id identifierManagerMock = createIdentifierManagerMock();
                 [[identifierManagerMock should] receive:@selector(isAdvertisingTrackingEnabled)
                                               andReturn:theValue(NO)
                                        withCountAtLeast:1];
 
-                NSString *idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
                 [[[EMSDeviceInfo hardwareId] should] equal:idfv];
             });
 
-
             it(@"should return idfa if available and there is no cached hardwareId", ^{
-                [[createUserDefaultsMock() should] receive:@selector(objectForKey:)
-                                                 andReturn:nil
-                                          withCountAtLeast:0];
+                NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:@"E621E1F8-C36C-495A-93FC-0C247A3E6E5F"];
+                id mockUserDefaults = createUserDefaultsMock();
+                [[mockUserDefaults should] receive:@selector(objectForKey:)
+                                         andReturn:nil];
+                [[mockUserDefaults should] receive:@selector(setObject:forKey:)
+                                     withArguments:[uuid UUIDString], @"kHardwareIdKey"];
+                [[mockUserDefaults should] receive:@selector(synchronize)];
 
                 id identifierManagerMock = createIdentifierManagerMock();
 
@@ -109,14 +114,12 @@ SPEC_BEGIN(EMSDeviceInfoTests)
                                               andReturn:theValue(YES)
                                        withCountAtLeast:1];
 
-                NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:@"E621E1F8-C36C-495A-93FC-0C247A3E6E5F"];
                 [[identifierManagerMock should] receive:@selector(advertisingIdentifier)
                                               andReturn:uuid
                                        withCountAtLeast:0];
 
                 [[[EMSDeviceInfo hardwareId] should] equal:[uuid UUIDString]];
             });
-
 
             it(@"should return the cached value if available", ^{
                 [[createUserDefaultsMock() should] receive:@selector(objectForKey:)
