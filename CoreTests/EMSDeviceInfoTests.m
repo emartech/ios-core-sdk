@@ -71,7 +71,7 @@ SPEC_BEGIN(EMSDeviceInfoTests)
             [[userDefaultsMock should] receive:@selector(initWithSuiteName:)
                                      andReturn:userDefaultsMock
                               withCountAtLeast:0
-                                     arguments:@"MobileEngage"];
+                                     arguments:@"com.emarsys.core"];
             return userDefaultsMock;
         };
 

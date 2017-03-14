@@ -10,7 +10,7 @@
 @implementation EMSDeviceInfo
 
 #define kHardwareIdKey @"kHardwareIdKey"
-#define kSuiteName @"MobileEngage"
+#define kSuiteName @"com.emarsys.core"
 
 + (NSString *)timeZone {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
