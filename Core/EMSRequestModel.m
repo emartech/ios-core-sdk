@@ -11,7 +11,7 @@
     NSParameterAssert(builderBlock);
     EMSRequestModelBuilder *builder = [EMSRequestModelBuilder new];
     builderBlock(builder);
-    NSParameterAssert(builder.url);
+    NSParameterAssert(builder.requestUrl);
     return [[EMSRequestModel alloc] initWithBuilder:builder];
 }
 
@@ -19,8 +19,8 @@
     if (self = [super init]) {
         _requestId = builder.requestId;
         _timestamp = builder.timestamp;
-        _method = builder.method;
-        _url = builder.url;
+        _method = builder.requestMethod;
+        _url = builder.requestUrl;
         _payload = builder.payload;
         _headers = builder.headers;
     }

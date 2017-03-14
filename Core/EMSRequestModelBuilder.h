@@ -9,12 +9,13 @@ typedef enum {
     HTTPMethodGET
 } HTTPMethod;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface EMSRequestModelBuilder : NSObject
 
 @property (nonatomic, readonly) NSString *requestId;
 @property (nonatomic, readonly) NSDate *timestamp;
-@property (nonatomic, readonly) NSURL *url;
-@property (nonatomic, readonly) NSString *method;
+@property(nonatomic, readonly) NSURL *requestUrl;
+@property(nonatomic, readonly) NSString *requestMethod;
 @property (nonatomic, readonly) NSDictionary<NSString *, id> *payload;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
 
@@ -24,3 +25,5 @@ typedef enum {
 - (EMSRequestModelBuilder *)setHeaders:(NSDictionary<NSString *, NSString *> *)headers;
 
 @end
+
+NS_ASSUME_NONNULL_END

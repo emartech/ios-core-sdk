@@ -6,6 +6,7 @@
 
 @class EMSRequestModelBuilder;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface EMSRequestModel : NSObject
 
 @property (nonatomic, readonly) NSString *requestId;
@@ -15,10 +16,12 @@
 @property (nonatomic, readonly) NSDictionary<NSString *, id> *payload;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
 
-typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder * _Nonnull builder);
+typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
 
-+ (nonnull EMSRequestModel *)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock;
++ (EMSRequestModel *)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock;
 
 - (BOOL)isEqualToModel:(EMSRequestModel *)model;
 
 @end
+
+NS_ASSUME_NONNULL_END

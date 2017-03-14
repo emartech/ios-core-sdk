@@ -10,7 +10,7 @@
     if (self = [super init]) {
         _requestId = [[NSUUID UUID] UUIDString];
         _timestamp = [NSDate date];
-        _method = @"POST";
+        _requestMethod = @"POST";
     }
     return self;
 }
@@ -18,10 +18,10 @@
 - (EMSRequestModelBuilder *)setMethod:(HTTPMethod)method {
     switch (method) {
         case HTTPMethodPOST:
-            _method = @"POST";
+            _requestMethod = @"POST";
             break;
         case HTTPMethodGET:
-            _method = @"GET";
+            _requestMethod = @"GET";
             break;
     }
     return self;
@@ -30,7 +30,7 @@
 - (EMSRequestModelBuilder *)setUrl:(NSString *)url {
     NSURL *urlToCheck = [NSURL URLWithString:url];
     if (urlToCheck && urlToCheck.scheme && urlToCheck.host) {
-        _url = urlToCheck;
+        _requestUrl = urlToCheck;
     }
     return self;
 }

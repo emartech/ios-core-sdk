@@ -6,6 +6,8 @@
 
 @class EMSRequestModel;
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef void (^CoreErrorBlock)(NSString *requestId, NSError *error);
 typedef void (^CoreSuccessBlock)(NSString *requestId);
 
@@ -14,8 +16,10 @@ typedef void (^CoreSuccessBlock)(NSString *requestId);
 - (void)setAdditionalHeaders:(NSDictionary<NSString *, NSString *> *)additionalHeaders;
 
 - (void)submit:(EMSRequestModel *)model
-  successBlock:(CoreSuccessBlock)successBlock
-    errorBlock:(CoreErrorBlock)errorBlock;
+  successBlock:(nullable CoreSuccessBlock)successBlock
+    errorBlock:(nullable CoreErrorBlock)errorBlock;
 
 
 @end
+
+NS_ASSUME_NONNULL_END

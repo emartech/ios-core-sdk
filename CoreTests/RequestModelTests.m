@@ -19,7 +19,7 @@ SPEC_BEGIN(BuilderTest)
             [[model.requestId shouldNot] beNil];
         });
 
-        it(@"should create a model where default method is POST", ^{
+        it(@"should create a model where default requestMethod is POST", ^{
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:@"http://www.google.com"];
             }];
@@ -27,7 +27,7 @@ SPEC_BEGIN(BuilderTest)
             [[model.method should] equal:@"POST"];
         });
 
-        it(@"should create a model with specified method when setMethod is called on builder", ^{
+        it(@"should create a model with specified requestMethod when setMethod is called on builder", ^{
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setMethod:HTTPMethodGET];
                 [builder setUrl:@"http://www.google.com"];
@@ -36,7 +36,7 @@ SPEC_BEGIN(BuilderTest)
             [[model.method should] equal:@"GET"];
         });
 
-        it(@"should create a model with specified url when setUrl is called on builder", ^{
+        it(@"should create a model with specified requestUrl when setUrl is called on builder", ^{
             NSString *urlString = @"http://www.google.com";
             NSURL *url = [NSURL URLWithString:urlString];
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
@@ -80,7 +80,7 @@ SPEC_BEGIN(BuilderTest)
             }
         });
 
-        it(@"should throw an exception, when url is invalid", ^{
+        it(@"should throw an exception, when requestUrl is invalid", ^{
             @try {
                 [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"fatal"];
@@ -91,7 +91,7 @@ SPEC_BEGIN(BuilderTest)
             }
         });
 
-        it(@"should throw an exception, when url is nil", ^{
+        it(@"should throw an exception, when requestUrl is nil", ^{
             @try {
                 [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 }];

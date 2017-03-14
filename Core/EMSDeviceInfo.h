@@ -4,13 +4,17 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
 @interface EMSDeviceInfo: NSObject
 
 + (NSString *)timeZone;
 + (NSString *)languageCode;
-+ (NSString *)applicationVersion;
+
++ (nullable NSString *)applicationVersion;
 + (NSString *)deviceModel;
 + (NSString *)osVersion;
 + (NSString *)hardwareId;
 
 @end
+
+NS_ASSUME_NONNULL_END
