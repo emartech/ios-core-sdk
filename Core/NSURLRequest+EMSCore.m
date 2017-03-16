@@ -7,10 +7,20 @@
 
 @implementation NSURLRequest (EMSCore)
 
-+ (NSURLRequest *)requestWithRequestModel:(EMSRequestModel *)requestModel {
++ (NSURLRequest *)requestWithRequestModel:(EMSRequestModel *)requestModel
+                        additionalHeaders:(nullable NSDictionary *)additionalHeaders {
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestModel.url];
     [request setHTTPMethod:requestModel.method];
-    [request setAllHTTPHeaderFields:requestModel.headers];
+    NSMutableDictionary *headers;
+    if (requestModel.headers) {
+        headers = [NSMutableDictionary dictionaryWithDictionary:requestModel.headers];
+        if (additionalHeaders) {
+            [headers addEntriesFromDictionary:additionalHeaders];
+        }
+    } else if (additionalHeaders) {
+        headers = [additionalHeaders mutableCopy];
+    }
+    [request setAllHTTPHeaderFields:headers];
 
     if ([requestModel.method isEqualToString:@"POST"] && requestModel.payload) {
         NSError *error;

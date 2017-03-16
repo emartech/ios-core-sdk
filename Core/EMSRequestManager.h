@@ -13,7 +13,7 @@ typedef void (^CoreSuccessBlock)(NSString *requestId);
 
 @interface EMSRequestManager : NSObject
 
-- (void)setAdditionalHeaders:(NSDictionary<NSString *, NSString *> *)additionalHeaders;
+@property(nonatomic, strong) NSDictionary<NSString *, NSString *> *additionalHeaders;
 
 - (void)submit:(EMSRequestModel *)model
   successBlock:(nullable CoreSuccessBlock)successBlock

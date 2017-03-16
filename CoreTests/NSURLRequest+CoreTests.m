@@ -11,7 +11,7 @@ SPEC_BEGIN(NSURLRequestCoreTests)
 
     describe(@"NSURLRequest+CoreTests requestWithRequestModel:(EMSRequestModel *)model", ^{
 
-        it(@"should create an NSUrlRequest from EMSRequestModel", ^{
+        it(@"should create an NSUrlRequest from EMSRequestModel when additionalHeaders is nil", ^{
 
             NSString *url = @"http://www.google.com";
             NSDictionary *headers = @{@"asdasd" : @"dgereg"};
@@ -24,7 +24,8 @@ SPEC_BEGIN(NSURLRequestCoreTests)
                 [builder setPayload:payload];
             }];
 
-            NSURLRequest *request = [NSURLRequest requestWithRequestModel:model];
+            NSURLRequest *request = [NSURLRequest requestWithRequestModel:model
+                                                        additionalHeaders:nil];
 
             NSError *error = nil;
             NSData *body = [NSJSONSerialization dataWithJSONObject:payload
@@ -34,6 +35,87 @@ SPEC_BEGIN(NSURLRequestCoreTests)
             [[[[request URL] absoluteString] should] equal:url];
             [[[request HTTPMethod] should] equal:@"POST"];
             [[[request allHTTPHeaderFields] should] equal:headers];
+            [[[request HTTPBody] should] equal:body];
+        });
+
+        it(@"should create an NSUrlRequest from EMSRequestModel when additionalHeaders is not nil", ^{
+
+            NSString *url = @"http://www.google.com";
+            NSDictionary *headers = @{@"headerKey": @"headerValue"};
+            NSDictionary *additionalHeaders = @{@"additionalHeaderKey": @"additionalHeaderValue"};
+            NSDictionary *payload = @{@"key": @"value"};
+
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:url];
+                [builder setMethod:HTTPMethodPOST];
+                [builder setHeaders:headers];
+                [builder setPayload:payload];
+            }];
+
+            NSURLRequest *request = [NSURLRequest requestWithRequestModel:model
+                                                        additionalHeaders:additionalHeaders];
+
+            NSError *error = nil;
+            NSData *body = [NSJSONSerialization dataWithJSONObject:payload
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+
+            NSMutableDictionary *result = [headers mutableCopy];
+            [result addEntriesFromDictionary:additionalHeaders];
+            [[[[request URL] absoluteString] should] equal:url];
+            [[[request HTTPMethod] should] equal:@"POST"];
+            [[[request allHTTPHeaderFields] should] equal:result];
+            [[[request HTTPBody] should] equal:body];
+        });
+
+        it(@"should create an NSUrlRequest from EMSRequestModel when additionalHeaders is not nil, model's headers is nil", ^{
+
+            NSString *url = @"http://www.google.com";
+            NSDictionary *additionalHeaders = @{@"additionalHeaderKey": @"additionalHeaderValue"};
+            NSDictionary *payload = @{@"key": @"value"};
+
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:url];
+                [builder setMethod:HTTPMethodPOST];
+                [builder setPayload:payload];
+            }];
+
+            NSURLRequest *request = [NSURLRequest requestWithRequestModel:model
+                                                        additionalHeaders:additionalHeaders];
+
+            NSError *error = nil;
+            NSData *body = [NSJSONSerialization dataWithJSONObject:payload
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+
+            [[[[request URL] absoluteString] should] equal:url];
+            [[[request HTTPMethod] should] equal:@"POST"];
+            [[[request allHTTPHeaderFields] should] equal:additionalHeaders];
+            [[[request HTTPBody] should] equal:body];
+        });
+
+        it(@"should create an NSUrlRequest from EMSRequestModel when additionalHeaders is nil, model's headers is nil", ^{
+
+            NSString *url = @"http://www.google.com";
+            NSDictionary *payload = @{@"key": @"value"};
+
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:url];
+                [builder setMethod:HTTPMethodPOST];
+                [builder setPayload:payload];
+            }];
+
+            NSURLRequest *request = [NSURLRequest requestWithRequestModel:model
+                                                        additionalHeaders:nil];
+
+            NSError *error = nil;
+            NSData *body = [NSJSONSerialization dataWithJSONObject:payload
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+
+            [[[[request URL] absoluteString] should] equal:url];
+            [[[request HTTPMethod] should] equal:@"POST"];
+            [[[request allHTTPHeaderFields] should] beEmpty];
             [[[request HTTPBody] should] equal:body];
         });
 

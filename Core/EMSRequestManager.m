@@ -31,22 +31,17 @@
 
 #pragma mark - Public methods
 
-- (void)setAdditionalHeaders:(NSDictionary<NSString *, NSString *> *)additionalHeaders {
-    [self.session.configuration setHTTPAdditionalHeaders:additionalHeaders];
-}
-
-
 - (void)submit:(EMSRequestModel *)model
   successBlock:(CoreSuccessBlock)successBlock
     errorBlock:(CoreErrorBlock)errorBlock {
     NSParameterAssert(model);
-    NSURLRequest *request = [NSURLRequest requestWithRequestModel:model];
+    NSURLRequest *request = [NSURLRequest requestWithRequestModel:model
+                                                additionalHeaders:self.additionalHeaders];
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request
                                                      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                                                          if (error && errorBlock) {
                                                              errorBlock(model.requestId, error);
                                                          }
-
                                                          if (!error && successBlock) {
                                                              successBlock(model.requestId);
                                                          }
