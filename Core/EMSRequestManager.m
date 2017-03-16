@@ -5,6 +5,7 @@
 #import "EMSRequestManager.h"
 #import "EMSRequestModel.h"
 #import "NSURLRequest+EMSCore.h"
+#import "NSError+EMSCore.h"
 
 @interface EMSRequestManager () <NSURLSessionDelegate>
 
@@ -39,10 +40,21 @@
                                                 additionalHeaders:self.additionalHeaders];
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request
                                                      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                                         if (error && errorBlock) {
-                                                             errorBlock(model.requestId, error);
+                                                         int statusCode = ((NSHTTPURLResponse *) response).statusCode;
+                                                         if (errorBlock) {
+                                                             if (error) {
+                                                                 errorBlock(model.requestId, error);
+                                                             } else if (statusCode < 200 || statusCode > 299) {
+                                                                 NSString *description = @"Unknown error";
+                                                                 if (data) {
+                                                                     description = [[NSString alloc] initWithData:data
+                                                                                                         encoding:NSUTF8StringEncoding];
+                                                                 }
+                                                                 errorBlock(model.requestId, [NSError errorWithCode:statusCode
+                                                                                               localizedDescription:description]);
+                                                             }
                                                          }
-                                                         if (!error && successBlock) {
+                                                         if (successBlock && !error && (statusCode >= 200 && statusCode <= 299)) {
                                                              successBlock(model.requestId);
                                                          }
                                                      }];
