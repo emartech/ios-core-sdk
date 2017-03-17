@@ -224,6 +224,11 @@
 				CLASSPREFIX = EMS;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Emarsys;
+				TargetAttributes = {
+					32C6F022FEEEC4E839D80D11 = {
+						DevelopmentTeam = 8LAPGQR7L8;
+					};
+				};
 			};
 			buildConfigurationList = 32C6F37AD1D2821FFF8BFAF9 /* Build configuration list for PBXProject "Core" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -430,6 +435,7 @@
 		32C6F5D7F3972F11583767F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 8LAPGQR7L8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -498,6 +504,7 @@
 		32C6FAB5A77D93B933E27BFB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 8LAPGQR7L8;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
