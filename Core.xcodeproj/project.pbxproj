@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		164B99A21E8021EA00371ED4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 164B99A11E8021EA00371ED4 /* main.m */; };
+		164B99A51E8021EA00371ED4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 164B99A41E8021EA00371ED4 /* AppDelegate.m */; };
+		164B99A81E8021EA00371ED4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 164B99A71E8021EA00371ED4 /* ViewController.m */; };
+		164B99AB1E8021EA00371ED4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 164B99A91E8021EA00371ED4 /* Main.storyboard */; };
+		164B99AD1E8021EA00371ED4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 164B99AC1E8021EA00371ED4 /* Assets.xcassets */; };
+		164B99B01E8021EA00371ED4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 164B99AE1E8021EA00371ED4 /* LaunchScreen.storyboard */; };
 		32C6F1123216F1A8712571E1 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6F81DA4AD75BF5509BA76 /* AdSupport.framework */; };
 		32C6F30986F0DAC6691E5353 /* EMSDeviceInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FA6E0EA9D9AAD4DC672F /* EMSDeviceInfoTests.m */; };
 		32C6F4BF4DB889C37CF9D860 /* CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */; };
@@ -27,6 +33,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		164B99B51E8021F300371ED4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 32C6FD5DCDD3973E54DAF412 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 164B999D1E8021EA00371ED4;
+			remoteInfo = "Core Host";
+		};
 		8AC411581E65CDF2000E1791 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 32C6FD5DCDD3973E54DAF412 /* Project object */;
@@ -50,6 +63,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		164B999E1E8021EA00371ED4 /* Core Host.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Core Host.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		164B99A11E8021EA00371ED4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		164B99A31E8021EA00371ED4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		164B99A41E8021EA00371ED4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		164B99A61E8021EA00371ED4 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		164B99A71E8021EA00371ED4 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		164B99AA1E8021EA00371ED4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		164B99AC1E8021EA00371ED4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		164B99AF1E8021EA00371ED4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		164B99B11E8021EA00371ED4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		312B33223F508F1401A7B0F4 /* Pods-CoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CoreTests/Pods-CoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		32C6F2AB679CB5977743368C /* RequestModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestModelTests.m; sourceTree = "<group>"; };
 		32C6F2C1C503E581C677869F /* EMSAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSAuthentication.h; sourceTree = "<group>"; };
@@ -80,6 +103,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		164B999B1E8021EA00371ED4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32C6F53A72809CEF62116494 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -101,9 +131,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		164B999F1E8021EA00371ED4 /* Core Host */ = {
+			isa = PBXGroup;
+			children = (
+				164B99A31E8021EA00371ED4 /* AppDelegate.h */,
+				164B99A41E8021EA00371ED4 /* AppDelegate.m */,
+				164B99A61E8021EA00371ED4 /* ViewController.h */,
+				164B99A71E8021EA00371ED4 /* ViewController.m */,
+				164B99A91E8021EA00371ED4 /* Main.storyboard */,
+				164B99AC1E8021EA00371ED4 /* Assets.xcassets */,
+				164B99AE1E8021EA00371ED4 /* LaunchScreen.storyboard */,
+				164B99B11E8021EA00371ED4 /* Info.plist */,
+				164B99A01E8021EA00371ED4 /* Supporting Files */,
+			);
+			path = "Core Host";
+			sourceTree = "<group>";
+		};
+		164B99A01E8021EA00371ED4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				164B99A11E8021EA00371ED4 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		32C6F3D3C85F42DFA0798A3A = {
 			isa = PBXGroup;
 			children = (
+				164B999F1E8021EA00371ED4 /* Core Host */,
 				32C6FC3FA25F24A0FFE526AA /* Products */,
 				32C6FF9E5946A30CD82FC305 /* Core */,
 				32C6FB39D4ADEE5B9D0DE0DB /* CoreTests */,
@@ -131,6 +186,7 @@
 			children = (
 				32C6FFF089CB395D3BFF5070 /* libCore.a */,
 				32C6F44545C8A42DD19D736F /* CoreTests.xctest */,
+				164B999E1E8021EA00371ED4 /* Core Host.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -177,6 +233,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		164B999D1E8021EA00371ED4 /* Core Host */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 164B99B41E8021EA00371ED4 /* Build configuration list for PBXNativeTarget "Core Host" */;
+			buildPhases = (
+				164B999A1E8021EA00371ED4 /* Sources */,
+				164B999B1E8021EA00371ED4 /* Frameworks */,
+				164B999C1E8021EA00371ED4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Core Host";
+			productName = "Core Host";
+			productReference = 164B999E1E8021EA00371ED4 /* Core Host.app */;
+			productType = "com.apple.product-type.application";
+		};
 		32C6F022FEEEC4E839D80D11 /* Core */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 32C6FFE3CB4CD6B9253BB21B /* Build configuration list for PBXNativeTarget "Core" */;
@@ -209,6 +282,7 @@
 			);
 			dependencies = (
 				8AC411591E65CDF2000E1791 /* PBXTargetDependency */,
+				164B99B61E8021F300371ED4 /* PBXTargetDependency */,
 			);
 			name = CoreTests;
 			productName = CoreTests;
@@ -225,8 +299,16 @@
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Emarsys;
 				TargetAttributes = {
+					164B999D1E8021EA00371ED4 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 8LAPGQR7L8;
+						ProvisioningStyle = Automatic;
+					};
 					32C6F022FEEEC4E839D80D11 = {
 						DevelopmentTeam = 8LAPGQR7L8;
+					};
+					32C6F9A87B750E4422DAD612 = {
+						TestTargetID = 164B999D1E8021EA00371ED4;
 					};
 				};
 			};
@@ -236,6 +318,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 32C6F3D3C85F42DFA0798A3A;
 			productRefGroup = 32C6FC3FA25F24A0FFE526AA /* Products */;
@@ -244,11 +327,22 @@
 			targets = (
 				32C6F022FEEEC4E839D80D11 /* Core */,
 				32C6F9A87B750E4422DAD612 /* CoreTests */,
+				164B999D1E8021EA00371ED4 /* Core Host */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		164B999C1E8021EA00371ED4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				164B99B01E8021EA00371ED4 /* LaunchScreen.storyboard in Resources */,
+				164B99AD1E8021EA00371ED4 /* Assets.xcassets in Resources */,
+				164B99AB1E8021EA00371ED4 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32C6FF72304955B1A84E552D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -307,6 +401,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		164B999A1E8021EA00371ED4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				164B99A81E8021EA00371ED4 /* ViewController.m in Sources */,
+				164B99A51E8021EA00371ED4 /* AppDelegate.m in Sources */,
+				164B99A21E8021EA00371ED4 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		32C6F75F4B836BD38B533330 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -336,6 +440,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		164B99B61E8021F300371ED4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 164B999D1E8021EA00371ED4 /* Core Host */;
+			targetProxy = 164B99B51E8021F300371ED4 /* PBXContainerItemProxy */;
+		};
 		8AC411591E65CDF2000E1791 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 32C6F022FEEEC4E839D80D11 /* Core */;
@@ -343,7 +452,54 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		164B99A91E8021EA00371ED4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				164B99AA1E8021EA00371ED4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		164B99AE1E8021EA00371ED4 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				164B99AF1E8021EA00371ED4 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		164B99B21E8021EA00371ED4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8LAPGQR7L8;
+				INFOPLIST_FILE = "Core Host/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "emarsys.Core-Host";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		164B99B31E8021EA00371ED4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 8LAPGQR7L8;
+				INFOPLIST_FILE = "Core Host/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "emarsys.Core-Host";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		32C6F0A5B9EB583EBC73879F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -498,6 +654,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.CoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Core Host.app/Core Host";
 			};
 			name = Debug;
 		};
@@ -560,6 +717,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.emarsys.CoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Core Host.app/Core Host";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -567,6 +725,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		164B99B41E8021EA00371ED4 /* Build configuration list for PBXNativeTarget "Core Host" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				164B99B21E8021EA00371ED4 /* Debug */,
+				164B99B31E8021EA00371ED4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		32C6F37AD1D2821FFF8BFAF9 /* Build configuration list for PBXProject "Core" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -12,7 +12,7 @@ SPEC_BEGIN(CoreTest)
     describe(@"EMSRequestManager", ^{
 
         it(@"should do networking with the gained EMSRequestModel and return success", ^{
-            NSString *url = @"http://www.google.com";
+            NSString *url = @"https://www.google.com";
 
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:url];
@@ -25,13 +25,15 @@ SPEC_BEGIN(CoreTest)
             [core submit:model
             successBlock:^(NSString *requestId) {
                 checkableRequestId = requestId;
-            } errorBlock:nil];
+            } errorBlock:^(NSString * _Nonnull requestId, NSError * _Nonnull error) {
+                NSLog(@"ERROR: %@", error);
+            }];
 
             [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];
         });
 
         it(@"should do networking with the gained EMSRequestModel and return failure", ^{
-            NSString *url = @"http://alma.korte.szilva/egyeb/palinkagyumolcsok";
+            NSString *url = @"https://alma.korte.szilva/egyeb/palinkagyumolcsok";
 
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:url];
