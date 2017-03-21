@@ -11,26 +11,26 @@ SPEC_BEGIN(CoreTest)
 
     describe(@"EMSRequestManager", ^{
 
-//        it(@"should do networking with the gained EMSRequestModel and return success", ^{
-//            NSString *url = @"https://www.google.com";
-//
-//            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-//                [builder setUrl:url];
-//                [builder setMethod:HTTPMethodGET];
-//            }];
-//
-//            __block NSString *checkableRequestId;
-//
-//            EMSRequestManager *core = [EMSRequestManager new];
-//            [core submit:model
-//            successBlock:^(NSString *requestId) {
-//                checkableRequestId = requestId;
-//            } errorBlock:^(NSString * _Nonnull requestId, NSError * _Nonnull error) {
-//                NSLog(@"ERROR: %@", error);
-//            }];
-//
-//            [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];
-//        });
+        it(@"should do networking with the gained EMSRequestModel and return success", ^{
+            NSString *url = @"https://www.google.com";
+
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:url];
+                [builder setMethod:HTTPMethodGET];
+            }];
+
+            __block NSString *checkableRequestId;
+
+            EMSRequestManager *core = [EMSRequestManager new];
+            [core submit:model
+            successBlock:^(NSString *requestId) {
+                checkableRequestId = requestId;
+            } errorBlock:^(NSString * _Nonnull requestId, NSError * _Nonnull error) {
+                NSLog(@"ERROR: %@", error);
+            }];
+
+            [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];
+        });
 
         it(@"should do networking with the gained EMSRequestModel and return failure", ^{
             NSString *url = @"https://alma.korte.szilva/egyeb/palinkagyumolcsok";
