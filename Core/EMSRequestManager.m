@@ -20,7 +20,7 @@
 - (id)init{
     if (self = [super init]) {
         NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-        [sessionConfiguration setTimeoutIntervalForRequest:10.0];
+        [sessionConfiguration setTimeoutIntervalForRequest:30.0];
         NSOperationQueue *operationQueue = [NSOperationQueue new];
         [operationQueue setMaxConcurrentOperationCount:1];
         _session = [NSURLSession sessionWithConfiguration:sessionConfiguration
