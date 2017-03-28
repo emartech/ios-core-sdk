@@ -28,7 +28,7 @@ SPEC_BEGIN(EMSDeviceInfoTests)
 
             it(@"should return with the current timeZone", ^{
                 NSString *timeZone = [EMSDeviceInfo timeZone];
-                [[timeZone should] equal:@"+0100"];
+                [[timeZone should] equal:@"+0200"];
             });
 
         });
