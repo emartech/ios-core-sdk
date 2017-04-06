@@ -27,6 +27,7 @@ SPEC_BEGIN(CoreTest)
                 checkableRequestId = requestId;
             } errorBlock:^(NSString * _Nonnull requestId, NSError * _Nonnull error) {
                 NSLog(@"ERROR: %@", error);
+                        fail([NSString stringWithFormat:@"errorBlock: %@", error]);
             }];
 
             [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];

@@ -40,7 +40,7 @@
                                                 additionalHeaders:self.additionalHeaders];
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request
                                                      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                                         int statusCode = ((NSHTTPURLResponse *) response).statusCode;
+                                                         NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
                                                          if (errorBlock) {
                                                              if (error) {
                                                                  errorBlock(model.requestId, error);
