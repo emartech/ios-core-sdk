@@ -50,7 +50,7 @@
                                                                      description = [[NSString alloc] initWithData:data
                                                                                                          encoding:NSUTF8StringEncoding];
                                                                  }
-                                                                 errorBlock(model.requestId, [NSError errorWithCode:statusCode
+                                                                 errorBlock(model.requestId, [NSError errorWithCode:@(statusCode).intValue
                                                                                                localizedDescription:description]);
                                                              }
                                                          }
