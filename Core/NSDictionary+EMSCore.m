@@ -9,11 +9,21 @@
 
 - (BOOL)subsetOfDictionary:(NSDictionary *)dictionary {
     BOOL result = NO;
-    for (id key in [dictionary allKeys]) {
-        if ([[self allKeys] containsObject:key] && [self[key] isEqual:dictionary[key]]) {
-            result = YES;
+
+    NSArray *dictKeys = [dictionary allKeys];
+
+    if (!dictionary) {
+        result = NO;
+    } else if ([dictKeys count] == 0) {
+        result = YES;
+    } else {
+        for (id key in dictKeys) {
+            if ([[self allKeys] containsObject:key] && [self[key] isEqual:dictionary[key]]) {
+                result = YES;
+            }
         }
     }
+
     return result;
 }
 
