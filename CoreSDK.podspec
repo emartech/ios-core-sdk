@@ -12,6 +12,7 @@ Pod::Spec.new do |spec|
 		'Core/EMSRequestManager.h',
 		'Core/EMSRequestModelBuilder.h',
 		'Core/EMSRequestModel.h',
+		'Core/EMSResponseModel.h',
 		'Core/EMSAuthentication.h',
 		'Core/EMSDeviceInfo.h',
 		'Core/NSError+EMSCore.h'
