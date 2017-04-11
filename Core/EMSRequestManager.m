@@ -4,6 +4,7 @@
 
 #import "EMSRequestManager.h"
 #import "EMSRequestModel.h"
+#import "EMSResponseModel.h"
 #import "NSURLRequest+EMSCore.h"
 #import "NSError+EMSCore.h"
 
@@ -40,7 +41,8 @@
                                                 additionalHeaders:self.additionalHeaders];
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request
                                                      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                                         NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
+                                                         NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *) response;
+                                                         NSInteger statusCode = httpUrlResponse.statusCode;
                                                          if (errorBlock) {
                                                              if (error) {
                                                                  errorBlock(model.requestId, error);
@@ -55,7 +57,9 @@
                                                              }
                                                          }
                                                          if (successBlock && !error && (statusCode >= 200 && statusCode <= 299)) {
-                                                             successBlock(model.requestId);
+                                                             EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
+                                                                                                                                            data:data];
+                                                             successBlock(model.requestId, responseModel);
                                                          }
                                                      }];
     [dataTask resume];

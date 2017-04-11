@@ -23,7 +23,7 @@ SPEC_BEGIN(CoreTest)
 
             EMSRequestManager *core = [EMSRequestManager new];
             [core submit:model
-            successBlock:^(NSString *requestId) {
+            successBlock:^(NSString *requestId, EMSResponseModel *response) {
                 checkableRequestId = requestId;
             } errorBlock:^(NSString * _Nonnull requestId, NSError * _Nonnull error) {
                 NSLog(@"ERROR: %@", error);
