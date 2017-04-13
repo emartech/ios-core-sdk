@@ -1,8 +1,8 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'CoreSDK'
-	spec.version              = '0.1.5'
+	spec.version              = '0.1.6'
 	spec.homepage             = 'http://documentation.emarsys.com/'
-	spec.license              = 'Apache License, Version 2.0'
+	spec.license              = 'Mozilla Public License 2.0'
 	spec.author               = { 'Emarsys Technologies' => 'mobile-team@emarsys.com' }
 	spec.summary              = 'Core iOS SDK'
 	spec.platform             = :ios, '9.0'
