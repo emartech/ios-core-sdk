@@ -1,12 +1,12 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'CoreSDK'
-	spec.version              = '0.1.6'
+	spec.version              = '0.5.0'
 	spec.homepage             = 'http://documentation.emarsys.com/'
 	spec.license              = 'Mozilla Public License 2.0'
 	spec.author               = { 'Emarsys Technologies' => 'mobile-team@emarsys.com' }
 	spec.summary              = 'Core iOS SDK'
 	spec.platform             = :ios, '9.0'
-	spec.source               = { :git => 'git@github.com:emartech/ios-core-sdk.git', :tag => spec.version }
+	spec.source               = { :git => 'https://github.com/emartech/ios-core-sdk.git', :tag => spec.version }
 	spec.source_files         = 'Core/**/*.{h,m}'
 	spec.public_header_files  = [
 		'Core/EMSRequestManager.h',
