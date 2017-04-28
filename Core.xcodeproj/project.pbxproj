@@ -33,6 +33,8 @@
 		32C6FCB66DC0AEA85A081310 /* EMSResponseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F11639CDF656126958C7 /* EMSResponseModel.m */; };
 		32C6FD76AD92E50B0DF0AC25 /* EMSAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FF5C6A87415E0CF91F4B /* EMSAuthentication.m */; };
 		32C6FF26FD11DBF3A076278A /* DennaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FF50263807C302965C07 /* DennaTests.m */; };
+		3746023B03FEAF425446CE9E /* QueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746071F99E2DF3E65ED09F3 /* QueueTests.m */; };
+		37460599D8C020B3E049289A /* EMSInMemoryQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460F3A7D356E27D6B35CD2 /* EMSInMemoryQueue.m */; };
 		8AC4115A1E65CEB3000E1791 /* libCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFF089CB395D3BFF5070 /* libCore.a */; };
 		C044766C5F3E992EE224EA0A /* libPods-CoreTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C3FE95E82357BFEBD9D7CC /* libPods-CoreTests.a */; };
 /* End PBXBuildFile section */
@@ -110,6 +112,10 @@
 		32C6FFAD1469B8D85A39377C /* NSURLRequest+EMSCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+EMSCore.m"; sourceTree = "<group>"; };
 		32C6FFCA7AFD05A021CF8617 /* EMSAuthenticationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSAuthenticationTests.m; sourceTree = "<group>"; };
 		32C6FFF089CB395D3BFF5070 /* libCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3746059CCFB8AFED9F009AF8 /* EMSInMemoryQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSInMemoryQueue.h; sourceTree = "<group>"; };
+		3746071F99E2DF3E65ED09F3 /* QueueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueTests.m; sourceTree = "<group>"; };
+		37460E967F3BA4D0EFB64800 /* EMSQueueProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSQueueProtocol.h; sourceTree = "<group>"; };
+		37460F3A7D356E27D6B35CD2 /* EMSInMemoryQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSInMemoryQueue.m; sourceTree = "<group>"; };
 		43C3FE95E82357BFEBD9D7CC /* libPods-CoreTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoreTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53945C3A47653C0428B7C182 /* Pods-CoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CoreTests/Pods-CoreTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -192,6 +198,7 @@
 				32C6FF50263807C302965C07 /* DennaTests.m */,
 				32C6F7A45D1CA8547D0258CD /* EMSResponseModelTests.m */,
 				32C6FC475CE6DC07AEA7CCB4 /* NSDictionary+EMSCoreTests.m */,
+				3746071F99E2DF3E65ED09F3 /* QueueTests.m */,
 			);
 			path = CoreTests;
 			sourceTree = "<group>";
@@ -227,6 +234,9 @@
 				32C6F11639CDF656126958C7 /* EMSResponseModel.m */,
 				32C6FC3BB9E7491BEEEDD241 /* NSDictionary+EMSCore.m */,
 				32C6F92E4AC82ED30EE391B5 /* NSDictionary+EMSCore.h */,
+				37460F3A7D356E27D6B35CD2 /* EMSInMemoryQueue.m */,
+				37460E967F3BA4D0EFB64800 /* EMSQueueProtocol.h */,
+				3746059CCFB8AFED9F009AF8 /* EMSInMemoryQueue.h */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -442,6 +452,7 @@
 				32C6FF26FD11DBF3A076278A /* DennaTests.m in Sources */,
 				32C6F798157E033DA7DA0A1B /* EMSResponseModelTests.m in Sources */,
 				32C6FBC236293B33AD7ACEB1 /* NSDictionary+EMSCoreTests.m in Sources */,
+				3746023B03FEAF425446CE9E /* QueueTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +469,7 @@
 				32C6FC590267C6DFE11ED4AD /* NSError+EMSCore.m in Sources */,
 				32C6FCB66DC0AEA85A081310 /* EMSResponseModel.m in Sources */,
 				32C6F4F52F1413204BF12C04 /* NSDictionary+EMSCore.m in Sources */,
+				37460599D8C020B3E049289A /* EMSInMemoryQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
