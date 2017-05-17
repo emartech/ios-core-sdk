@@ -7,7 +7,10 @@
 @protocol EMSQueueProtocol <NSObject>
 
 - (void)push:(EMSRequestModel *)model;
-- (void)pushFirst:(EMSRequestModel *)model;
 - (EMSRequestModel *)pop;
+
+- (EMSRequestModel *)peek;
+
+- (BOOL)empty;
 
 @end

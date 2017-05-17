@@ -23,14 +23,18 @@
     [_data addObject:model];
 }
 
-- (void)pushFirst:(EMSRequestModel *)model {
-    [_data insertObject:model atIndex:0];
-}
-
 - (EMSRequestModel *)pop {
     EMSRequestModel *firstModel = [_data firstObject];
     [_data removeObject:firstModel];
     return firstModel;
+}
+
+- (EMSRequestModel *)peek {
+    return [_data firstObject];
+}
+
+- (BOOL)empty {
+    return [_data count] == 0;;
 }
 
 @end

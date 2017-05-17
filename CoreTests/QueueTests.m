@@ -70,18 +70,4 @@ SPEC_BEGIN(QueueTests)
         });
     });
 
-    describe(@"pushFirst:", ^{
-        it(@"should add to the beginning of the queue", ^{
-            id <EMSQueueProtocol> queue = createQueue();
-
-            EMSRequestModel *firstModel = requestModel(@"https://url1.com", nil);
-            EMSRequestModel *secondModel = requestModel(@"https://url2.com", nil);
-
-            [queue push:secondModel];
-            [queue pushFirst:firstModel];
-
-            [[[queue pop] should] equal:firstModel];
-        });
-    });
-
 SPEC_END
