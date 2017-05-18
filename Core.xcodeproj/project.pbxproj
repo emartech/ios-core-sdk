@@ -15,6 +15,7 @@
 		164B99B01E8021EA00371ED4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 164B99AE1E8021EA00371ED4 /* LaunchScreen.storyboard */; };
 		32C6F1123216F1A8712571E1 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6F81DA4AD75BF5509BA76 /* AdSupport.framework */; };
 		32C6F30986F0DAC6691E5353 /* EMSDeviceInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FA6E0EA9D9AAD4DC672F /* EMSDeviceInfoTests.m */; };
+		32C6F4004C9B5EC85DF88267 /* EMSSqliteQueueSchemaDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F73B6522BBF6CC9E2887 /* EMSSqliteQueueSchemaDelegate.m */; };
 		32C6F4BF4DB889C37CF9D860 /* CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */; };
 		32C6F4F52F1413204BF12C04 /* NSDictionary+EMSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FC3BB9E7491BEEEDD241 /* NSDictionary+EMSCore.m */; };
 		32C6F4FB32D0E7B1776A956F /* NSURLRequest+CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */; };
@@ -28,9 +29,11 @@
 		32C6FA8DE65CCBFABAD267AD /* NSURLRequest+EMSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FFAD1469B8D85A39377C /* NSURLRequest+EMSCore.m */; };
 		32C6FAA874A06BF5A7FA7381 /* EMSRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F67BC379469363FE4145 /* EMSRequestModel.m */; };
 		32C6FAF16A4C8B9CB6AC9650 /* RequestModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2AB679CB5977743368C /* RequestModelTests.m */; };
+		32C6FB46836ED9F1C4CC99A1 /* SqliteHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB187847D2E0E9A85204 /* SqliteHelperTests.m */; };
 		32C6FB8001D11647831B67E2 /* EMSRequestModelBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4FA804CBAF47086955F /* EMSRequestModelBuilder.m */; };
 		32C6FBC236293B33AD7ACEB1 /* NSDictionary+EMSCoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FC475CE6DC07AEA7CCB4 /* NSDictionary+EMSCoreTests.m */; };
 		32C6FC590267C6DFE11ED4AD /* NSError+EMSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4A2D5A0D191E4FD5298 /* NSError+EMSCore.m */; };
+		32C6FC9C65893F6319FA00A5 /* EMSSQLiteHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F929700DCCB9B41F8C88 /* EMSSQLiteHelper.m */; };
 		32C6FCAFA6F7B5A21D5C3028 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6F81DA4AD75BF5509BA76 /* AdSupport.framework */; };
 		32C6FCB66DC0AEA85A081310 /* EMSResponseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F11639CDF656126958C7 /* EMSResponseModel.m */; };
 		32C6FD76AD92E50B0DF0AC25 /* EMSAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FF5C6A87415E0CF91F4B /* EMSAuthentication.m */; };
@@ -38,6 +41,8 @@
 		3746023B03FEAF425446CE9E /* QueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746071F99E2DF3E65ED09F3 /* QueueTests.m */; };
 		37460599D8C020B3E049289A /* EMSInMemoryQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460F3A7D356E27D6B35CD2 /* EMSInMemoryQueue.m */; };
 		8AC4115A1E65CEB3000E1791 /* libCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFF089CB395D3BFF5070 /* libCore.a */; };
+		8ADA9EE51ECC872300E4D180 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ADA9EE41ECC872300E4D180 /* libsqlite3.tbd */; };
+		8ADA9EE61ECC876700E4D180 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ADA9EE41ECC872300E4D180 /* libsqlite3.tbd */; };
 		C044766C5F3E992EE224EA0A /* libPods-CoreTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 43C3FE95E82357BFEBD9D7CC /* libPods-CoreTests.a */; };
 /* End PBXBuildFile section */
 
@@ -95,8 +100,10 @@
 		32C6F4FA804CBAF47086955F /* EMSRequestModelBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSRequestModelBuilder.m; sourceTree = "<group>"; };
 		32C6F53D20903B29DFC87B09 /* SQLiteQueueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLiteQueueTests.m; sourceTree = "<group>"; };
 		32C6F67BC379469363FE4145 /* EMSRequestModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSRequestModel.m; sourceTree = "<group>"; };
+		32C6F73B6522BBF6CC9E2887 /* EMSSqliteQueueSchemaDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSSqliteQueueSchemaDelegate.m; sourceTree = "<group>"; };
 		32C6F7A45D1CA8547D0258CD /* EMSResponseModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSResponseModelTests.m; sourceTree = "<group>"; };
 		32C6F81DA4AD75BF5509BA76 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		32C6F929700DCCB9B41F8C88 /* EMSSQLiteHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSSQLiteHelper.m; sourceTree = "<group>"; };
 		32C6F92E4AC82ED30EE391B5 /* NSDictionary+EMSCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+EMSCore.h"; sourceTree = "<group>"; };
 		32C6F987416ED53122F6724F /* EMSRequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestModel.h; sourceTree = "<group>"; };
 		32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoreTests.m; sourceTree = "<group>"; };
@@ -104,10 +111,13 @@
 		32C6F9D72FB3C2E0E29DAC84 /* NSURLRequest+EMSCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLRequest+EMSCore.h"; sourceTree = "<group>"; };
 		32C6FA6E0EA9D9AAD4DC672F /* EMSDeviceInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSDeviceInfoTests.m; sourceTree = "<group>"; };
 		32C6FAAA04CBA3BEA822B3B4 /* EMSRequestManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EMSRequestManager.m; sourceTree = "<group>"; };
+		32C6FB187847D2E0E9A85204 /* SqliteHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqliteHelperTests.m; sourceTree = "<group>"; };
 		32C6FBE25044FFD98747EDF3 /* EMSDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSDeviceInfo.h; sourceTree = "<group>"; };
 		32C6FC3BB9E7491BEEEDD241 /* NSDictionary+EMSCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+EMSCore.m"; sourceTree = "<group>"; };
 		32C6FC475CE6DC07AEA7CCB4 /* NSDictionary+EMSCoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+EMSCoreTests.m"; sourceTree = "<group>"; };
 		32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+CoreTests.m"; sourceTree = "<group>"; };
+		32C6FE65CA8B0637C616ADB3 /* EMSSqliteQueueSchemaDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSSqliteQueueSchemaDelegate.h; sourceTree = "<group>"; };
+		32C6FE9BEC050B55FDEB4FC3 /* EMSSQLiteHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSSQLiteHelper.h; sourceTree = "<group>"; };
 		32C6FEA5E62ABBC3A53C59F3 /* EMSSQLiteQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSSQLiteQueue.h; sourceTree = "<group>"; };
 		32C6FEBF08ECB75CC1066BA3 /* EMSSQLiteQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSSQLiteQueue.m; sourceTree = "<group>"; };
 		32C6FEEB3AD1AB71E1C77AF7 /* NSError+EMSCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+EMSCore.h"; sourceTree = "<group>"; };
@@ -123,6 +133,7 @@
 		37460F3A7D356E27D6B35CD2 /* EMSInMemoryQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSInMemoryQueue.m; sourceTree = "<group>"; };
 		43C3FE95E82357BFEBD9D7CC /* libPods-CoreTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CoreTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53945C3A47653C0428B7C182 /* Pods-CoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CoreTests/Pods-CoreTests.debug.xcconfig"; sourceTree = "<group>"; };
+		8ADA9EE41ECC872300E4D180 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8ADA9EE51ECC872300E4D180 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +149,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8ADA9EE61ECC876700E4D180 /* libsqlite3.tbd in Frameworks */,
 				8AC4115A1E65CEB3000E1791 /* libCore.a in Frameworks */,
 				C044766C5F3E992EE224EA0A /* libPods-CoreTests.a in Frameworks */,
 				32C6F1123216F1A8712571E1 /* AdSupport.framework in Frameworks */,
@@ -205,8 +218,20 @@
 				32C6FC475CE6DC07AEA7CCB4 /* NSDictionary+EMSCoreTests.m */,
 				3746071F99E2DF3E65ED09F3 /* QueueTests.m */,
 				32C6F53D20903B29DFC87B09 /* SQLiteQueueTests.m */,
+				32C6FB187847D2E0E9A85204 /* SqliteHelperTests.m */,
 			);
 			path = CoreTests;
+			sourceTree = "<group>";
+		};
+		32C6FB6438BFB73398522FFB /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				32C6F929700DCCB9B41F8C88 /* EMSSQLiteHelper.m */,
+				32C6FE9BEC050B55FDEB4FC3 /* EMSSQLiteHelper.h */,
+				32C6F73B6522BBF6CC9E2887 /* EMSSqliteQueueSchemaDelegate.m */,
+				32C6FE65CA8B0637C616ADB3 /* EMSSqliteQueueSchemaDelegate.h */,
+			);
+			path = Database;
 			sourceTree = "<group>";
 		};
 		32C6FC3FA25F24A0FFE526AA /* Products */ = {
@@ -245,6 +270,7 @@
 				3746059CCFB8AFED9F009AF8 /* EMSInMemoryQueue.h */,
 				32C6FEA5E62ABBC3A53C59F3 /* EMSSQLiteQueue.h */,
 				32C6FEBF08ECB75CC1066BA3 /* EMSSQLiteQueue.m */,
+				32C6FB6438BFB73398522FFB /* Database */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -252,6 +278,7 @@
 		39F75BFAEFD082CED904F2BB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8ADA9EE41ECC872300E4D180 /* libsqlite3.tbd */,
 				43C3FE95E82357BFEBD9D7CC /* libPods-CoreTests.a */,
 				32C6F81DA4AD75BF5509BA76 /* AdSupport.framework */,
 			);
@@ -462,6 +489,8 @@
 				32C6FBC236293B33AD7ACEB1 /* NSDictionary+EMSCoreTests.m in Sources */,
 				3746023B03FEAF425446CE9E /* QueueTests.m in Sources */,
 				32C6F54666CE692CA7361E34 /* SQLiteQueueTests.m in Sources */,
+				32C6FC9C65893F6319FA00A5 /* EMSSQLiteHelper.m in Sources */,
+				32C6FB46836ED9F1C4CC99A1 /* SqliteHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +509,7 @@
 				32C6F4F52F1413204BF12C04 /* NSDictionary+EMSCore.m in Sources */,
 				37460599D8C020B3E049289A /* EMSInMemoryQueue.m in Sources */,
 				32C6FA211F58CDBADF0AC004 /* EMSSQLiteQueue.m in Sources */,
+				32C6F4004C9B5EC85DF88267 /* EMSSqliteQueueSchemaDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,10 +668,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 8LAPGQR7L8;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lsqlite3",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/** \"${PROJECT_DIR}/Pods\"/** \"${PROJECT_DIR}/Pods\"/**";
@@ -711,10 +738,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 8LAPGQR7L8;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lsqlite3",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				USER_HEADER_SEARCH_PATHS = "\"${PROJECT_DIR}/Pods\"/** \"${PROJECT_DIR}/Pods\"/** \"${PROJECT_DIR}/Pods\"/**";

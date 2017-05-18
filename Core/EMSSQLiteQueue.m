@@ -3,11 +3,19 @@
 //
 
 #import "EMSSQLiteQueue.h"
+#import "EMSSQLiteHelper.h"
+
+@interface EMSSQLiteQueue ()
+
+@property(nonatomic, strong) EMSSQLiteHelper *dbHelper;
+
+@end
 
 @implementation EMSSQLiteQueue
 
-- (id)init {
+- (instancetype)initWithSQLiteHelper:(EMSSQLiteHelper *)sqliteHelper {
     if (self = [super init]) {
+        _dbHelper = sqliteHelper;
     }
     return self;
 }
