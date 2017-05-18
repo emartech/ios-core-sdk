@@ -7,11 +7,12 @@
 
 #define SCHEMA_VERSION 3
 
+@class EMSSQLiteHelper;
 @protocol EMSSQLiteHelperSchemaDelegate
 
-- (void)onCreateWithDatabase:(sqlite3 *)db;
+- (void)onCreateWithDbHelper:(EMSSQLiteHelper *)dbHelper;
 
-- (void)onUpgradeWithDatabase:(sqlite3 *)db oldVersion:(int)oldversion newVersion:(int)newVersion;
+- (void)onUpgradeWithDbHelper:(EMSSQLiteHelper *)dbHelper oldVersion:(int)oldversion newVersion:(int)newVersion;
 
 @end
 

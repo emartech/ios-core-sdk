@@ -53,9 +53,9 @@
 
         int version = [self version];
         if (version == 0) {
-            [self.schemaDelegate onCreateWithDatabase:_db];
+            [self.schemaDelegate onCreateWithDbHelper:self];
         } else if (version < SCHEMA_VERSION) {
-            [self.schemaDelegate onUpgradeWithDatabase:_db oldVersion:version newVersion:SCHEMA_VERSION];
+            [self.schemaDelegate onUpgradeWithDbHelper:self oldVersion:version newVersion:SCHEMA_VERSION];
         }
     }
 }
@@ -65,7 +65,6 @@
     _db = nil;
 }
 
-#pragma mark - Private methods
 
 - (BOOL)executeCommand:(NSString *)command {
     sqlite3_stmt *statement;

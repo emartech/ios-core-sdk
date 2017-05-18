@@ -22,6 +22,29 @@ SPEC_BEGIN(SQLiteHelperTests)
         [dbHelper close];
     });
 
+//    void (^shouldEqualWithValues)(NSString *sql, NSArray *expectedColumns) = ^(NSString *sql, NSArray *expectedColumns) {
+//        EMSSQLiteHelper *helper = [EMSSQLiteHelper new];
+//        [[NSFileManager defaultManager] removeItemAtPath:[helper databasePath] error:nil];
+//
+//        sqlite3 *db = [helper open];
+//
+//        sqlite3_stmt *statement;
+//        if(sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil) == SQLITE_OK) {
+//            if(sqlite3_step(statement) == SQLITE_ROW) {
+//                for (int i = 0; i < expectedColumns.count; i++) {
+//                    [[theValue(sqlite3_column_int(statement, i)) should] equal:expectedColumns[(NSUInteger) i]];
+//                }
+//            } else {
+//                fail(@"sqlite3_step failed");
+//            }
+//        } else {
+//            fail(@"sqlite3_prepare_v2 failed");
+//        };
+//
+//        [[theValue([[NSFileManager defaultManager] fileExistsAtPath:[helper databasePath]]) should] beTrue];
+//        [helper close];
+//    };
+
     void (^runCommandOnTestDB)(NSString *sql) = ^(NSString *sql) {
         sqlite3 *db;
         sqlite3_open([TEST_DB_PATH UTF8String], &db);
@@ -61,7 +84,7 @@ SPEC_BEGIN(SQLiteHelperTests)
         it(@"should call onCreate when the database is opened the first time", ^{
             EMSSqliteQueueSchemaDelegate *schemaDelegate = [EMSSqliteQueueSchemaDelegate mock];
             dbHelper.schemaDelegate = schemaDelegate;
-            [[schemaDelegate should] receive:@selector(onCreateWithDatabase:) withArguments:any()];
+            [[schemaDelegate should] receive:@selector(onCreateWithDbHelper:) withArguments:any()];
 
             [dbHelper open];
         });
@@ -71,7 +94,7 @@ SPEC_BEGIN(SQLiteHelperTests)
 
             EMSSqliteQueueSchemaDelegate *schemaDelegate = [EMSSqliteQueueSchemaDelegate mock];
             dbHelper.schemaDelegate = schemaDelegate;
-            [[schemaDelegate should] receive:@selector(onUpgradeWithDatabase:oldVersion:newVersion:) withArguments:any(), theValue(2), theValue(SCHEMA_VERSION)];
+            [[schemaDelegate should] receive:@selector(onUpgradeWithDbHelper:oldVersion:newVersion:) withArguments:any(), theValue(2), theValue(SCHEMA_VERSION)];
 
             [dbHelper open];
         });
@@ -108,6 +131,29 @@ SPEC_BEGIN(SQLiteHelperTests)
             [[theValue(returnedValue) should] beFalse];
         });
 
+    });
+
+    describe(@"schemaDelegate onCreate", ^{
+
+        xit(@"should creates schema for RequestModel", ^{
+            [dbHelper setSchemaDelegate:[EMSSqliteQueueSchemaDelegate new]];
+            [dbHelper open];
+            [dbHelper close];
+
+            sqlite3 *db;
+            sqlite3_open([TEST_DB_PATH UTF8String], &db);
+            sqlite3_stmt *statement;
+            if (sqlite3_prepare_v2(db, [@"SELECT sql FROM sqlite_master WHERE type='table' AND name='RequestModel';" UTF8String], -1, &statement, nil) == SQLITE_OK) {
+                if (sqlite3_step(statement) == SQLITE_ROW) {
+                    [[[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)] should] equal:@"create table if not exists RequestModel (request_id TEXT, method TEXT, url TEXT, headers BLOB, payload BLOB, timestamp INTEGER);"];
+                } else {
+                    fail(@"sqlite3_step failed");
+                }
+            } else {
+                fail(@"sqlite3_prepare_v2 failed");
+            };
+            sqlite3_close(db);
+        });
     });
 
 SPEC_END
