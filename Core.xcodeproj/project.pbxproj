@@ -32,6 +32,7 @@
 		32C6FB46836ED9F1C4CC99A1 /* SqliteHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB187847D2E0E9A85204 /* SqliteHelperTests.m */; };
 		32C6FB8001D11647831B67E2 /* EMSRequestModelBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4FA804CBAF47086955F /* EMSRequestModelBuilder.m */; };
 		32C6FBC236293B33AD7ACEB1 /* NSDictionary+EMSCoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FC475CE6DC07AEA7CCB4 /* NSDictionary+EMSCoreTests.m */; };
+		32C6FC54107F80706F7D208E /* EMSRequestModelMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FB3DC1652E7A90F37CBB /* EMSRequestModelMapper.m */; };
 		32C6FC590267C6DFE11ED4AD /* NSError+EMSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F4A2D5A0D191E4FD5298 /* NSError+EMSCore.m */; };
 		32C6FC9C65893F6319FA00A5 /* EMSSQLiteHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F929700DCCB9B41F8C88 /* EMSSQLiteHelper.m */; };
 		32C6FCAFA6F7B5A21D5C3028 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6F81DA4AD75BF5509BA76 /* AdSupport.framework */; };
@@ -112,10 +113,13 @@
 		32C6FA6E0EA9D9AAD4DC672F /* EMSDeviceInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSDeviceInfoTests.m; sourceTree = "<group>"; };
 		32C6FAAA04CBA3BEA822B3B4 /* EMSRequestManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EMSRequestManager.m; sourceTree = "<group>"; };
 		32C6FB187847D2E0E9A85204 /* SqliteHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SqliteHelperTests.m; sourceTree = "<group>"; };
+		32C6FB3DC1652E7A90F37CBB /* EMSRequestModelMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSRequestModelMapper.m; sourceTree = "<group>"; };
 		32C6FBE25044FFD98747EDF3 /* EMSDeviceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSDeviceInfo.h; sourceTree = "<group>"; };
 		32C6FC3BB9E7491BEEEDD241 /* NSDictionary+EMSCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+EMSCore.m"; sourceTree = "<group>"; };
 		32C6FC475CE6DC07AEA7CCB4 /* NSDictionary+EMSCoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+EMSCoreTests.m"; sourceTree = "<group>"; };
 		32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+CoreTests.m"; sourceTree = "<group>"; };
+		32C6FDE7CD35ECBDE6839F74 /* EMSRequestModelMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestModelMapper.h; sourceTree = "<group>"; };
+		32C6FE234D67C69E4A193273 /* EMSModelMapperProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSModelMapperProtocol.h; sourceTree = "<group>"; };
 		32C6FE65CA8B0637C616ADB3 /* EMSSqliteQueueSchemaDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSSqliteQueueSchemaDelegate.h; sourceTree = "<group>"; };
 		32C6FE9BEC050B55FDEB4FC3 /* EMSSQLiteHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSSQLiteHelper.h; sourceTree = "<group>"; };
 		32C6FEA5E62ABBC3A53C59F3 /* EMSSQLiteQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSSQLiteQueue.h; sourceTree = "<group>"; };
@@ -230,6 +234,9 @@
 				32C6FE9BEC050B55FDEB4FC3 /* EMSSQLiteHelper.h */,
 				32C6F73B6522BBF6CC9E2887 /* EMSSqliteQueueSchemaDelegate.m */,
 				32C6FE65CA8B0637C616ADB3 /* EMSSqliteQueueSchemaDelegate.h */,
+				32C6FE234D67C69E4A193273 /* EMSModelMapperProtocol.h */,
+				32C6FB3DC1652E7A90F37CBB /* EMSRequestModelMapper.m */,
+				32C6FDE7CD35ECBDE6839F74 /* EMSRequestModelMapper.h */,
 			);
 			path = Database;
 			sourceTree = "<group>";
@@ -510,6 +517,7 @@
 				37460599D8C020B3E049289A /* EMSInMemoryQueue.m in Sources */,
 				32C6FA211F58CDBADF0AC004 /* EMSSQLiteQueue.m in Sources */,
 				32C6F4004C9B5EC85DF88267 /* EMSSqliteQueueSchemaDelegate.m in Sources */,
+				32C6FC54107F80706F7D208E /* EMSRequestModelMapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,4 +27,13 @@
     return result;
 }
 
+- (NSData *)archive {
+    return [NSKeyedArchiver archivedDataWithRootObject:self];
+}
+
++ (NSDictionary *)dictionaryWithData:(NSData *)data {
+    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+
 @end

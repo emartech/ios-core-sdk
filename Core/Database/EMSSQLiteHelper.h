@@ -5,14 +5,16 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
-#define SCHEMA_VERSION 3
-
 @class EMSSQLiteHelper;
+@protocol EMSModelMapperProtocol;
+
 @protocol EMSSQLiteHelperSchemaDelegate
 
 - (void)onCreateWithDbHelper:(EMSSQLiteHelper *)dbHelper;
 
 - (void)onUpgradeWithDbHelper:(EMSSQLiteHelper *)dbHelper oldVersion:(int)oldversion newVersion:(int)newVersion;
+
+- (int)schemaVersion;
 
 @end
 
@@ -31,5 +33,9 @@
 - (void)close;
 
 - (BOOL)executeCommand:(NSString *)command;
+
+- (NSArray *)executeQuery:(NSString *)query mapper:(id <EMSModelMapperProtocol>)mapper;
+
+- (BOOL)insertModel:(id)model withMapper:(id <EMSModelMapperProtocol>)mapper;
 
 @end

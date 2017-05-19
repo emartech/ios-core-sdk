@@ -51,4 +51,19 @@ SPEC_BEGIN(NSDictionaryCoreTests)
         });
     });
 
+    describe(@"NSDictionary+EMSCore archive - dictionaryWithData", ^{
+
+        it(@"should return with original values of dictionary after archive and dictionaryWithData", ^{
+            NSDictionary *testDict = @{
+                    @"key1": @"value1",
+                    @"key2": @"value2"
+            };
+
+            NSData *data = [testDict archive];
+            NSDictionary *returnedDict = [NSDictionary dictionaryWithData:data];
+
+            [[testDict should] equal:returnedDict];
+        });
+    });
+
 SPEC_END

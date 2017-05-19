@@ -10,6 +10,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)subsetOfDictionary:(NSDictionary *)dictionary;
 
+- (NSData *)archive;
+
++ (NSDictionary *)dictionaryWithData:(NSData *)data;
+
 @end
 
 NS_ASSUME_NONNULL_END
