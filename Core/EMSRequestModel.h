@@ -20,6 +20,13 @@ typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
 
 + (EMSRequestModel *)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock;
 
+- (instancetype)initWithRequestId:(NSString *)requestId
+                        timestamp:(NSDate *)timestamp
+                              url:(NSURL *)url
+                           method:(NSString *)method
+                          payload:(NSDictionary<NSString *, id> *)payload
+                          headers:(NSDictionary<NSString *, NSString *> *)headers;
+
 - (BOOL)isEqualToModel:(EMSRequestModel *)model;
 
 @end

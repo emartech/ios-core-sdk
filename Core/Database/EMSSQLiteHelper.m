@@ -10,6 +10,10 @@
 @property(nonatomic, assign) sqlite3 *db;
 @property(nonatomic, strong) NSString *dbPath;
 
+- (BOOL)executeCommand:(NSString *)insertSQL
+             withModel:(id)model
+                mapper:(id <EMSModelMapperProtocol>)mapper;
+
 @end
 
 @implementation EMSSQLiteHelper
@@ -37,7 +41,9 @@
     if (result == SQLITE_OK) {
         int step = sqlite3_step(statement);
         if (step == SQLITE_ROW) {
-            return sqlite3_column_int(statement, 0);
+            int version = sqlite3_column_int(statement, 0);
+            sqlite3_finalize(statement);
+            return version;
         } else {
             return -2;
         }
@@ -72,29 +78,43 @@
     sqlite3_stmt *statement;
     if (sqlite3_prepare_v2(_db, [command UTF8String], -1, &statement, nil) == SQLITE_OK) {
         int value = sqlite3_step(statement);
+        if (value == SQLITE_ROW) {
+            sqlite3_finalize(statement);
+        }
         return value == SQLITE_ROW || value == SQLITE_DONE;
     }
     return NO;
 }
 
-- (BOOL)insertModel:(id)model withQuery:(NSString *)insertSQL mapper:(id <EMSModelMapperProtocol>)mapper {
-    sqlite3_stmt *statement;
-    if (sqlite3_prepare_v2(_db, [insertSQL UTF8String], -1, &statement, nil) == SQLITE_OK) {
-        [mapper bindStatement:statement fromModel:model];
-        int value = sqlite3_step(statement);
-        sqlite3_finalize(statement);
-        return value == SQLITE_DONE;
-    }
-    return NO;
+- (BOOL)insertModel:(id)model
+          withQuery:(NSString *)insertSQL
+             mapper:(id <EMSModelMapperProtocol>)mapper {
+    return [self executeCommand:insertSQL
+                      withModel:model
+                         mapper:mapper];
 }
 
-- (NSArray *)executeQuery:(NSString *)query mapper:(id <EMSModelMapperProtocol>)mapper {
+- (BOOL)executeCommand:(NSString *)command
+             withModel:(id)model
+                mapper:(id <EMSModelMapperProtocol>)mapper {
+    BOOL result = NO;
+    sqlite3_stmt *statement;
+    if (sqlite3_prepare_v2(_db, [command UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        [mapper bindStatement:statement fromModel:model];
+        result = sqlite3_step(statement) == SQLITE_DONE;
+    }
+    return result;
+}
+
+- (NSArray *)executeQuery:(NSString *)query
+                   mapper:(id <EMSModelMapperProtocol>)mapper {
     NSMutableArray *models = [NSMutableArray new];
     sqlite3_stmt *statement;
     if (sqlite3_prepare_v2(_db, [query UTF8String], -1, &statement, nil) == SQLITE_OK) {
         while (sqlite3_step(statement) == SQLITE_ROW) {
             [models addObject:[mapper modelFromStatement:statement]];
         }
+        sqlite3_finalize(statement);
         return [NSArray arrayWithArray:models];
     }
     return nil;

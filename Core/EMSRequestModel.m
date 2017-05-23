@@ -15,6 +15,24 @@
     return [[EMSRequestModel alloc] initWithBuilder:builder];
 }
 
+- (instancetype)initWithRequestId:(NSString *)requestId
+                        timestamp:(NSDate *)timestamp
+                              url:(NSURL *)url
+                           method:(NSString *)method
+                          payload:(NSDictionary<NSString *, id> *)payload
+                          headers:(NSDictionary<NSString *, NSString *> *)headers {
+    if (self = [super init]) {
+        _requestId = requestId;
+        _timestamp = timestamp;
+        _method = method;
+        _url = url;
+        _payload = payload;
+        _headers = headers;
+    }
+    return self;
+}
+
+
 - (id)initWithBuilder:(EMSRequestModelBuilder *)builder {
     if (self = [super init]) {
         _requestId = builder.requestId;
@@ -43,7 +61,7 @@
         return NO;
     if (self.requestId != model.requestId && ![self.requestId isEqualToString:model.requestId])
         return NO;
-    if (self.timestamp != model.timestamp && ![self.timestamp isEqualToDate:model.timestamp])
+    if (self.timestamp != model.timestamp && [self.timestamp timeIntervalSince1970] != [model.timestamp timeIntervalSince1970])
         return NO;
     if (self.url != model.url && ![self.url isEqual:model.url])
         return NO;

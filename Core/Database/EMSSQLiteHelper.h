@@ -12,7 +12,7 @@
 
 - (void)onCreateWithDbHelper:(EMSSQLiteHelper *)dbHelper;
 
-- (void)onUpgradeWithDbHelper:(EMSSQLiteHelper *)dbHelper oldVersion:(int)oldversion newVersion:(int)newVersion;
+- (void)onUpgradeWithDbHelper:(EMSSQLiteHelper *)dbHelper oldVersion:(int)oldVersion newVersion:(int)newVersion;
 
 - (int)schemaVersion;
 
@@ -36,6 +36,8 @@
 
 - (NSArray *)executeQuery:(NSString *)query mapper:(id <EMSModelMapperProtocol>)mapper;
 
-- (BOOL)insertModel:(id)model withMapper:(id <EMSModelMapperProtocol>)mapper;
+- (BOOL)insertModel:(id)model
+          withQuery:(NSString *)insertSQL
+             mapper:(id <EMSModelMapperProtocol>)mapper;
 
 @end

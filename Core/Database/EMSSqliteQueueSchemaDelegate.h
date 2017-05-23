@@ -5,7 +5,6 @@
 #import <Foundation/Foundation.h>
 #import "EMSSQLiteHelper.h"
 
-
 @interface EMSSqliteQueueSchemaDelegate : NSObject <EMSSQLiteHelperSchemaDelegate>
 
 @end

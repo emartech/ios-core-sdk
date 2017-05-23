@@ -5,6 +5,5 @@
 #import <Foundation/Foundation.h>
 #import "EMSModelMapperProtocol.h"
 
-
 @interface EMSRequestModelMapper : NSObject <EMSModelMapperProtocol>
 @end

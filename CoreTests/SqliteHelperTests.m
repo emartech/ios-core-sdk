@@ -5,6 +5,10 @@
 #import "Kiwi.h"
 #import "EMSSQLiteHelper.h"
 #import "EMSSqliteQueueSchemaDelegate.h"
+#import "EMSRequestModel.h"
+#import "EMSRequestModelBuilder.h"
+#import "EMSRequestContract.h"
+#import "EMSRequestModelMapper.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
@@ -22,12 +26,21 @@ SPEC_BEGIN(SQLiteHelperTests)
         [dbHelper close];
     });
 
+    id (^requestModel)(NSString *url, NSDictionary *payload) = ^id(NSString *url, NSDictionary *payload) {
+        return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+            [builder setUrl:url];
+            [builder setMethod:HTTPMethodPOST];
+            [builder setPayload:payload];
+            [builder setHeaders:@{@"headerKey": @"headerValue"}];
+        }];
+    };
+
     void (^runCommandOnTestDB)(NSString *sql) = ^(NSString *sql) {
         sqlite3 *db;
         sqlite3_open([TEST_DB_PATH UTF8String], &db);
-        sqlite3_stmt *statement1;
-        sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement1, nil);
-        sqlite3_step(statement1);
+        sqlite3_stmt *statement;
+        sqlite3_prepare_v2(db, [sql UTF8String], -1, &statement, nil);
+        sqlite3_step(statement);
         sqlite3_close(db);
     };
 
@@ -72,7 +85,8 @@ SPEC_BEGIN(SQLiteHelperTests)
             EMSSqliteQueueSchemaDelegate *schemaDelegate = [EMSSqliteQueueSchemaDelegate mock];
             dbHelper.schemaDelegate = schemaDelegate;
             [[schemaDelegate should] receive:@selector(schemaVersion) andReturn:theValue(100)];
-            [[schemaDelegate should] receive:@selector(onUpgradeWithDbHelper:oldVersion:newVersion:) withArguments:any(), theValue(2), theValue(100)];
+            [[schemaDelegate should] receive:@selector(onUpgradeWithDbHelper:oldVersion:newVersion:)
+                               withArguments:any(), theValue(2), theValue(100)];
 
             [dbHelper open];
         });
@@ -111,8 +125,29 @@ SPEC_BEGIN(SQLiteHelperTests)
 
     });
 
+    describe(@"insertModel", ^{
+        it(@"should insert the correct model in the database", ^{
+            EMSSqliteQueueSchemaDelegate *schemaDelegate = [EMSSqliteQueueSchemaDelegate new];
+            [dbHelper setSchemaDelegate:schemaDelegate];
+            [dbHelper open];
+            EMSRequestModel *model = requestModel(@"https://www.google.com", @{
+                    @"key": @"value"
+            });
+            EMSRequestModelMapper *mapper = [EMSRequestModelMapper new];
+
+            BOOL returnedValue = [dbHelper insertModel:model
+                                             withQuery:SQL_INSERT
+                                                mapper:mapper];
+            NSArray *requests = [dbHelper executeQuery:SQL_SELECTFIRST
+                                                mapper:mapper];
+            EMSRequestModel *request = requests[0];
+            [[theValue(returnedValue) should] beTrue];
+            [[model should] equal:request];
+        });
+    });
+
     describe(@"schemaDelegate onCreate", ^{
-        it(@"should creates schema for RequestModel", ^{
+        it(@"should create schema for RequestModel", ^{
             EMSSqliteQueueSchemaDelegate *delegate = [EMSSqliteQueueSchemaDelegate new];
             [dbHelper setSchemaDelegate:delegate];
             [dbHelper open];
@@ -121,10 +156,10 @@ SPEC_BEGIN(SQLiteHelperTests)
             sqlite3 *db;
             sqlite3_open([TEST_DB_PATH UTF8String], &db);
             sqlite3_stmt *statement;
-            if (sqlite3_prepare_v2(db, [@"SELECT sql FROM sqlite_master WHERE type='table' AND name='RequestModel';" UTF8String], -1, &statement, nil) == SQLITE_OK) {
+            if (sqlite3_prepare_v2(db, [@"SELECT sql FROM sqlite_master WHERE type='table' AND name='request';" UTF8String], -1, &statement, nil) == SQLITE_OK) {
                 int result = sqlite3_step(statement);
                 if (result == SQLITE_ROW) {
-                    [[[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)] should] equal:@"CREATE TABLE RequestModel (request_id TEXT, method TEXT, url TEXT, headers BLOB, payload BLOB, timestamp INTEGER)"];
+                    [[[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)] should] equal:@"CREATE TABLE request (request_id TEXT,method TEXT,url TEXT,headers BLOB,payload BLOB,timestamp REAL)"];
                 } else {
                     fail(@"sqlite3_step failed");
                 }
