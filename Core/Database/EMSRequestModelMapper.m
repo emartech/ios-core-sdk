@@ -6,30 +6,68 @@
 #import "EMSRequestModel.h"
 #import "NSDictionary+EMSCore.h"
 
+@interface EMSRequestModelMapper ()
+
+- (NSData *)dataFromStatement:(sqlite3_stmt *)statement
+                        index:(int)index;
+
+- (BOOL)notNull:(sqlite3_stmt *)statement
+          index:(int)index;
+
+@end
+
 @implementation EMSRequestModelMapper
 
+
 - (id)modelFromStatement:(sqlite3_stmt *)statement {
-    return nil;
+    NSString *requestId = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
+    NSString *method = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 1)];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 2)]];
+    NSDictionary<NSString *, NSString *> *headers;
+    if ([self notNull:statement index:3]) {
+        headers = [NSDictionary dictionaryWithData:[self dataFromStatement:statement
+                                                                     index:3]];
+    }
+    NSDictionary<NSString *, id> *payload;
+    if ([self notNull:statement index:4]) {
+        payload = [NSDictionary dictionaryWithData:[self dataFromStatement:statement
+                                                                     index:4]];
+    }
+    NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:sqlite3_column_double(statement, 5)];
+    return [[EMSRequestModel alloc] initWithRequestId:requestId
+                                            timestamp:timestamp
+                                                  url:url
+                                               method:method
+                                              payload:payload
+                                              headers:headers];
 }
 
-- (sqlite3_stmt *)bindStatement:(sqlite3_stmt *)statement fromModel:(id)model2 {
-    EMSRequestModel *model;
-    sqlite3_bind_text(statement, 1, [[model requestId] UTF8String], -1, SQLITE_STATIC);
-    sqlite3_bind_text(statement, 2, [[model method] UTF8String], -1, SQLITE_STATIC);
-    sqlite3_bind_text(statement, 3, [[[model url] absoluteString] UTF8String], -1, SQLITE_STATIC);
+- (sqlite3_stmt *)bindStatement:(sqlite3_stmt *)statement fromModel:(id)model {
+    sqlite3_bind_text(statement, 1, [[model requestId] UTF8String], -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(statement, 2, [[model method] UTF8String], -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(statement, 3, [[[model url] absoluteString] UTF8String], -1, SQLITE_TRANSIENT);
 
     NSData *headers = [[model headers] archive];
     sqlite3_bind_blob(statement, 4, [headers bytes], [headers length], SQLITE_BLOB);
     NSData *payload = [[model payload] archive];
     sqlite3_bind_blob(statement, 5, [payload bytes], [payload length], SQLITE_BLOB);
-    sqlite3_bind_int64(statement, 6, (sqlite3_int64) ([[model timestamp] timeIntervalSince1970] * 1000));
-
+    sqlite3_bind_double(statement, 6, [[model timestamp] timeIntervalSince1970]);
     return statement;
 }
 
-- (NSString *)insertStatement {
-    return @"INSERT INTO RequestModel VALUES (request_id=?,method=?,url=?,headers=?,payload=?,timestamp=?)";
+#pragma mark - Private methods
+
+- (NSData *)dataFromStatement:(sqlite3_stmt *)statement
+                        index:(int)index {
+    const void *blob = sqlite3_column_blob(statement, index);
+    NSUInteger size = (NSUInteger) sqlite3_column_bytes(statement, index);
+    return [[NSData alloc] initWithBytes:blob
+                                  length:size];
 }
 
+- (BOOL)notNull:(sqlite3_stmt *)statement
+          index:(int)index {
+    return sqlite3_column_type(statement, index) != SQLITE_NULL;
+}
 
 @end
