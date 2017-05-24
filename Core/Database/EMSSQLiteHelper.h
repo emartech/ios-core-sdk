@@ -8,7 +8,7 @@
 @class EMSSQLiteHelper;
 @protocol EMSModelMapperProtocol;
 
-@protocol EMSSQLiteHelperSchemaDelegate
+@protocol EMSSQLiteHelperSchemaHandler
 
 - (void)onCreateWithDbHelper:(EMSSQLiteHelper *)dbHelper;
 
@@ -20,11 +20,11 @@
 
 @interface EMSSQLiteHelper : NSObject
 
-@property(nonatomic, weak) id <EMSSQLiteHelperSchemaDelegate> schemaDelegate;
+@property(nonatomic, strong) id <EMSSQLiteHelperSchemaHandler> schemaHandler;
 
 - (instancetype)initWithDatabasePath:(NSString *)path;
 
-- (instancetype)initWithDatabasePath:(NSString *)path schemaDelegate:(id <EMSSQLiteHelperSchemaDelegate>)schemaDelegate;
+- (instancetype)initWithDatabasePath:(NSString *)path schemaDelegate:(id <EMSSQLiteHelperSchemaHandler>)schemaDelegate;
 
 - (int)version;
 
@@ -33,6 +33,9 @@
 - (void)close;
 
 - (BOOL)executeCommand:(NSString *)command;
+
+- (BOOL)executeCommand:(NSString *)command
+             withValue:(NSString *)value;
 
 - (NSArray *)executeQuery:(NSString *)query mapper:(id <EMSModelMapperProtocol>)mapper;
 

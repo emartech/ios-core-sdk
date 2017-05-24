@@ -2,10 +2,10 @@
 // Copyright (c) 2017 Emarsys. All rights reserved.
 //
 
-#import "EMSSqliteQueueSchemaDelegate.h"
+#import "EMSSqliteQueueSchemaHandler.h"
 #import "EMSRequestContract.h"
 
-@implementation EMSSqliteQueueSchemaDelegate
+@implementation EMSSqliteQueueSchemaHandler
 
 - (void)onCreateWithDbHelper:(EMSSQLiteHelper *)dbHelper {
     [dbHelper executeCommand:SQL_CREATE_TABLE];

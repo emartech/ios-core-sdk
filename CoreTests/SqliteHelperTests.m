@@ -4,7 +4,7 @@
 
 #import "Kiwi.h"
 #import "EMSSQLiteHelper.h"
-#import "EMSSqliteQueueSchemaDelegate.h"
+#import "EMSSqliteQueueSchemaHandler.h"
 #import "EMSRequestModel.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSRequestContract.h"
@@ -72,8 +72,8 @@ SPEC_BEGIN(SQLiteHelperTests)
     describe(@"open", ^{
 
         it(@"should call onCreate when the database is opened the first time", ^{
-            EMSSqliteQueueSchemaDelegate *schemaDelegate = [EMSSqliteQueueSchemaDelegate mock];
-            dbHelper.schemaDelegate = schemaDelegate;
+            EMSSqliteQueueSchemaHandler *schemaDelegate = [EMSSqliteQueueSchemaHandler mock];
+            dbHelper.schemaHandler = schemaDelegate;
             [[schemaDelegate should] receive:@selector(onCreateWithDbHelper:) withArguments:any()];
 
             [dbHelper open];
@@ -82,8 +82,8 @@ SPEC_BEGIN(SQLiteHelperTests)
         it(@"should call onUpgrade when the oldVersion and newVersion are different", ^{
             runCommandOnTestDB(@"PRAGMA user_version=2;");
 
-            EMSSqliteQueueSchemaDelegate *schemaDelegate = [EMSSqliteQueueSchemaDelegate mock];
-            dbHelper.schemaDelegate = schemaDelegate;
+            EMSSqliteQueueSchemaHandler *schemaDelegate = [EMSSqliteQueueSchemaHandler mock];
+            dbHelper.schemaHandler = schemaDelegate;
             [[schemaDelegate should] receive:@selector(schemaVersion) andReturn:theValue(100)];
             [[schemaDelegate should] receive:@selector(onUpgradeWithDbHelper:oldVersion:newVersion:)
                                withArguments:any(), theValue(2), theValue(100)];
@@ -127,8 +127,8 @@ SPEC_BEGIN(SQLiteHelperTests)
 
     describe(@"insertModel", ^{
         it(@"should insert the correct model in the database", ^{
-            EMSSqliteQueueSchemaDelegate *schemaDelegate = [EMSSqliteQueueSchemaDelegate new];
-            [dbHelper setSchemaDelegate:schemaDelegate];
+            EMSSqliteQueueSchemaHandler *schemaDelegate = [EMSSqliteQueueSchemaHandler new];
+            [dbHelper setSchemaHandler:schemaDelegate];
             [dbHelper open];
             EMSRequestModel *model = requestModel(@"https://www.google.com", @{
                     @"key": @"value"
@@ -140,16 +140,16 @@ SPEC_BEGIN(SQLiteHelperTests)
                                                 mapper:mapper];
             NSArray *requests = [dbHelper executeQuery:SQL_SELECTFIRST
                                                 mapper:mapper];
-            EMSRequestModel *request = requests[0];
+            EMSRequestModel *request = [requests firstObject];
             [[theValue(returnedValue) should] beTrue];
             [[model should] equal:request];
         });
     });
 
-    describe(@"schemaDelegate onCreate", ^{
+    describe(@"schemaHandler onCreate", ^{
         it(@"should create schema for RequestModel", ^{
-            EMSSqliteQueueSchemaDelegate *delegate = [EMSSqliteQueueSchemaDelegate new];
-            [dbHelper setSchemaDelegate:delegate];
+            EMSSqliteQueueSchemaHandler *delegate = [EMSSqliteQueueSchemaHandler new];
+            [dbHelper setSchemaHandler:delegate];
             [dbHelper open];
             [dbHelper close];
 
@@ -159,7 +159,8 @@ SPEC_BEGIN(SQLiteHelperTests)
             if (sqlite3_prepare_v2(db, [@"SELECT sql FROM sqlite_master WHERE type='table' AND name='request';" UTF8String], -1, &statement, nil) == SQLITE_OK) {
                 int result = sqlite3_step(statement);
                 if (result == SQLITE_ROW) {
-                    [[[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)] should] equal:@"CREATE TABLE request (request_id TEXT,method TEXT,url TEXT,headers BLOB,payload BLOB,timestamp REAL)"];
+                    [[[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)] should]
+                            equal:@"CREATE TABLE request (request_id TEXT,method TEXT,url TEXT,headers BLOB,payload BLOB,timestamp REAL)"];
                 } else {
                     fail(@"sqlite3_step failed");
                 }

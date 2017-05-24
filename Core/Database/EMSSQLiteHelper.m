@@ -10,10 +10,6 @@
 @property(nonatomic, assign) sqlite3 *db;
 @property(nonatomic, strong) NSString *dbPath;
 
-- (BOOL)executeCommand:(NSString *)insertSQL
-             withModel:(id)model
-                mapper:(id <EMSModelMapperProtocol>)mapper;
-
 @end
 
 @implementation EMSSQLiteHelper
@@ -23,11 +19,11 @@
 }
 
 - (instancetype)initWithDatabasePath:(NSString *)path
-                      schemaDelegate:(id <EMSSQLiteHelperSchemaDelegate>)schemaDelegate {
+                      schemaDelegate:(id <EMSSQLiteHelperSchemaHandler>)schemaDelegate {
     self = [super init];
     if (self) {
         _dbPath = path;
-        _schemaDelegate = schemaDelegate;
+        _schemaHandler = schemaDelegate;
     }
 
     return self;
@@ -58,11 +54,11 @@
 
         int version = [self version];
         if (version == 0) {
-            [self.schemaDelegate onCreateWithDbHelper:self];
+            [self.schemaHandler onCreateWithDbHelper:self];
         } else {
-            int newVersion = [self.schemaDelegate schemaVersion];
+            int newVersion = [self.schemaHandler schemaVersion];
             if (version < newVersion) {
-                [self.schemaDelegate onUpgradeWithDbHelper:self oldVersion:version newVersion:newVersion];
+                [self.schemaHandler onUpgradeWithDbHelper:self oldVersion:version newVersion:newVersion];
             }
         }
     }
@@ -86,24 +82,33 @@
     return NO;
 }
 
+typedef void(^BindBlock)(sqlite3_stmt *statement);
+
+- (BOOL)execute:(NSString *)command withBindBlock:(BindBlock)bindBlock {
+    sqlite3_stmt *statement;
+    if (sqlite3_prepare_v2(_db, [command UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        bindBlock(statement);
+        int value = sqlite3_step(statement);
+        if (value == SQLITE_ROW) {
+            sqlite3_finalize(statement);
+        }
+        return value == SQLITE_ROW || value == SQLITE_DONE;
+    }
+    return NO;
+}
+
+- (BOOL)executeCommand:(NSString *)command withValue:(NSString *)value {
+    return [self execute:command withBindBlock:^(sqlite3_stmt *statement) {
+        sqlite3_bind_text(statement, 1, [value UTF8String], -1, SQLITE_TRANSIENT);
+    }];
+}
+
 - (BOOL)insertModel:(id)model
           withQuery:(NSString *)insertSQL
              mapper:(id <EMSModelMapperProtocol>)mapper {
-    return [self executeCommand:insertSQL
-                      withModel:model
-                         mapper:mapper];
-}
-
-- (BOOL)executeCommand:(NSString *)command
-             withModel:(id)model
-                mapper:(id <EMSModelMapperProtocol>)mapper {
-    BOOL result = NO;
-    sqlite3_stmt *statement;
-    if (sqlite3_prepare_v2(_db, [command UTF8String], -1, &statement, nil) == SQLITE_OK) {
+    return [self execute:insertSQL withBindBlock:^(sqlite3_stmt *statement) {
         [mapper bindStatement:statement fromModel:model];
-        result = sqlite3_step(statement) == SQLITE_DONE;
-    }
-    return result;
+    }];
 }
 
 - (NSArray *)executeQuery:(NSString *)query

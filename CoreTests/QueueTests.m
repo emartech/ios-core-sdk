@@ -67,6 +67,22 @@ SPEC_BEGIN(QueueTests)
 
             [[[queue pop] should] equal:firstModel];
             [[[queue pop] should] equal:secondModel];
+            [[theValue([queue empty]) should] beTrue];
+        });
+    });
+
+    describe(@"peek", ^{
+        it(@"should return the first added element from the queue", ^{
+            id <EMSQueueProtocol> queue = createQueue();
+
+            EMSRequestModel *firstModel = requestModel(@"https://url1.com", nil);
+            EMSRequestModel *secondModel = requestModel(@"https://url2.com", nil);
+
+            [queue push:firstModel];
+            [queue push:secondModel];
+
+            [[[queue peek] should] equal:firstModel];
+            [[[queue peek] should] equal:firstModel];
         });
     });
 
