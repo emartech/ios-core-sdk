@@ -3,15 +3,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EMSCoreCompletion.h"
 
 @class EMSRequestModel;
-@class EMSResponseModel;
 
 NS_ASSUME_NONNULL_BEGIN
-
-typedef void (^CoreErrorBlock)(NSString *requestId, NSError *error);
-
-typedef void (^CoreSuccessBlock)(NSString *requestId, EMSResponseModel *response);
 
 @interface EMSRequestManager : NSObject
 
