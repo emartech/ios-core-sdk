@@ -25,10 +25,24 @@ SPEC_BEGIN(SQLiteQueueTests)
         return [EMSSQLiteQueue new];
     };
 
+    describe(@"pop", ^{
+        it(@"should return nil when the queue is empty", ^{
+            EMSSQLiteQueue *queue = createQueue();
+
+            [[[queue pop] should] beNil];
+        });
+    });
+
     describe(@"push", ^{
 
-        it(@"should store item in the queue", ^{
-
+        xit(@"should throw exception when the model is nil", ^{
+            id <EMSQueueProtocol> queue = createQueue();
+            @try {
+                [queue push:nil];
+                fail(@"Expected Exception when model is nil!");
+            } @catch (NSException *exception) {
+                [[theValue(exception) shouldNot] beNil];
+            }
         });
 
     });
