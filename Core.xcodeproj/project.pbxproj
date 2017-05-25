@@ -48,6 +48,7 @@
 		37460A320A39E0F48E1A2E45 /* EMSDefaultWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FBC16F18E16BE33FF431 /* EMSDefaultWorker.m */; };
 		37460B9E9E7185C93720C52E /* TestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460798C218C7BAB1D217F4 /* TestUtils.m */; };
 		37460BD85EFEA7297E6B7B1D /* EMSSQLiteQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 374606ECA8F636AD3E27698E /* EMSSQLiteQueue.m */; };
+		37460CDD10B9249AC47E8B33 /* EMSConnectionWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2CB2E5191984849DE14 /* EMSConnectionWatchdog.m */; };
 		37460E029F5671D4F868223C /* EMSCountMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460C9F6118934A13C87083 /* EMSCountMapper.m */; };
 		8AC4115A1E65CEB3000E1791 /* libCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFF089CB395D3BFF5070 /* libCore.a */; };
 		8ADA9EE51ECC872300E4D180 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ADA9EE41ECC872300E4D180 /* libsqlite3.tbd */; };
@@ -592,6 +593,7 @@
 				37460E029F5671D4F868223C /* EMSCountMapper.m in Sources */,
 				37460BD85EFEA7297E6B7B1D /* EMSSQLiteQueue.m in Sources */,
 				37460A320A39E0F48E1A2E45 /* EMSDefaultWorker.m in Sources */,
+				37460CDD10B9249AC47E8B33 /* EMSConnectionWatchdog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

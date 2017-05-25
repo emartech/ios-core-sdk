@@ -16,7 +16,7 @@
 - (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
                  successBlock:(CoreSuccessBlock)successBlock
                    errorBlock:(CoreErrorBlock)errorBlock {
-    return nil;
+    return [self initWithQueue:queue connectionWatchdog:[EMSConnectionWatchdog new] session:[NSURLSession sharedSession] successBlock:successBlock errorBlock:errorBlock];
 }
 
 - (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
@@ -24,6 +24,9 @@
                       session:(NSURLSession *)session
                  successBlock:(CoreSuccessBlock)successBlock
                    errorBlock:(CoreErrorBlock)errorBlock {
+    NSParameterAssert(queue);
+    NSParameterAssert(connectionWatchdog);
+    NSParameterAssert(session);
     return nil;
 }
 
