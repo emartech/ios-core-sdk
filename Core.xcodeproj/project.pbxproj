@@ -44,11 +44,13 @@
 		32C6FF26FD11DBF3A076278A /* DennaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FF50263807C302965C07 /* DennaTests.m */; };
 		3746023A39B5830431296300 /* PBXBuildFile */ = {isa = PBXBuildFile; fileRef = 37460C9F6118934A13C87083 /* EMSCountMapper.m */; };
 		3746023B03FEAF425446CE9E /* QueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3746071F99E2DF3E65ED09F3 /* QueueTests.m */; };
+		3746041DFD83262AE8DC5061 /* ConnectionWatchdogTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 374606C89BEB10543AB4BF60 /* ConnectionWatchdogTests.m */; };
 		37460599D8C020B3E049289A /* EMSInMemoryQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460F3A7D356E27D6B35CD2 /* EMSInMemoryQueue.m */; };
 		37460A320A39E0F48E1A2E45 /* EMSDefaultWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FBC16F18E16BE33FF431 /* EMSDefaultWorker.m */; };
 		37460B9E9E7185C93720C52E /* TestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460798C218C7BAB1D217F4 /* TestUtils.m */; };
 		37460BD85EFEA7297E6B7B1D /* EMSSQLiteQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 374606ECA8F636AD3E27698E /* EMSSQLiteQueue.m */; };
 		37460CDD10B9249AC47E8B33 /* EMSConnectionWatchdog.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F2CB2E5191984849DE14 /* EMSConnectionWatchdog.m */; };
+		37460D9E46BFD51D662AE26F /* EMSReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F7BC0D6B851254821F05 /* EMSReachability.m */; };
 		37460E029F5671D4F868223C /* EMSCountMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37460C9F6118934A13C87083 /* EMSCountMapper.m */; };
 		8AC4115A1E65CEB3000E1791 /* libCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6FFF089CB395D3BFF5070 /* libCore.a */; };
 		8ADA9EE51ECC872300E4D180 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8ADA9EE41ECC872300E4D180 /* libsqlite3.tbd */; };
@@ -151,6 +153,7 @@
 		32C6FFF089CB395D3BFF5070 /* libCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		37460395E0AB367D4313706F /* EMSSQLiteQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSSQLiteQueue.h; sourceTree = "<group>"; };
 		3746059CCFB8AFED9F009AF8 /* EMSInMemoryQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSInMemoryQueue.h; sourceTree = "<group>"; };
+		374606C89BEB10543AB4BF60 /* ConnectionWatchdogTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectionWatchdogTests.m; sourceTree = "<group>"; };
 		374606ECA8F636AD3E27698E /* EMSSQLiteQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSSQLiteQueue.m; sourceTree = "<group>"; };
 		3746071F99E2DF3E65ED09F3 /* QueueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueTests.m; sourceTree = "<group>"; };
 		37460798C218C7BAB1D217F4 /* TestUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestUtils.m; sourceTree = "<group>"; };
@@ -269,6 +272,7 @@
 				32C6FB187847D2E0E9A85204 /* SqliteHelperTests.m */,
 				32C6F1F33F6A283FAA3905CC /* DefaultWorkerTests.m */,
 				37460777FDC73E047CF285D1 /* Utils */,
+				374606C89BEB10543AB4BF60 /* ConnectionWatchdogTests.m */,
 			);
 			path = CoreTests;
 			sourceTree = "<group>";
@@ -571,6 +575,7 @@
 				32C6FB46836ED9F1C4CC99A1 /* SqliteHelperTests.m in Sources */,
 				32C6FD862BCED5AA53C4D387 /* DefaultWorkerTests.m in Sources */,
 				37460B9E9E7185C93720C52E /* TestUtils.m in Sources */,
+				3746041DFD83262AE8DC5061 /* ConnectionWatchdogTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +599,7 @@
 				37460BD85EFEA7297E6B7B1D /* EMSSQLiteQueue.m in Sources */,
 				37460A320A39E0F48E1A2E45 /* EMSDefaultWorker.m in Sources */,
 				37460CDD10B9249AC47E8B33 /* EMSConnectionWatchdog.m in Sources */,
+				37460D9E46BFD51D662AE26F /* EMSReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

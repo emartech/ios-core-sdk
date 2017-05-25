@@ -15,6 +15,8 @@
 
 @property(nonatomic, weak) id <EMSConnectionChangeListener> connectionChangeListener;
 
+- (instancetype)initWithReachability:(EMSReachability *)reachability;
+
 - (NetworkStatus)connectionState;
 
 - (BOOL)connected;
