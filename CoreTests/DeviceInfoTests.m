@@ -6,7 +6,7 @@
 #import "EMSDeviceInfo.h"
 #import <AdSupport/AdSupport.h>
 
-SPEC_BEGIN(EMSDeviceInfoTests)
+SPEC_BEGIN(DeviceInfoTests)
 
     context(@"Timezone", ^{
         __block NSTimeZone *cachedTimeZone;

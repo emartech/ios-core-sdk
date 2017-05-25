@@ -5,7 +5,7 @@
 #import "Kiwi.h"
 #import "EMSAuthentication.h"
 
-SPEC_BEGIN(EMSAuthenticationTests)
+SPEC_BEGIN(AuthenticationTests)
 
     __block NSTimeZone *cachedTimeZone;
 

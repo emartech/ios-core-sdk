@@ -35,6 +35,7 @@ SPEC_BEGIN(QueueTests)
     describe(@"push:", ^{
         it(@"should assert for nil parameter", ^{
             id <EMSQueueProtocol> queue = createQueue();
+
             @try {
                 [queue push:nil];
                 fail(@"Expected Exception when model is nil!");
