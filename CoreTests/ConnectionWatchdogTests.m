@@ -43,14 +43,14 @@ SPEC_BEGIN(EMSConnectionWatchdogTest)
 
     });
 
-    describe(@"connected", ^{
+    describe(@"isConnected", ^{
 
         it(@"should be NO when it's not reachable", ^{
             EMSReachability *reachabilityMock = [EMSReachability mock];
             [[reachabilityMock should] receive:@selector(currentReachabilityStatus) andReturn:theValue(NotReachable)];
 
             EMSConnectionWatchdog *watchdog = [[EMSConnectionWatchdog alloc] initWithReachability:reachabilityMock];
-            [[@([watchdog connected]) should] beNo];
+            [[@([watchdog isConnected]) should] beNo];
         });
 
         it(@"should be YES when it's ReachableViaWiFi", ^{
@@ -58,7 +58,7 @@ SPEC_BEGIN(EMSConnectionWatchdogTest)
             [[reachabilityMock should] receive:@selector(currentReachabilityStatus) andReturn:theValue(ReachableViaWiFi)];
 
             EMSConnectionWatchdog *watchdog = [[EMSConnectionWatchdog alloc] initWithReachability:reachabilityMock];
-            [[@([watchdog connected]) should] beYes];
+            [[@([watchdog isConnected]) should] beYes];
         });
 
         it(@"should be YES when it's ReachableViaWWAN", ^{
@@ -66,7 +66,7 @@ SPEC_BEGIN(EMSConnectionWatchdogTest)
             [[reachabilityMock should] receive:@selector(currentReachabilityStatus) andReturn:theValue(ReachableViaWWAN)];
 
             EMSConnectionWatchdog *watchdog = [[EMSConnectionWatchdog alloc] initWithReachability:reachabilityMock];
-            [[@([watchdog connected]) should] beYes];
+            [[@([watchdog isConnected]) should] beYes];
         });
 
     });

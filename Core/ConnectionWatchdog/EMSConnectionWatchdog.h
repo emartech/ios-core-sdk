@@ -19,6 +19,6 @@
 
 - (NetworkStatus)connectionState;
 
-- (BOOL)connected;
+- (BOOL)isConnected;
 
 @end

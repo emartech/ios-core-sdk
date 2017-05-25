@@ -30,7 +30,7 @@
     return [self.reachability currentReachabilityStatus];
 }
 
-- (BOOL)connected {
+- (BOOL)isConnected {
     int state = [self connectionState];
     return state == ReachableViaWiFi || state == ReachableViaWWAN;
 }
@@ -54,7 +54,7 @@
 - (void)startObserving {
     __weak typeof(self) weakSelf = self;
     self.notificationToken = [[NSNotificationCenter defaultCenter] addObserverForName:kReachabilityChangedNotification object:self.reachability queue:[NSOperationQueue currentQueue] usingBlock:^(NSNotification *note) {
-        [weakSelf.connectionChangeListener connectionChangedToNetworkStatus:[weakSelf connectionState] connectionStatus:[weakSelf connected]];
+        [weakSelf.connectionChangeListener connectionChangedToNetworkStatus:[weakSelf connectionState] connectionStatus:[weakSelf isConnected]];
     }];
     [self.reachability startNotifier];
 }
