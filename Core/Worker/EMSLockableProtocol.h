@@ -10,6 +10,6 @@
 
 - (void)unlock;
 
-- (BOOL)locked;
+- (BOOL)isLocked;
 
 @end

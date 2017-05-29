@@ -6,7 +6,7 @@
 #import "EMSConnectionWatchdog.h"
 
 @interface EMSDefaultWorker ()
-
+@property (nonatomic, assign) BOOL locked;
 @end
 
 @implementation EMSDefaultWorker
@@ -24,30 +24,38 @@
                       session:(NSURLSession *)session
                  successBlock:(CoreSuccessBlock)successBlock
                    errorBlock:(CoreErrorBlock)errorBlock {
-    NSParameterAssert(queue);
-    NSParameterAssert(connectionWatchdog);
-    NSParameterAssert(session);
-    return nil;
+    self = [super init];
+    if (self) {
+        NSParameterAssert(queue);
+        NSParameterAssert(connectionWatchdog);
+        NSParameterAssert(session);
+    }
+    return self;
 }
 
 #pragma mark - WorkerProtocol
 
 - (void)run {
+    [self lock];
+    [self execute];
+}
 
+- (void)execute {
+    NSLog(@"original execute");
 }
 
 #pragma mark - LockableProtocol
 
 - (void)lock {
-
+    self.locked = YES;
 }
 
 - (void)unlock {
 
 }
 
-- (BOOL)locked {
-    return NO;
+- (BOOL)isLocked {
+    return self.locked;
 }
 
 @end
