@@ -33,7 +33,7 @@
     return [_data firstObject];
 }
 
-- (BOOL)empty {
+- (BOOL)isEmpty {
     return [_data count] == 0;;
 }
 

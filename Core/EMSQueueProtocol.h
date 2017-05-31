@@ -11,6 +11,6 @@
 
 - (EMSRequestModel *)peek;
 
-- (BOOL)empty;
+- (BOOL)isEmpty;
 
 @end

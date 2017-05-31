@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSURLRequest *)requestWithRequestModel:(EMSRequestModel *)requestModel
                         additionalHeaders:(nullable NSDictionary *)additionalHeaders;
 
++ (NSURLRequest *)requestWithRequestModel:(EMSRequestModel *)requestModel;
+
 @end
 
 NS_ASSUME_NONNULL_END

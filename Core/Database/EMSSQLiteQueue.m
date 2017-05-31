@@ -46,7 +46,7 @@
     return model;
 }
 
-- (BOOL)empty {
+- (BOOL)isEmpty {
     [self.dbHelper open];
     NSNumber *count = [[self.dbHelper executeQuery:SQL_COUNT mapper:[EMSCountMapper new]] firstObject];
     [self.dbHelper close];

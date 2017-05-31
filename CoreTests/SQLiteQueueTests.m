@@ -33,7 +33,7 @@ SPEC_BEGIN(SQLiteQueueTests)
         return [[EMSSQLiteQueue alloc] initWithSQLiteHelper:helper];
     };
     describe(@"pop", ^{
-        it(@"should return nil when the queue is empty", ^{
+        it(@"should return nil when the queue is isEmpty", ^{
             id <EMSQueueProtocol> queue = createQueue();
 
             [[[queue pop] should] beNil];
@@ -75,7 +75,7 @@ SPEC_BEGIN(SQLiteQueueTests)
 
             [[[queue pop] should] equal:firstModel];
             [[[queue pop] should] equal:secondModel];
-            [[theValue([queue empty]) should] beTrue];
+            [[theValue([queue isEmpty]) should] beTrue];
         });
     });
 

@@ -37,7 +37,7 @@ SPEC_BEGIN(NSDictionaryCoreTests)
             [[@([testDictionary subsetOfDictionary:testDictionary]) should] equal:@(YES)];
         });
 
-        it(@"should return YES if the other dictionary is empty", ^{
+        it(@"should return YES if the other dictionary is isEmpty", ^{
             [[@([testDictionary subsetOfDictionary:@{}]) should] equal:@(YES)];
         });
 

@@ -9,7 +9,7 @@
 
 SPEC_BEGIN(NSURLRequestCoreTests)
 
-    describe(@"NSURLRequest+CoreTests requestWithRequestModel:(EMSRequestModel *)model", ^{
+    describe(@"NSURLRequest+CoreTests requestWithRequestModel:additionalHeaders:", ^{
 
         it(@"should create an NSUrlRequest from EMSRequestModel when additionalHeaders is nil", ^{
 
@@ -119,6 +119,31 @@ SPEC_BEGIN(NSURLRequestCoreTests)
             [[[request HTTPBody] should] equal:body];
         });
 
+    });
+
+    describe(@"NSURLRequest+CoreTests requestWithRequestModel:(EMSRequestModel *)model", ^{
+        it(@"should create NSURLRequest from EMSRequestModel", ^{
+            NSString *url = @"http://www.google.com";
+            NSDictionary *payload = @{@"key": @"value"};
+
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:url];
+                [builder setMethod:HTTPMethodPOST];
+                [builder setPayload:payload];
+            }];
+
+            NSURLRequest *request = [NSURLRequest requestWithRequestModel:model];
+
+            NSError *error = nil;
+            NSData *body = [NSJSONSerialization dataWithJSONObject:payload
+                                                           options:NSJSONWritingPrettyPrinted
+                                                             error:&error];
+
+            [[[[request URL] absoluteString] should] equal:url];
+            [[[request HTTPMethod] should] equal:@"POST"];
+            [[[request allHTTPHeaderFields] should] beEmpty];
+            [[[request HTTPBody] should] equal:body];
+        });
     });
 
 SPEC_END

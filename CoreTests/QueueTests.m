@@ -25,7 +25,7 @@ SPEC_BEGIN(QueueTests)
     };
 
     describe(@"pop", ^{
-        it(@"should return nil when the queue is empty", ^{
+        it(@"should return nil when the queue is isEmpty", ^{
             id <EMSQueueProtocol> queue = createQueue();
 
             [[[queue pop] should] beNil];
@@ -68,7 +68,7 @@ SPEC_BEGIN(QueueTests)
 
             [[[queue pop] should] equal:firstModel];
             [[[queue pop] should] equal:secondModel];
-            [[theValue([queue empty]) should] beTrue];
+            [[theValue([queue isEmpty]) should] beTrue];
         });
     });
 
