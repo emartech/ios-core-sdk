@@ -6,10 +6,9 @@
 #import "EMSDefaultWorker.h"
 #import "TestUtils.h"
 #import "EMSInMemoryQueue.h"
-#import "EMSConnectionWatchdog.h"
 #import "EMSSQLiteQueue.h"
 #import "EMSRequestModelBuilder.h"
-#import "NSURLRequest+EMSCore.h"
+#import "EMSRESTClient.h"
 
 SPEC_BEGIN(DefaultWorkerTests)
 
@@ -24,9 +23,7 @@ SPEC_BEGIN(DefaultWorkerTests)
         id (^createWorker)() = ^id() {
             return [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
                                         connectionWatchdog:[EMSConnectionWatchdog new]
-                                                   session:[NSURLSession sharedSession]
-                                              successBlock:successBlock
-                                                errorBlock:errorBlock];
+                                                restClient:[EMSRESTClient new]];
         };
 
         it(@"should not return nil", ^{
@@ -43,36 +40,15 @@ SPEC_BEGIN(DefaultWorkerTests)
         itShouldThrowException(@"should throw exception, when watchdog is nil", ^{
             [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
                                  connectionWatchdog:nil
-                                            session:[NSURLSession sharedSession]
-                                       successBlock:successBlock
-                                         errorBlock:errorBlock];
+                                         restClient:[EMSRESTClient new]];
         });
 
 
-        itShouldThrowException(@"should throw exception, when session is nil", ^{
+        itShouldThrowException(@"should throw exception, when restClient is nil", ^{
             [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
                                  connectionWatchdog:[EMSConnectionWatchdog new]
-                                            session:nil
-                                       successBlock:successBlock
-                                         errorBlock:errorBlock];
+                                         restClient:nil];
         });
-
-        itShouldThrowException(@"should throw exception, when successBlock is nil", ^{
-            [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
-                                 connectionWatchdog:[EMSConnectionWatchdog new]
-                                            session:[NSURLSession sharedSession]
-                                       successBlock:nil
-                                         errorBlock:errorBlock];
-        });
-
-        itShouldThrowException(@"should throw exception, when errorBlock is nil", ^{
-            [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
-                                 connectionWatchdog:[EMSConnectionWatchdog new]
-                                            session:[NSURLSession sharedSession]
-                                       successBlock:successBlock
-                                         errorBlock:nil];
-        });
-
 
         it(@"should initialize worker as unlocked", ^{
             EMSDefaultWorker *worker = createWorker();
@@ -104,9 +80,7 @@ SPEC_BEGIN(DefaultWorkerTests)
 
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queue
                                                             connectionWatchdog:watchdog
-                                                                       session:[NSURLSession sharedSession]
-                                                                  successBlock:successBlock
-                                                                    errorBlock:errorBlock];
+                                                                    restClient:[EMSRESTClient new]];
             [worker unlock];
             [worker run];
 
@@ -121,9 +95,7 @@ SPEC_BEGIN(DefaultWorkerTests)
 
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
                                                             connectionWatchdog:mockWatchdog
-                                                                       session:[NSURLSession sharedSession]
-                                                                  successBlock:successBlock
-                                                                    errorBlock:errorBlock];
+                                                                    restClient:[EMSRESTClient new]];
             [worker lock];
             [worker run];
         });
@@ -135,77 +107,55 @@ SPEC_BEGIN(DefaultWorkerTests)
 
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
                                                             connectionWatchdog:mockWatchdog
-                                                                       session:[NSURLSession sharedSession]
-                                                                  successBlock:successBlock
-                                                                    errorBlock:errorBlock];
+                                                                    restClient:[EMSRESTClient new]];
             [worker run];
         });
 
         it(@"should invoke peek on queue, when its running", ^{
             EMSSQLiteQueue *queueMock = [EMSSQLiteQueue mock];
             EMSConnectionWatchdog *watchdogMock = [EMSConnectionWatchdog mock];
-            NSURLSession *sessionMock = [NSURLSession mock];
+            EMSRESTClient *restClient = [EMSRESTClient new];
 
             [watchdogMock stub:@selector(setConnectionChangeListener:)];
+            [restClient stub:@selector(executeTaskWithRequestModel:onComplete:)];
 
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queueMock
                                                             connectionWatchdog:watchdogMock
-                                                                       session:sessionMock
-                                                                  successBlock:successBlock
-                                                                    errorBlock:errorBlock];
-
+                                                                    restClient:restClient];
             [[watchdogMock should] receive:@selector(isConnected)
                                  andReturn:theValue(YES)];
             [[queueMock should] receive:@selector(isEmpty)
                               andReturn:theValue(NO)];
 
-            [[queueMock should] receive:@selector(peek)
-                              andReturn:requestModel(@"https://url1.com", nil)];
-            [[sessionMock should] receive:@selector(dataTaskWithRequest:completionHandler:)];
-
+            [[queueMock should] receive:@selector(peek)];
             [worker run];
         });
 
         it(@"should invoke dataTaskWithRequest on session, when its running", ^{
             EMSSQLiteQueue *queueMock = [EMSSQLiteQueue mock];
             EMSConnectionWatchdog *watchdogMock = [EMSConnectionWatchdog mock];
-            NSURLSession *sessionMock = [NSURLSession mock];
+            EMSRESTClient *clientMock = [EMSRESTClient mock];
 
             [watchdogMock stub:@selector(setConnectionChangeListener:)];
 
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queueMock
                                                             connectionWatchdog:watchdogMock
-                                                                       session:sessionMock
-                                                                  successBlock:successBlock
-                                                                    errorBlock:errorBlock];
+                                                                    restClient:clientMock];
             [[watchdogMock should] receive:@selector(isConnected)
                                  andReturn:theValue(YES)];
             [[queueMock should] receive:@selector(isEmpty)
                               andReturn:theValue(NO)];
 
-            EMSRequestModel *model = requestModel(@"https://url1.com", nil);
+            EMSRequestModel *expectedModel = requestModel(@"https://url1.com", nil);
 
             [[queueMock should] receive:@selector(peek)
-                              andReturn:model];
-
-            NSURLSessionDataTask *taskMock = [NSURLSessionDataTask mock];
-
-            [[sessionMock should] receive:@selector(dataTaskWithRequest:completionHandler:)
-                                andReturn:taskMock];
-            [[taskMock should] receive:@selector(resume)];
-            KWCaptureSpy *requestSpy = [sessionMock captureArgument:@selector(dataTaskWithRequest:completionHandler:)
-                                                            atIndex:0];
-            KWCaptureSpy *completionHandlerSpy = [sessionMock captureArgument:@selector(dataTaskWithRequest:completionHandler:)
-                                                                      atIndex:1];
+                              andReturn:expectedModel];
+            KWCaptureSpy *requestSpy = [clientMock captureArgument:@selector(executeTaskWithRequestModel:onComplete:)
+                                                           atIndex:0];
             [worker run];
 
-            NSURLRequest *expectedRequest = [NSURLRequest requestWithRequestModel:model];
-            NSURLRequest *request = requestSpy.argument;
-
-            void (^completionHandler)(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) = completionHandlerSpy.argument;
-
-            [[expectedRequest should] equal:request];
-            [[completionHandler shouldNot] beNil];
+            EMSRequestModel *capturedModel = requestSpy.argument;
+            [[expectedModel should] equal:capturedModel];
         });
 
     });
@@ -215,9 +165,7 @@ SPEC_BEGIN(DefaultWorkerTests)
         id (^createWorker)() = ^id() {
             return [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
                                         connectionWatchdog:[EMSConnectionWatchdog new]
-                                                   session:[NSURLSession sharedSession]
-                                              successBlock:successBlock
-                                                errorBlock:errorBlock];
+                                                restClient:[EMSRESTClient new]];
         };
 
         it(@"isLocked should return YES after calling lock", ^{
@@ -242,9 +190,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             EMSConnectionWatchdog *watchdog = [EMSConnectionWatchdog new];
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
                                                             connectionWatchdog:watchdog
-                                                                       session:[NSURLSession sharedSession]
-                                                                  successBlock:successBlock
-                                                                    errorBlock:errorBlock];
+                                                                    restClient:[EMSRESTClient new]];
             [[worker should] equal:watchdog.connectionChangeListener];
         });
 
@@ -255,9 +201,7 @@ SPEC_BEGIN(DefaultWorkerTests)
 
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:[EMSInMemoryQueue new]
                                                             connectionWatchdog:mockWatchdog
-                                                                       session:[NSURLSession sharedSession]
-                                                                  successBlock:successBlock
-                                                                    errorBlock:errorBlock];
+                                                                    restClient:[EMSRESTClient new]];
             [worker unlock];
             [worker connectionChangedToNetworkStatus:ReachableViaWiFi
                                     connectionStatus:YES];

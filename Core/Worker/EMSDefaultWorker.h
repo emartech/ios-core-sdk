@@ -9,6 +9,7 @@
 
 @protocol EMSQueueProtocol;
 @class EMSConnectionWatchdog;
+@class EMSRESTClient;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,9 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
            connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
-                      session:(NSURLSession *)session
-                 successBlock:(CoreSuccessBlock)successBlock
-                   errorBlock:(CoreErrorBlock)errorBlock;
+                   restClient:(EMSRESTClient *)client;
 @end
 
 NS_ASSUME_NONNULL_END

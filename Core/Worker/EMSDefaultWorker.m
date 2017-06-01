@@ -4,7 +4,7 @@
 
 #import "EMSDefaultWorker.h"
 #import "EMSRequestModel.h"
-#import "EMSCoreCompletionHandlerMiddleware.h"
+#import "EMSRESTClient.h"
 #import "EMSQueueProtocol.h"
 #import "NSURLRequest+EMSCore.h"
 
@@ -13,9 +13,7 @@
 @property(nonatomic, assign) BOOL locked;
 @property(nonatomic, strong) EMSConnectionWatchdog *connectionWatchdog;
 @property(nonatomic, strong) id <EMSQueueProtocol> queue;
-@property(nonatomic, strong) NSURLSession *session;
-@property(nonatomic, strong) CoreSuccessBlock successBlock;
-@property(nonatomic, strong) CoreErrorBlock errorBlock;
+@property(nonatomic, strong) EMSRESTClient *client;
 
 @end
 
@@ -26,30 +24,26 @@
 - (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
                  successBlock:(CoreSuccessBlock)successBlock
                    errorBlock:(CoreErrorBlock)errorBlock {
+    NSParameterAssert(successBlock);
+    NSParameterAssert(errorBlock);
     return [self initWithQueue:queue
             connectionWatchdog:[EMSConnectionWatchdog new]
-                       session:[NSURLSession sharedSession]
-                  successBlock:successBlock
-                    errorBlock:errorBlock];
+                    restClient:[EMSRESTClient clientWithSuccessBlock:successBlock
+                                                          errorBlock:errorBlock]];
 }
 
 - (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
            connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
-                      session:(NSURLSession *)session
-                 successBlock:(CoreSuccessBlock)successBlock
-                   errorBlock:(CoreErrorBlock)errorBlock {
+                   restClient:(EMSRESTClient *)client {
     if (self = [super init]) {
         NSParameterAssert(queue);
         NSParameterAssert(connectionWatchdog);
-        NSParameterAssert(session);
-        NSParameterAssert(successBlock);
-        NSParameterAssert(errorBlock);
+        NSParameterAssert(client);
+
         _connectionWatchdog = connectionWatchdog;
         [_connectionWatchdog setConnectionChangeListener:self];
         _queue = queue;
-        _session = session;
-        _successBlock = successBlock;
-        _errorBlock = errorBlock;
+        _client = client;
     }
     return self;
 }
@@ -60,12 +54,10 @@
     if (![self isLocked] && [self.connectionWatchdog isConnected] && ![self.queue isEmpty]) {
         [self lock];
         EMSRequestModel *model = [self.queue peek];
-        NSURLRequest *request = [NSURLRequest requestWithRequestModel:model];
-        EMSCoreCompletionHandlerMiddleware *middleware = [[EMSCoreCompletionHandlerMiddleware alloc] initWithSuccessBlock:self.successBlock
-                                                                                                               errorBlock:self.errorBlock];
-        NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request
-                                                         completionHandler:middleware.completionBlock];
-        [dataTask resume];
+        [self.client executeTaskWithRequestModel:model
+                                      onComplete:^(BOOL shouldContinue) {
+                                          //TODO: do not forget it please!
+                                      }];
     }
 }
 
