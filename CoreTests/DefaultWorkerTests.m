@@ -131,7 +131,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             [worker run];
         });
 
-        it(@"should invoke dataTaskWithRequest on session, when its running", ^{
+        it(@"should invoke executeTaskWithRequestModel:onComplete: on Restclient, when its running", ^{
             EMSSQLiteQueue *queueMock = [EMSSQLiteQueue mock];
             EMSConnectionWatchdog *watchdogMock = [EMSConnectionWatchdog mock];
             EMSRESTClient *clientMock = [EMSRESTClient mock];
@@ -158,7 +158,71 @@ SPEC_BEGIN(DefaultWorkerTests)
             [[expectedModel should] equal:capturedModel];
         });
 
+        it(@"should unlock after onComplete called with false", ^{
+            EMSSQLiteQueue *queueMock = [EMSSQLiteQueue mock];
+            EMSConnectionWatchdog *watchdogMock = [EMSConnectionWatchdog mock];
+            EMSRESTClient *clientMock = [EMSRESTClient mock];
+
+            [watchdogMock stub:@selector(setConnectionChangeListener:)];
+
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queueMock
+                                                            connectionWatchdog:watchdogMock
+                                                                    restClient:clientMock];
+            [[watchdogMock should] receive:@selector(isConnected)
+                                 andReturn:theValue(YES)];
+            [[queueMock should] receive:@selector(isEmpty)
+                              andReturn:theValue(NO)];
+
+            EMSRequestModel *expectedModel = requestModel(@"https://url1.com", nil);
+
+            [[queueMock should] receive:@selector(peek)
+                              andReturn:expectedModel];
+            KWCaptureSpy *completionSpy = [clientMock captureArgument:@selector(executeTaskWithRequestModel:onComplete:)
+                                                              atIndex:1];
+            [worker run];
+
+            EMSRestClientCompletionBlock capturedBlock = completionSpy.argument;
+
+            capturedBlock(false);
+
+            [[theValue([worker isLocked]) should] beNo];
+        });
+
+        it(@"should unlock and rerun after onComplete called with true", ^{
+            EMSSQLiteQueue *queueMock = [EMSSQLiteQueue mock];
+            EMSConnectionWatchdog *watchdogMock = [EMSConnectionWatchdog mock];
+            EMSRESTClient *clientMock = [EMSRESTClient mock];
+
+            [watchdogMock stub:@selector(setConnectionChangeListener:)];
+
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queueMock
+                                                            connectionWatchdog:watchdogMock
+                                                                    restClient:clientMock];
+            [[watchdogMock should] receive:@selector(isConnected)
+                                 andReturn:theValue(YES)];
+            [[queueMock should] receive:@selector(isEmpty)
+                              andReturn:theValue(NO)];
+
+            EMSRequestModel *expectedModel = requestModel(@"https://url1.com", nil);
+
+            [[queueMock should] receive:@selector(peek)
+                              andReturn:expectedModel];
+            KWCaptureSpy *completionSpy = [clientMock captureArgument:@selector(executeTaskWithRequestModel:onComplete:)
+                                                              atIndex:1];
+            [worker run];
+
+            EMSRestClientCompletionBlock capturedBlock = completionSpy.argument;
+
+            capturedBlock(true);
+
+            [[worker shouldEventually] receive:@selector(run)];
+
+            [[theValue([worker isLocked]) should] beNo];
+
+        });
+
     });
+
 
     describe(@"LockableProtocol", ^{
 

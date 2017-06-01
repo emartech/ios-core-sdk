@@ -54,9 +54,13 @@
     if (![self isLocked] && [self.connectionWatchdog isConnected] && ![self.queue isEmpty]) {
         [self lock];
         EMSRequestModel *model = [self.queue peek];
+        __weak typeof(self) weakSelf = self;
         [self.client executeTaskWithRequestModel:model
                                       onComplete:^(BOOL shouldContinue) {
-                                          //TODO: do not forget it please!
+                                          [weakSelf unlock];
+                                          if (shouldContinue) {
+                                              [weakSelf performSelector:@selector(run) withObject:nil afterDelay:0];
+                                          }
                                       }];
     }
 }

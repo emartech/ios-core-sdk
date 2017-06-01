@@ -164,9 +164,9 @@ SPEC_BEGIN(EMSRESTClientTests)
                         successRequestId = requestId;
                         returnedResponse = response;
                     }
-                                                                   errorBlock:^(NSString *requestId, NSError *error) {
+                                                                   errorBlock:^(NSString *requestId, NSError *blockError) {
                                                                        errorRequestId = requestId;
-                                                                       returnedError = error;
+                                                                       returnedError = blockError;
                                                                    }
                                                                       session:sessionMock];
 
@@ -174,7 +174,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                 returnedShouldContinue = shouldContinue;
             }];
 
-            void (^completionBlock)(NSData *_Nullable completionData, NSURLResponse *_Nullable response, NSError *_Nullable error) = blockSpy.argument;
+            void (^completionBlock)(NSData *_Nullable completionData, NSURLResponse *_Nullable response, NSError *_Nullable completionError) = blockSpy.argument;
 
             completionBlock(data, urlResponse, error);
 
@@ -210,9 +210,9 @@ SPEC_BEGIN(EMSRESTClientTests)
                         successRequestId = requestId;
                         returnedResponse = response;
                     }
-                                                                   errorBlock:^(NSString *requestId, NSError *error) {
+                                                                   errorBlock:^(NSString *requestId, NSError *blockError) {
                                                                        errorRequestId = requestId;
-                                                                       returnedError = error;
+                                                                       returnedError = blockError;
                                                                    }
                                                                       session:sessionMock];
 
@@ -220,7 +220,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                 returnedShouldContinue = shouldContinue;
             }];
 
-            void (^completionBlock)(NSData *_Nullable completionData, NSURLResponse *_Nullable response, NSError *_Nullable error) = blockSpy.argument;
+            void (^completionBlock)(NSData *_Nullable completionData, NSURLResponse *_Nullable response, NSError *_Nullable completionError) = blockSpy.argument;
 
             completionBlock(data, urlResponse, error);
 
