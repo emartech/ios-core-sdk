@@ -6,7 +6,6 @@
 #import "EMSRequestModel.h"
 #import "EMSRESTClient.h"
 #import "EMSQueueProtocol.h"
-#import "NSURLRequest+EMSCore.h"
 
 @interface EMSDefaultWorker ()
 
@@ -59,6 +58,7 @@
                                       onComplete:^(BOOL shouldContinue) {
                                           [weakSelf unlock];
                                           if (shouldContinue) {
+                                              [weakSelf.queue pop];
                                               [weakSelf performSelector:@selector(run) withObject:nil afterDelay:0];
                                           }
                                       }];

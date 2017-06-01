@@ -8,10 +8,22 @@
 #import "EMSRequestManager.h"
 #import "EMSResponseModel.h"
 #import "NSDictionary+EMSCore.h"
+#import "EMSSQLiteHelper.h"
+#import "EMSSQLiteQueue.h"
+#import "EMSSqliteQueueSchemaHandler.h"
+#import "EMSRequestContract.h"
 
 #define DennaUrl(ending) [NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", ending];
 
 SPEC_BEGIN(DennaTest)
+
+    beforeEach(^{
+        EMSSQLiteHelper *helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
+                                                                 schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
+        [helper open];
+        [helper executeCommand:SQL_PURGE];
+        [helper close];
+    });
 
     NSString *error500 = DennaUrl(@"/error500");
     NSString *echo = DennaUrl(@"/echo");
@@ -24,22 +36,21 @@ SPEC_BEGIN(DennaTest)
         __block BOOL expectedSubsetOfResultHeaders;
         __block NSDictionary<NSString *, id> *resultPayload;
 
-        EMSRequestManager *core = [EMSRequestManager new];
-        [core submit:model
-        successBlock:^(NSString *requestId, EMSResponseModel *response) {
-            checkableRequestId = requestId;
-            NSDictionary<NSString *, id> *returnedPayload = [NSJSONSerialization JSONObjectWithData:response.body
-                                                                                            options:NSJSONReadingAllowFragments
-                                                                                              error:nil];
-            NSLog(@"RequestId: %@, responsePayload: %@", requestId, returnedPayload);
-            resultMethod = returnedPayload[@"method"];
-            expectedSubsetOfResultHeaders = [returnedPayload[@"headers"] subsetOfDictionary:headers];
-            resultPayload = returnedPayload[@"body"];
-        }
-          errorBlock:^(NSString *_Nonnull requestId, NSError *_Nonnull error) {
-              NSLog(@"ERROR!");
-              fail(@"errorblock invoked");
-          }];
+        EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+                    checkableRequestId = requestId;
+                    NSDictionary<NSString *, id> *returnedPayload = [NSJSONSerialization JSONObjectWithData:response.body
+                                                                                                    options:NSJSONReadingAllowFragments
+                                                                                                      error:nil];
+                    NSLog(@"RequestId: %@, responsePayload: %@", requestId, returnedPayload);
+                    resultMethod = returnedPayload[@"method"];
+                    expectedSubsetOfResultHeaders = [returnedPayload[@"headers"] subsetOfDictionary:headers];
+                    resultPayload = returnedPayload[@"body"];
+                }
+                                                                  errorBlock:^(NSString *requestId, NSError *error) {
+                                                                      NSLog(@"ERROR!");
+                                                                      fail(@"errorblock invoked");
+                                                                  }];
+        [core submit:model];
 
         [[expectFutureValue(resultMethod) shouldEventually] equal:method];
         [[expectFutureValue(@(expectedSubsetOfResultHeaders)) shouldEventually] equal:@YES];
@@ -59,16 +70,17 @@ SPEC_BEGIN(DennaTest)
 
             __block NSString *checkableRequestId;
 
-            EMSRequestManager *core = [EMSRequestManager new];
-            [core submit:model
-            successBlock:^(NSString *requestId, EMSResponseModel *response) {
-                NSLog(@"ERROR!");
-                fail(@"successBlock invoked :'(");
-            }
-              errorBlock:^(NSString *_Nonnull requestId, NSError *_Nonnull error) {
-                  checkableRequestId = requestId;
-              }];
-            [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];
+            EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+                        NSLog(@"ERROR!");
+                        fail(@"successBlock invoked :'(");
+                    }
+                                                                      errorBlock:^(NSString *requestId, NSError *error) {
+                                                                          checkableRequestId = requestId;
+                                                                          NSLog(@"ERROR!");
+                                                                          fail(@"errorBlock invoked :'(");
+                                                                      }];
+            [core submit:model];
+            [[expectFutureValue(checkableRequestId) shouldEventually] beNil];
         });
 
         it(@"should respond with the GET request's headers/body", ^{

@@ -79,9 +79,9 @@
     NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *) response;
     NSInteger statusCode = httpUrlResponse.statusCode;
     const BOOL hasError = error || statusCode < 200 || statusCode > 299;
-    const BOOL nonRetryAbleError = statusCode >= 400 && statusCode < 500;
+    const BOOL nonRetriableRequest = [self isStatusCodeNonRetriable:statusCode] || [self isErrorNonRetriable:error];
 
-    if (self.errorBlock && nonRetryAbleError) {
+    if (self.errorBlock && nonRetriableRequest) {
         self.errorBlock(requestModel.requestId,
                 error ? error : [self errorWithData:data statusCode:statusCode]);
     }
@@ -92,9 +92,17 @@
     }
 
     if (onComplete) {
-        const BOOL shouldContinue = !hasError || nonRetryAbleError;
+        const BOOL shouldContinue = !hasError || nonRetriableRequest;
         onComplete(shouldContinue);
     }
+}
+
+- (BOOL)isErrorNonRetriable:(NSError *)error {
+    return error.code == NSURLErrorCannotFindHost || error.code == NSURLErrorBadURL || error.code == NSURLErrorUnsupportedURL;
+}
+
+- (BOOL)isStatusCodeNonRetriable:(NSInteger)statusCode {
+    return statusCode >= 400 && statusCode < 500;
 }
 
 - (NSError *)errorWithData:(NSData *)data
@@ -106,3 +114,4 @@
 }
 
 @end
+

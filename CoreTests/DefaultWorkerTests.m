@@ -213,6 +213,8 @@ SPEC_BEGIN(DefaultWorkerTests)
 
             EMSRestClientCompletionBlock capturedBlock = completionSpy.argument;
 
+            [[queueMock should] receive:@selector(pop)];
+
             capturedBlock(true);
 
             [[worker shouldEventually] receive:@selector(run)];

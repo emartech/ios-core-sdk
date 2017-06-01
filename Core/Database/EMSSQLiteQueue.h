@@ -6,6 +6,8 @@
 #import <sqlite3.h>
 #import "EMSQueueProtocol.h"
 
+#define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
+
 @class EMSSQLiteHelper;
 
 @interface EMSSQLiteQueue : NSObject <EMSQueueProtocol>

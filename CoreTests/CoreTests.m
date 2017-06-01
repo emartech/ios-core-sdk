@@ -6,8 +6,20 @@
 #import "EMSRequestManager.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSRequestModel.h"
+#import "EMSSQLiteHelper.h"
+#import "EMSSQLiteQueue.h"
+#import "EMSSqliteQueueSchemaHandler.h"
+#import "EMSRequestContract.h"
 
 SPEC_BEGIN(CoreTest)
+
+    beforeEach(^{
+        EMSSQLiteHelper *helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
+                                                                 schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
+        [helper open];
+        [helper executeCommand:SQL_PURGE];
+        [helper close];
+    });
 
     describe(@"EMSRequestManager", ^{
 
@@ -21,14 +33,15 @@ SPEC_BEGIN(CoreTest)
 
             __block NSString *checkableRequestId;
 
-            EMSRequestManager *core = [EMSRequestManager new];
-            [core submit:model
-            successBlock:^(NSString *requestId, EMSResponseModel *response) {
-                checkableRequestId = requestId;
-            } errorBlock:^(NSString * _Nonnull requestId, NSError * _Nonnull error) {
-                NSLog(@"ERROR: %@", error);
-                        fail([NSString stringWithFormat:@"errorBlock: %@", error]);
-            }];
+            EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+                        checkableRequestId = requestId;
+                    }
+                                                                      errorBlock:^(NSString *requestId, NSError *error) {
+                                                                          NSLog(@"ERROR: %@", error);
+                                                                          fail([NSString stringWithFormat:@"errorBlock: %@", error]);
+                                                                      }];
+
+            [core submit:model];
 
             [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];
         });
@@ -44,28 +57,28 @@ SPEC_BEGIN(CoreTest)
             __block NSString *checkableRequestId;
             __block NSError *checkableError;
 
-            EMSRequestManager *core = [EMSRequestManager new];
-            [core submit:model
-            successBlock:nil
-              errorBlock:^(NSString *requestId, NSError *error) {
-                  checkableRequestId = requestId;
-                  checkableError = error;
-              }];
+            EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+                        fail([NSString stringWithFormat:@"SuccessBlock: %@", response]);
+                    }
+                                                                      errorBlock:^(NSString *requestId, NSError *error) {
+                                                                          checkableRequestId = requestId;
+                                                                          checkableError = error;
+                                                                      }];
+            [core submit:model];
 
             [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];
             [[expectFutureValue(checkableError) shouldNotEventually] beNil];
         });
 
         it(@"should throw an exception, when model is nil", ^{
-            EMSRequestModel *model;
-            EMSRequestManager *core = [EMSRequestManager new];
-
+            EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+                    }
+                                                                      errorBlock:^(NSString *requestId, NSError *error) {
+                                                                      }];
             @try {
-                [core submit:model
-                successBlock:nil
-                  errorBlock:nil];
+                [core submit:nil];
                 fail(@"Expected exception when model is nil");
-            } @catch(NSException *exception) {
+            } @catch (NSException *exception) {
                 [[theValue(exception) shouldNot] beNil];
             }
         });
