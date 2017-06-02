@@ -185,6 +185,52 @@ SPEC_BEGIN(EMSRESTClientTests)
             [[expectFutureValue(theValue(returnedShouldContinue)) shouldEventually] beNo];
         });
 
+        it(@"executeTaskWithRequestModel should not return requestId or error on errorBlock nor successId and response when there is a request timeout", ^{
+            NSURLSession *sessionMock = [NSURLSession mock];
+
+            NSString *urlString = @"https://url1.com";
+            EMSRequestModel *model = requestModel(urlString, nil);
+            NSData *data = [urlString dataUsingEncoding:NSUTF8StringEncoding];
+            NSURLResponse *urlResponse = [[NSHTTPURLResponse alloc] initWithURL:[[NSURL alloc] initWithString:urlString]
+                                                                     statusCode:408
+                                                                    HTTPVersion:nil
+                                                                   headerFields:nil];
+            NSError *error = [NSError errorWithCode:5000 localizedDescription:@"crazy"];
+
+            __block NSString *successRequestId;
+            __block NSString *errorRequestId;
+            __block EMSResponseModel *returnedResponse;
+            __block NSError *returnedError;
+            __block BOOL returnedShouldContinue;
+
+            KWCaptureSpy *blockSpy = [sessionMock captureArgument:@selector(dataTaskWithRequest:completionHandler:)
+                                                          atIndex:1];
+
+            EMSRESTClient *restClient = [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+                        successRequestId = requestId;
+                        returnedResponse = response;
+                    }
+                                                                   errorBlock:^(NSString *requestId, NSError *blockError) {
+                                                                       errorRequestId = requestId;
+                                                                       returnedError = blockError;
+                                                                   }
+                                                                      session:sessionMock];
+
+            [restClient executeTaskWithRequestModel:model onComplete:^(BOOL shouldContinue) {
+                returnedShouldContinue = shouldContinue;
+            }];
+
+            void (^completionBlock)(NSData *_Nullable completionData, NSURLResponse *_Nullable response, NSError *_Nullable completionError) = blockSpy.argument;
+
+            completionBlock(data, urlResponse, error);
+
+            [[expectFutureValue(successRequestId) shouldEventually] beNil];
+            [[expectFutureValue(returnedResponse) shouldEventually] beNil];
+            [[expectFutureValue(errorRequestId) shouldEventually] beNil];
+            [[expectFutureValue(returnedError) shouldEventually] beNil];
+            [[expectFutureValue(theValue(returnedShouldContinue)) shouldEventually] beNo];
+        });
+
         it(@"executeTaskWithRequestModel should return requestId, and error on errorBlock, when there is a non-retriable error", ^{
             NSURLSession *sessionMock = [NSURLSession mock];
 
