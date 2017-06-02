@@ -15,7 +15,8 @@ Pod::Spec.new do |spec|
 		'Core/EMSResponseModel.h',
 		'Core/EMSAuthentication.h',
 		'Core/EMSDeviceInfo.h',
-		'Core/NSError+EMSCore.h'
+		'Core/NSError+EMSCore.h',
+		'Core/EMSCoreCompletion.h'
 	]
 	spec.libraries = 'z', 'c++'
 end
