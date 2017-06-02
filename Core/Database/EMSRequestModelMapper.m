@@ -42,7 +42,7 @@
                                               headers:headers];
 }
 
-- (sqlite3_stmt *)bindStatement:(sqlite3_stmt *)statement fromModel:(id)model {
+- (sqlite3_stmt *)bindStatement:(sqlite3_stmt *)statement fromModel:(EMSRequestModel *)model {
     sqlite3_bind_text(statement, 1, [[model requestId] UTF8String], -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(statement, 2, [[model method] UTF8String], -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(statement, 3, [[[model url] absoluteString] UTF8String], -1, SQLITE_TRANSIENT);
