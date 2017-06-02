@@ -102,6 +102,7 @@
 }
 
 - (BOOL)isStatusCodeNonRetriable:(NSInteger)statusCode {
+    if (statusCode == 408) return NO;
     return statusCode >= 400 && statusCode < 500;
 }
 
