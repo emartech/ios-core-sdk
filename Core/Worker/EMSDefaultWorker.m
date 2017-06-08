@@ -54,14 +54,14 @@
         [self lock];
         EMSRequestModel *model = [self.queue peek];
         __weak typeof(self) weakSelf = self;
-        [self.client executeTaskWithRequestModel:model
-                                      onComplete:^(BOOL shouldContinue) {
-                                          [weakSelf unlock];
-                                          if (shouldContinue) {
-                                              [weakSelf.queue pop];
-                                              [weakSelf performSelector:@selector(run) withObject:nil afterDelay:0];
-                                          }
-                                      }];
+        [self.client executeTaskWithOfflineCallbackStrategyWithRequestModel:model
+                                                                 onComplete:^(BOOL shouldContinue) {
+                                                                     [weakSelf unlock];
+                                                                     if (shouldContinue) {
+                                                                         [weakSelf.queue pop];
+                                                                         [weakSelf performSelector:@selector(run) withObject:nil afterDelay:0];
+                                                                     }
+                                                                 }];
     }
 }
 

@@ -26,6 +26,21 @@ SPEC_BEGIN(EMSRESTClientTests)
         }];
     };
 
+    typedef void(^SessionMockBlock)(NSURLSession *session);
+    void(^sessionMockWithCannedResponse)(EMSRequestModel *requestModel, int responseStatusCode, NSData *responseData, NSError *responseError, SessionMockBlock actionBlock) = ^(EMSRequestModel *requestModel, int responseStatusCode, NSData *responseData, NSError *responseError, SessionMockBlock actionBlock) {
+        NSURLSession *sessionMock = [NSURLSession mock];
+        NSURLResponse *urlResponse = [[NSHTTPURLResponse alloc] initWithURL:requestModel.url
+                                                                 statusCode:responseStatusCode
+                                                                HTTPVersion:nil
+                                                               headerFields:nil];
+
+        KWCaptureSpy *blockSpy = [sessionMock captureArgument:@selector(dataTaskWithRequest:completionHandler:)
+                                                      atIndex:1];
+        actionBlock(sessionMock);
+        void (^completionBlock)(NSData *_Nullable completionData, NSURLResponse *_Nullable response, NSError *_Nullable error) = blockSpy.argument;
+        completionBlock(responseData, urlResponse, responseError);
+    };
+
     describe(@"RESTClient", ^{
 
         itShouldThrowException(@"should throw exception when successBlock is nil", ^{
@@ -41,11 +56,16 @@ SPEC_BEGIN(EMSRESTClientTests)
         itShouldThrowException(@"should throw exception when completionBlock is nil", ^{
             EMSRESTClient *client = [EMSRESTClient clientWithSuccessBlock:successBlock
                                                                errorBlock:errorBlock];
-            [client executeTaskWithRequestModel:requestModel(@"https://url1.com", nil)
-                                     onComplete:nil];
+            [client executeTaskWithOfflineCallbackStrategyWithRequestModel:requestModel(@"https://url1.com", nil)
+                                                                onComplete:nil];
         });
 
-        it(@"executeTaskWithRequestModel should call dataTaskWithRequest:completionHandler: with the correct requestModel", ^{
+    });
+
+    describe(@"executeTaskWithOfflineCallbackStrategyWithRequestModel", ^{
+
+
+        it(@"should call dataTaskWithRequest:completionHandler: with the correct requestModel", ^{
             NSURLSession *sessionMock = [NSURLSession mock];
 
             EMSRequestModel *model = requestModel(@"https://url1.com", nil);
@@ -56,10 +76,10 @@ SPEC_BEGIN(EMSRESTClientTests)
             KWCaptureSpy *sessionSpy = [sessionMock captureArgument:@selector(dataTaskWithRequest:completionHandler:)
                                                             atIndex:0];
 
-            [restClient executeTaskWithRequestModel:model
-                                         onComplete:^(BOOL shouldContinue) {
+            [restClient executeTaskWithOfflineCallbackStrategyWithRequestModel:model
+                                                                    onComplete:^(BOOL shouldContinue) {
 
-                                         }];
+                                                                    }];
 
             NSURLRequest *expectedRequest = [NSURLRequest requestWithRequestModel:model];
             NSURLRequest *capturedRequest = sessionSpy.argument;
@@ -67,7 +87,7 @@ SPEC_BEGIN(EMSRESTClientTests)
             [[expectedRequest should] equal:capturedRequest];
         });
 
-        it(@"executeTaskWithRequestModel should execute datatask returned by dataTaskWithRequest:completionHandler:", ^{
+        it(@"should execute datatask returned by dataTaskWithRequest:completionHandler:", ^{
             NSURLSession *sessionMock = [NSURLSession mock];
 
             EMSRequestModel *model = requestModel(@"https://url1.com", nil);
@@ -83,10 +103,10 @@ SPEC_BEGIN(EMSRESTClientTests)
             KWCaptureSpy *sessionSpy = [sessionMock captureArgument:@selector(dataTaskWithRequest:completionHandler:)
                                                             atIndex:0];
 
-            [restClient executeTaskWithRequestModel:model
-                                         onComplete:^(BOOL shouldContinue) {
+            [restClient executeTaskWithOfflineCallbackStrategyWithRequestModel:model
+                                                                    onComplete:^(BOOL shouldContinue) {
 
-                                         }];
+                                                                    }];
 
             NSURLRequest *expectedRequest = [NSURLRequest requestWithRequestModel:model];
             NSURLRequest *capturedRequest = sessionSpy.argument;
@@ -94,7 +114,7 @@ SPEC_BEGIN(EMSRESTClientTests)
             [[expectedRequest should] equal:capturedRequest];
         });
 
-        it(@"executeTaskWithRequestModel should return requestId, and responseModel on successBlock, when everything is fine", ^{
+        it(@"should return requestId, and responseModel on successBlock, when everything is fine", ^{
             NSURLSession *sessionMock = [NSURLSession mock];
 
             NSString *urlString = @"https://url1.com";
@@ -124,7 +144,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                                                                    }
                                                                       session:sessionMock];
 
-            [restClient executeTaskWithRequestModel:model onComplete:^(BOOL shouldContinue) {
+            [restClient executeTaskWithOfflineCallbackStrategyWithRequestModel:model onComplete:^(BOOL shouldContinue) {
                 returnedShouldContinue = shouldContinue;
             }];
 
@@ -139,7 +159,7 @@ SPEC_BEGIN(EMSRESTClientTests)
             [[expectFutureValue(theValue(returnedShouldContinue)) shouldEventually] beYes];
         });
 
-        it(@"executeTaskWithRequestModel should not return requestId or error on errorBlock nor successId and response when there is a retriable error", ^{
+        it(@"should not return requestId or error on errorBlock nor successId and response when there is a retriable error", ^{
             NSURLSession *sessionMock = [NSURLSession mock];
 
             NSString *urlString = @"https://url1.com";
@@ -170,7 +190,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                                                                    }
                                                                       session:sessionMock];
 
-            [restClient executeTaskWithRequestModel:model onComplete:^(BOOL shouldContinue) {
+            [restClient executeTaskWithOfflineCallbackStrategyWithRequestModel:model onComplete:^(BOOL shouldContinue) {
                 returnedShouldContinue = shouldContinue;
             }];
 
@@ -185,7 +205,7 @@ SPEC_BEGIN(EMSRESTClientTests)
             [[expectFutureValue(theValue(returnedShouldContinue)) shouldEventually] beNo];
         });
 
-        it(@"executeTaskWithRequestModel should not return requestId or error on errorBlock nor successId and response when there is a request timeout", ^{
+        it(@"should not return requestId or error on errorBlock nor successId and response when there is a request timeout", ^{
             NSURLSession *sessionMock = [NSURLSession mock];
 
             NSString *urlString = @"https://url1.com";
@@ -216,7 +236,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                                                                    }
                                                                       session:sessionMock];
 
-            [restClient executeTaskWithRequestModel:model onComplete:^(BOOL shouldContinue) {
+            [restClient executeTaskWithOfflineCallbackStrategyWithRequestModel:model onComplete:^(BOOL shouldContinue) {
                 returnedShouldContinue = shouldContinue;
             }];
 
@@ -231,7 +251,7 @@ SPEC_BEGIN(EMSRESTClientTests)
             [[expectFutureValue(theValue(returnedShouldContinue)) shouldEventually] beNo];
         });
 
-        it(@"executeTaskWithRequestModel should return requestId, and error on errorBlock, when there is a non-retriable error", ^{
+        it(@"should return requestId, and error on errorBlock, when there is a non-retriable error", ^{
             NSURLSession *sessionMock = [NSURLSession mock];
 
             NSString *urlString = @"https://url1.com";
@@ -262,7 +282,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                                                                    }
                                                                       session:sessionMock];
 
-            [restClient executeTaskWithRequestModel:model onComplete:^(BOOL shouldContinue) {
+            [restClient executeTaskWithOfflineCallbackStrategyWithRequestModel:model onComplete:^(BOOL shouldContinue) {
                 returnedShouldContinue = shouldContinue;
             }];
 
@@ -275,6 +295,47 @@ SPEC_BEGIN(EMSRESTClientTests)
             [[expectFutureValue(errorRequestId) shouldEventually] equal:model.requestId];
             [[expectFutureValue(returnedError) shouldEventually] equal:error];
             [[expectFutureValue(theValue(returnedShouldContinue)) shouldEventually] beYes];
+        });
+
+    });
+
+    describe(@"executeTaskWithRequestModel:onSuccess:onError", ^{
+
+        it(@"should call onSucces if the request was successful", ^{
+            __block NSData *_data;
+            __block NSError *_error;
+
+            NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
+            sessionMockWithCannedResponse(requestModel(@"https://www.google.com", nil), 200, originalResponseData, nil, ^(NSURLSession *session){
+                EMSRESTClient *client = [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {}
+                                                                   errorBlock:^(NSString *requestId, NSError *error) {} session:session];
+                [client executeTaskWithRequestModel:requestModel(@"https://www.google.com", nil) onSuccess:^(NSData *responseData) {
+                    _data = responseData;
+                } onError:^(NSError *error) {
+                    _error = error;
+                }];
+            });
+
+            [[originalResponseData shouldEventually] equal:_data];
+        });
+
+        it(@"should call onError if the request gone crazy", ^{
+            __block NSData *_data;
+            __block NSError *_error;
+
+            NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
+            NSError *originalError = [NSError errorWithCode:42 localizedDescription:@"desc"];
+            sessionMockWithCannedResponse(requestModel(@"https://www.google.com", nil), 500, nil, originalError, ^(NSURLSession *session){
+                EMSRESTClient *client = [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {}
+                                                                   errorBlock:^(NSString *requestId, NSError *error) {} session:session];
+                [client executeTaskWithRequestModel:requestModel(@"https://www.google.com", nil) onSuccess:^(NSData *responseData) {
+                    _data = responseData;
+                } onError:^(NSError *error) {
+                    _error = error;
+                }];
+            });
+
+            [[originalError shouldEventually] equal:_error];
         });
 
     });

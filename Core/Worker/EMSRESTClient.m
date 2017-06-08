@@ -56,7 +56,24 @@
 }
 
 - (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel
-                         onComplete:(EMSRestClientCompletionBlock)onComplete {
+                          onSuccess:(EMSRestClientOnSuccessBlock)onSuccess
+                            onError:(EMSRestClientOnErrorBlock)onError {
+    NSParameterAssert(onSuccess);
+    NSParameterAssert(onError);
+    NSURLSessionDataTask *task =
+            [self.session dataTaskWithRequest:[NSURLRequest requestWithRequestModel:requestModel]
+                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                if (error && onError) {
+                                    onError(error);
+                                } else if(onSuccess) {
+                                    onSuccess(data);
+                                }
+                            }];
+    [task resume];
+}
+
+- (void)executeTaskWithOfflineCallbackStrategyWithRequestModel:(EMSRequestModel *)requestModel
+                                                    onComplete:(EMSRestClientCompletionBlock)onComplete {
     NSParameterAssert(onComplete);
     __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *task =

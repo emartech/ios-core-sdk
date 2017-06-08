@@ -117,7 +117,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             EMSRESTClient *restClient = [EMSRESTClient new];
 
             [watchdogMock stub:@selector(setConnectionChangeListener:)];
-            [restClient stub:@selector(executeTaskWithRequestModel:onComplete:)];
+            [restClient stub:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:)];
 
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queueMock
                                                             connectionWatchdog:watchdogMock
@@ -131,7 +131,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             [worker run];
         });
 
-        it(@"should invoke executeTaskWithRequestModel:onComplete: on Restclient, when its running", ^{
+        it(@"should invoke executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete: on Restclient, when its running", ^{
             EMSSQLiteQueue *queueMock = [EMSSQLiteQueue mock];
             EMSConnectionWatchdog *watchdogMock = [EMSConnectionWatchdog mock];
             EMSRESTClient *clientMock = [EMSRESTClient mock];
@@ -150,7 +150,7 @@ SPEC_BEGIN(DefaultWorkerTests)
 
             [[queueMock should] receive:@selector(peek)
                               andReturn:expectedModel];
-            KWCaptureSpy *requestSpy = [clientMock captureArgument:@selector(executeTaskWithRequestModel:onComplete:)
+            KWCaptureSpy *requestSpy = [clientMock captureArgument:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:)
                                                            atIndex:0];
             [worker run];
 
@@ -177,7 +177,7 @@ SPEC_BEGIN(DefaultWorkerTests)
 
             [[queueMock should] receive:@selector(peek)
                               andReturn:expectedModel];
-            KWCaptureSpy *completionSpy = [clientMock captureArgument:@selector(executeTaskWithRequestModel:onComplete:)
+            KWCaptureSpy *completionSpy = [clientMock captureArgument:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:)
                                                               atIndex:1];
             [worker run];
 
@@ -207,7 +207,7 @@ SPEC_BEGIN(DefaultWorkerTests)
 
             [[queueMock should] receive:@selector(peek)
                               andReturn:expectedModel];
-            KWCaptureSpy *completionSpy = [clientMock captureArgument:@selector(executeTaskWithRequestModel:onComplete:)
+            KWCaptureSpy *completionSpy = [clientMock captureArgument:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:)
                                                               atIndex:1];
             [worker run];
 
