@@ -55,18 +55,21 @@
                                                session:session];
 }
 
-- (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel
-                          onSuccess:(EMSRestClientOnSuccessBlock)onSuccess
-                            onError:(EMSRestClientOnErrorBlock)onError {
-    NSParameterAssert(onSuccess);
-    NSParameterAssert(onError);
+- (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel {
+    __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *task =
             [self.session dataTaskWithRequest:[NSURLRequest requestWithRequestModel:requestModel]
                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                if (error && onError) {
-                                    onError(error);
-                                } else if(onSuccess) {
-                                    onSuccess(data);
+                                NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *) response;
+                                NSInteger statusCode = httpUrlResponse.statusCode;
+                                const BOOL hasError = error || statusCode < 200 || statusCode > 299;
+                                if (weakSelf.errorBlock && hasError) {
+                                    weakSelf.errorBlock(requestModel.requestId,
+                                            error ? error : [self errorWithData:data statusCode:statusCode]);
+                                }
+                                if (weakSelf.successBlock && !hasError) {
+                                    weakSelf.successBlock(requestModel.requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
+                                                                                                                           data:data]);
                                 }
                             }];
     [task resume];
