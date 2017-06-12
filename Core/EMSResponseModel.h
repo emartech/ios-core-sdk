@@ -8,9 +8,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EMSResponseModel : NSObject
 
-@property(nonatomic, assign, readonly) NSInteger statusCode;
-@property(nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
-@property(nonatomic, readonly) NSData *body;
+@property(nonatomic, assign) NSInteger statusCode;
+@property(nonatomic, strong) NSDictionary<NSString *, NSString *> *headers;
+@property(nonatomic, strong) NSData *body;
 
 - (id)initWithHttpUrlResponse:(NSHTTPURLResponse *)httpUrlResponse
                          data:(NSData *)data;
