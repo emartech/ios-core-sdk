@@ -33,12 +33,11 @@ SPEC_BEGIN(EMSRESTClientTests)
                                                                  statusCode:responseStatusCode
                                                                 HTTPVersion:nil
                                                                headerFields:nil];
-
         KWCaptureSpy *blockSpy = [sessionMock captureArgument:@selector(dataTaskWithRequest:completionHandler:)
-                                                      atIndex:1];
+                                                                atIndex:1];
         actionBlock(sessionMock);
-        void (^completionBlock)(NSData *_Nullable completionData, NSURLResponse *_Nullable response, NSError *_Nullable error) = blockSpy.argument;
-        completionBlock(responseData, urlResponse, responseError);
+        void (^onComplete)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) = blockSpy.argument;
+        onComplete(responseData, urlResponse, responseError);
     };
 
     describe(@"RESTClient", ^{
@@ -301,20 +300,22 @@ SPEC_BEGIN(EMSRESTClientTests)
 
     describe(@"executeTaskWithRequestModel:onSuccess:onError", ^{
 
-        it(@"should call onSucces if the request was successful", ^{
+        it(@"should call onSuccess if the request was successful", ^{
             __block NSData *_data;
             __block NSError *_error;
 
             NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
-            sessionMockWithCannedResponse(requestModel(@"https://www.google.com", nil), 200, originalResponseData, nil, ^(NSURLSession *session){
-                EMSRESTClient *client = [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
-                            _data = response.body;
-                        }
-                                                                   errorBlock:^(NSString *requestId, NSError *error) {
-                                                                       _error = error;
-                                                                   } session:session];
-                [client executeTaskWithRequestModel:requestModel(@"https://www.google.com", nil)];
+            id model = requestModel(@"https://www.google.com", nil);
+            sessionMockWithCannedResponse(model, 200, originalResponseData, nil, ^(NSURLSession *session){
+                EMSRESTClient *client = [EMSRESTClient clientWithSession:session];
+                [client executeTaskWithRequestModel:model successBlock:^(NSString *requestId, EMSResponseModel *response) {
+                    _data = response.body;
+                } errorBlock:^(NSString *requestId, NSError *error) {
+                    _error = error;
+                }];
             });
+
+
 
             [[originalResponseData shouldEventually] equal:_data];
         });
@@ -325,14 +326,14 @@ SPEC_BEGIN(EMSRESTClientTests)
 
             NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
             NSError *originalError = [NSError errorWithCode:42 localizedDescription:@"desc"];
-            sessionMockWithCannedResponse(requestModel(@"https://www.google.com", nil), 500, nil, originalError, ^(NSURLSession *session){
-                EMSRESTClient *client = [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
-                            _data = response.body;
-                        }
-                                                                   errorBlock:^(NSString *requestId, NSError *error) {
-                                                                       _error = error;
-                                                                   } session:session];
-                [client executeTaskWithRequestModel:requestModel(@"https://www.google.com", nil)];
+            id model = requestModel(@"https://www.google.com", nil);
+            sessionMockWithCannedResponse(model, 500, nil, originalError, ^(NSURLSession *session){
+                EMSRESTClient *client = [EMSRESTClient clientWithSession:session];
+                [client executeTaskWithRequestModel:model successBlock:^(NSString *requestId, EMSResponseModel *response) {
+                    _data = response.body;
+                } errorBlock:^(NSString *requestId, NSError *error) {
+                    _error = error;
+                }];
             });
 
             [[originalError shouldEventually] equal:_error];

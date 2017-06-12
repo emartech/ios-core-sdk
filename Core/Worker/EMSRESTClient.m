@@ -40,6 +40,12 @@
     return self;
 }
 
++ (EMSRESTClient *)clientWithSession:(NSURLSession *)session {
+    return [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {}
+                                      errorBlock:^(NSString *requestId, NSError *error) {}
+                                         session:session];
+}
+
 + (EMSRESTClient *)clientWithSuccessBlock:(CoreSuccessBlock)successBlock
                                errorBlock:(CoreErrorBlock)errorBlock {
     return [EMSRESTClient clientWithSuccessBlock:successBlock
@@ -55,21 +61,20 @@
                                                session:session];
 }
 
-- (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel {
-    __weak typeof(self) weakSelf = self;
+- (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel successBlock:(CoreSuccessBlock)successBlock errorBlock:(CoreErrorBlock)errorBlock {
     NSURLSessionDataTask *task =
             [self.session dataTaskWithRequest:[NSURLRequest requestWithRequestModel:requestModel]
                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
                                 NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *) response;
                                 NSInteger statusCode = httpUrlResponse.statusCode;
                                 const BOOL hasError = error || statusCode < 200 || statusCode > 299;
-                                if (weakSelf.errorBlock && hasError) {
-                                    weakSelf.errorBlock(requestModel.requestId,
+                                if (errorBlock && hasError) {
+                                    errorBlock(requestModel.requestId,
                                             error ? error : [self errorWithData:data statusCode:statusCode]);
                                 }
-                                if (weakSelf.successBlock && !hasError) {
-                                    weakSelf.successBlock(requestModel.requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
-                                                                                                                           data:data]);
+                                if (successBlock && !hasError) {
+                                    successBlock(requestModel.requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
+                                                                                                                      data:data]);
                                 }
                             }];
     [task resume];

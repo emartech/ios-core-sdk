@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void (^EMSRestClientCompletionBlock)(BOOL shouldContinue);
 @interface EMSRESTClient : NSObject
 
++ (EMSRESTClient *)clientWithSession:(NSURLSession *)session;
+
 + (EMSRESTClient *)clientWithSuccessBlock:(CoreSuccessBlock)successBlock
                                errorBlock:(CoreErrorBlock)errorBlock;
 
@@ -19,7 +21,7 @@ typedef void (^EMSRestClientCompletionBlock)(BOOL shouldContinue);
                                   session:(NSURLSession *)session;
 
 
-- (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel;
+- (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel successBlock:(CoreSuccessBlock)successBlock errorBlock:(CoreErrorBlock)errorBlock;
 
 - (void)executeTaskWithOfflineCallbackStrategyWithRequestModel:(EMSRequestModel *)requestModel
                                                     onComplete:(EMSRestClientCompletionBlock)onComplete;
