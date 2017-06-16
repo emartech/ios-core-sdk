@@ -50,6 +50,10 @@
 
 
 - (void)open {
+//    NSLog(@"OPEN %@", [NSThread currentThread]);
+//    if ([NSThread currentThread] != [NSThread mainThread]) {
+//        NSLog(@"jesus");
+//    }
     if (sqlite3_open([self.dbPath UTF8String], &_db) == SQLITE_OK) {
 
         int version = [self version];
@@ -65,6 +69,7 @@
 }
 
 - (void)close {
+//    NSLog(@"CLOSE %@", [NSThread currentThread]);
     sqlite3_close(_db);
     _db = nil;
 }

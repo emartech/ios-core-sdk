@@ -87,11 +87,13 @@
     NSURLSessionDataTask *task =
             [self.session dataTaskWithRequest:[NSURLRequest requestWithRequestModel:requestModel]
                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                [weakSelf handleResponse:requestModel
-                                                    data:data
-                                                response:response
-                                                   error:error
-                                              onComplete:onComplete];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [weakSelf handleResponse:requestModel
+                                                        data:data
+                                                    response:response
+                                                       error:error
+                                                  onComplete:onComplete];
+                                });
                             }];
     [task resume];
 }
