@@ -48,9 +48,9 @@
     sqlite3_bind_text(statement, 3, [[[model url] absoluteString] UTF8String], -1, SQLITE_TRANSIENT);
 
     NSData *headers = [[model headers] archive];
-    sqlite3_bind_blob(statement, 4, [headers bytes], [headers length], SQLITE_BLOB);
+    sqlite3_bind_blob(statement, 4, [headers bytes], (int)[headers length], SQLITE_TRANSIENT);
     NSData *payload = [[model payload] archive];
-    sqlite3_bind_blob(statement, 5, [payload bytes], [payload length], SQLITE_BLOB);
+    sqlite3_bind_blob(statement, 5, [payload bytes], (int)[payload length], SQLITE_TRANSIENT);
     sqlite3_bind_double(statement, 6, [[model timestamp] timeIntervalSince1970]);
     return statement;
 }

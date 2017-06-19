@@ -35,14 +35,13 @@
     sqlite3_stmt *statement;
     int result = sqlite3_prepare_v2(_db, [@"PRAGMA user_version;" UTF8String], -1, &statement, nil);
     if (result == SQLITE_OK) {
+        int version = -2;
         int step = sqlite3_step(statement);
         if (step == SQLITE_ROW) {
-            int version = sqlite3_column_int(statement, 0);
-            sqlite3_finalize(statement);
-            return version;
-        } else {
-            return -2;
+            version = sqlite3_column_int(statement, 0);
         }
+        sqlite3_finalize(statement);
+        return version;
     } else {
         return -1;
     };
@@ -50,10 +49,6 @@
 
 
 - (void)open {
-//    NSLog(@"OPEN %@", [NSThread currentThread]);
-//    if ([NSThread currentThread] != [NSThread mainThread]) {
-//        NSLog(@"jesus");
-//    }
     if (sqlite3_open([self.dbPath UTF8String], &_db) == SQLITE_OK) {
 
         int version = [self version];
@@ -69,7 +64,6 @@
 }
 
 - (void)close {
-//    NSLog(@"CLOSE %@", [NSThread currentThread]);
     sqlite3_close(_db);
     _db = nil;
 }
@@ -79,9 +73,7 @@
     sqlite3_stmt *statement;
     if (sqlite3_prepare_v2(_db, [command UTF8String], -1, &statement, nil) == SQLITE_OK) {
         int value = sqlite3_step(statement);
-        if (value == SQLITE_ROW) {
-            sqlite3_finalize(statement);
-        }
+        sqlite3_finalize(statement);
         return value == SQLITE_ROW || value == SQLITE_DONE;
     }
     return NO;
@@ -94,9 +86,7 @@ typedef void(^BindBlock)(sqlite3_stmt *statement);
     if (sqlite3_prepare_v2(_db, [command UTF8String], -1, &statement, nil) == SQLITE_OK) {
         bindBlock(statement);
         int value = sqlite3_step(statement);
-        if (value == SQLITE_ROW) {
-            sqlite3_finalize(statement);
-        }
+        sqlite3_finalize(statement);
         return value == SQLITE_ROW || value == SQLITE_DONE;
     }
     return NO;
