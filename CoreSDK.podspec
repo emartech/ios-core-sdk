@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'CoreSDK'
-	spec.version              = '0.5.3'
+	spec.version              = '0.7.0'
 	spec.homepage             = 'https://help.emarsys.com/hc/en-us/articles/115002410625'
 	spec.license              = 'Mozilla Public License 2.0'
 	spec.author               = { 'Emarsys Technologies' => 'mobile-team@emarsys.com' }
@@ -16,8 +16,8 @@ Pod::Spec.new do |spec|
 		'Core/EMSAuthentication.h',
 		'Core/EMSDeviceInfo.h',
 		'Core/NSError+EMSCore.h',
-		'Core/EMSCoreCompletion.h',
-		'Core/Worker/EMSRESTClient.h'
+        'Core/EMSCoreCompletion.h',
+        'Core/Worker/EMSRESTClient.h'
 	]
 	spec.libraries = 'z', 'c++'
 end
