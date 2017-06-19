@@ -18,7 +18,7 @@ typedef void (^EMSRestClientCompletionBlock)(BOOL shouldContinue);
 
 + (EMSRESTClient *)clientWithSuccessBlock:(CoreSuccessBlock)successBlock
                                errorBlock:(CoreErrorBlock)errorBlock
-                                  session:(NSURLSession *)session;
+                                  session:(nullable NSURLSession *)session;
 
 
 - (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel successBlock:(CoreSuccessBlock)successBlock errorBlock:(CoreErrorBlock)errorBlock;

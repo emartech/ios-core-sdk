@@ -55,7 +55,7 @@
 
 + (EMSRESTClient *)clientWithSuccessBlock:(CoreSuccessBlock)successBlock
                                errorBlock:(CoreErrorBlock)errorBlock
-                                  session:(NSURLSession *)session {
+                                  session:(nullable NSURLSession *)session {
     return [[EMSRESTClient alloc] initWithSuccessBlock:successBlock
                                             errorBlock:errorBlock
                                                session:session];

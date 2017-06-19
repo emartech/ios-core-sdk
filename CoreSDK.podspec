@@ -19,5 +19,5 @@ Pod::Spec.new do |spec|
         'Core/EMSCoreCompletion.h',
         'Core/Worker/EMSRESTClient.h'
 	]
-	spec.libraries = 'z', 'c++'
+	spec.libraries = 'z', 'c++', 'sqlite3'
 end
