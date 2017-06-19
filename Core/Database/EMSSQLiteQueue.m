@@ -7,6 +7,7 @@
 #import "EMSRequestContract.h"
 #import "EMSRequestModelMapper.h"
 #import "EMSCountMapper.h"
+#import <UIKit/UIKit.h>
 
 @interface EMSSQLiteQueue ()
 
@@ -19,6 +20,12 @@
 - (instancetype)initWithSQLiteHelper:(EMSSQLiteHelper *)sqliteHelper {
     if (self = [super init]) {
         _dbHelper = sqliteHelper;
+        [_dbHelper open];
+
+        __weak typeof(self) weakSelf = self;
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+            [weakSelf.dbHelper close];
+        }];
     }
     return self;
 }
@@ -26,30 +33,22 @@
 - (void)push:(EMSRequestModel *)model {
     NSParameterAssert(model);
 
-    [self.dbHelper open];
     [self.dbHelper insertModel:model withQuery:SQL_INSERT mapper:[EMSRequestModelMapper new]];
-    [self.dbHelper close];
 }
 
 - (EMSRequestModel *)pop {
-    [self.dbHelper open];
     EMSRequestModel *model = [[self.dbHelper executeQuery:SQL_SELECTFIRST mapper:[EMSRequestModelMapper new]] firstObject];
     [self.dbHelper executeCommand:SQL_DELETE_ITEM withValue:[model requestId]];
-    [self.dbHelper close];
     return model;
 }
 
 - (EMSRequestModel *)peek {
-    [self.dbHelper open];
     EMSRequestModel *model = [[self.dbHelper executeQuery:SQL_SELECTFIRST mapper:[EMSRequestModelMapper new]] firstObject];
-    [self.dbHelper close];
     return model;
 }
 
 - (BOOL)isEmpty {
-    [self.dbHelper open];
     NSNumber *count = [[self.dbHelper executeQuery:SQL_COUNT mapper:[EMSCountMapper new]] firstObject];
-    [self.dbHelper close];
     return [count integerValue] == 0;
 }
 

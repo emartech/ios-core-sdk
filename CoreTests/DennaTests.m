@@ -103,21 +103,4 @@ SPEC_BEGIN(DennaTest)
         });
     });
 
-    describe(@"Integration", ^{
-        it(@"should not crash for 10000 events", ^{
-            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                [builder setUrl:echo];
-                [builder setMethod:HTTPMethodGET];
-                [builder setHeaders:inputHeaders];
-            }];
-
-            EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {}
-                                                                      errorBlock:^(NSString *requestId, NSError *error) {}];
-            for (int i = 0; i < 10000; ++i) {
-                [core submit:model];
-            }
-        });
-
-    });
-
 SPEC_END
