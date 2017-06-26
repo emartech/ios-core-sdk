@@ -11,6 +11,10 @@
 #import "EMSSqliteQueueSchemaHandler.h"
 #import "EMSDefaultWorker.h"
 
+typedef void (^RunnerBlock)();
+
+static dispatch_queue_t coreQueue;
+
 @interface EMSRequestManager () <NSURLSessionDelegate>
 
 @property(nonatomic, strong) id <EMSQueueProtocol> queue;
@@ -18,6 +22,8 @@
 
 - (id)initWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
                 errorBlock:(nullable CoreErrorBlock)errorBlock;
+
+- (void)runInCoreQueueWithBlock:(RunnerBlock)runnerBlock;
 
 @end
 
@@ -47,23 +53,38 @@
 
 - (void)submit:(EMSRequestModel *)model {
     NSParameterAssert(model);
-    if (self.additionalHeaders) {
-        NSMutableDictionary *headers;
-        if (model.headers) {
-            headers = [NSMutableDictionary dictionaryWithDictionary:model.headers];
-            [headers addEntriesFromDictionary:self.additionalHeaders];
-        } else {
-            headers = [NSMutableDictionary dictionaryWithDictionary:self.additionalHeaders];
+    __weak typeof(self) weakSelf = self;
+    [self runInCoreQueueWithBlock:^{
+        EMSRequestModel *requestModel = model;
+        if (weakSelf.additionalHeaders) {
+            NSMutableDictionary *headers;
+            if (model.headers) {
+                headers = [NSMutableDictionary dictionaryWithDictionary:model.headers];
+                [headers addEntriesFromDictionary:weakSelf.additionalHeaders];
+            } else {
+                headers = [NSMutableDictionary dictionaryWithDictionary:weakSelf.additionalHeaders];
+            }
+            requestModel = [[EMSRequestModel alloc] initWithRequestId:model.requestId
+                                                            timestamp:model.timestamp
+                                                                  url:model.url
+                                                               method:model.method
+                                                              payload:model.payload
+                                                              headers:[NSDictionary dictionaryWithDictionary:headers]];
         }
-        model = [[EMSRequestModel alloc] initWithRequestId:model.requestId
-                                                 timestamp:model.timestamp
-                                                       url:model.url
-                                                    method:model.method
-                                                   payload:model.payload
-                                                   headers:[NSDictionary dictionaryWithDictionary:headers]];
+        [weakSelf.queue push:requestModel];
+        [weakSelf.worker run];
+    }];
+}
+
+#pragma mark - Private methods
+
+- (void)runInCoreQueueWithBlock:(RunnerBlock)runnerBlock {
+    if (!coreQueue) {
+        coreQueue = dispatch_queue_create("com.emarsys.mobileengage.queue", DISPATCH_QUEUE_CONCURRENT);
     }
-    [self.queue push:model];
-    [self.worker run];
+    dispatch_async(coreQueue, ^{
+        runnerBlock();
+    });
 }
 
 @end
