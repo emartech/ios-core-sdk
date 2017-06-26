@@ -13,8 +13,6 @@
 
 typedef void (^RunnerBlock)();
 
-static dispatch_queue_t coreQueue;
-
 @interface EMSRequestManager () <NSURLSessionDelegate>
 
 @property(nonatomic, strong) id <EMSQueueProtocol> queue;
@@ -27,7 +25,9 @@ static dispatch_queue_t coreQueue;
 
 @end
 
-@implementation EMSRequestManager
+@implementation EMSRequestManager {
+    dispatch_queue_t _coreQueue;
+}
 
 #pragma mark - Init
 
@@ -79,10 +79,10 @@ static dispatch_queue_t coreQueue;
 #pragma mark - Private methods
 
 - (void)runInCoreQueueWithBlock:(RunnerBlock)runnerBlock {
-    if (!coreQueue) {
-        coreQueue = dispatch_queue_create("com.emarsys.mobileengage.queue", DISPATCH_QUEUE_CONCURRENT);
+    if (!_coreQueue) {
+        _coreQueue = dispatch_queue_create("com.emarsys.mobileengage.queue", DISPATCH_QUEUE_SERIAL);
     }
-    dispatch_async(coreQueue, ^{
+    dispatch_async(_coreQueue, ^{
         runnerBlock();
     });
 }
