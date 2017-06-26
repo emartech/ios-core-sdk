@@ -26,7 +26,7 @@ typedef void (^RunnerBlock)();
 @end
 
 @implementation EMSRequestManager {
-    dispatch_queue_t _coreQueue;
+    NSOperationQueue * _coreQueue;
 }
 
 #pragma mark - Init
@@ -80,11 +80,12 @@ typedef void (^RunnerBlock)();
 
 - (void)runInCoreQueueWithBlock:(RunnerBlock)runnerBlock {
     if (!_coreQueue) {
-        _coreQueue = dispatch_queue_create("com.emarsys.mobileengage.queue", DISPATCH_QUEUE_SERIAL);
+        _coreQueue = [NSOperationQueue new];
+        _coreQueue.maxConcurrentOperationCount = 1;
+        _coreQueue.qualityOfService = NSQualityOfServiceUtility;
     }
-    dispatch_async(_coreQueue, ^{
-        runnerBlock();
-    });
+
+    [_coreQueue addOperationWithBlock:runnerBlock];
 }
 
 @end

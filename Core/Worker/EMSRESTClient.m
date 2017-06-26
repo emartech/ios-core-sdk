@@ -84,16 +84,18 @@
                                                     onComplete:(EMSRestClientCompletionBlock)onComplete {
     NSParameterAssert(onComplete);
     __weak typeof(self) weakSelf = self;
+
+    NSOperationQueue *currentQueue = [NSOperationQueue currentQueue];
     NSURLSessionDataTask *task =
             [self.session dataTaskWithRequest:[NSURLRequest requestWithRequestModel:requestModel]
                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                dispatch_async(dispatch_get_main_queue(), ^{
+                                [currentQueue addOperationWithBlock:^{
                                     [weakSelf handleResponse:requestModel
                                                         data:data
                                                     response:response
                                                        error:error
                                                   onComplete:onComplete];
-                                });
+                                }];
                             }];
     [task resume];
 }
