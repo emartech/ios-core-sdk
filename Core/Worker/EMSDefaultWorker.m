@@ -16,7 +16,9 @@
 
 @end
 
-@implementation EMSDefaultWorker
+@implementation EMSDefaultWorker {
+    NSOperationQueue *_workerQueue;
+}
 
 #pragma mark - Init
 
@@ -43,7 +45,12 @@
         [_connectionWatchdog setConnectionChangeListener:self];
         _queue = queue;
         _client = client;
+
+        _workerQueue = [NSOperationQueue new];
+        _workerQueue.maxConcurrentOperationCount = 1;
+        _workerQueue.qualityOfService = NSQualityOfServiceUtility;
     }
+
     return self;
 }
 
@@ -59,7 +66,9 @@
                                                                      [weakSelf unlock];
                                                                      if (shouldContinue) {
                                                                          [weakSelf.queue pop];
-                                                                         [weakSelf performSelector:@selector(run) withObject:nil afterDelay:0];
+                                                                         [_workerQueue addOperationWithBlock:^{
+                                                                             [weakSelf run];
+                                                                         }];
                                                                      }
                                                                  }];
     }
