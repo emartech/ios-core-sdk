@@ -6,4 +6,7 @@
 #import "EMSQueueProtocol.h"
 
 @interface EMSInMemoryQueue : NSObject <EMSQueueProtocol>
+
+- (int)count;
+
 @end

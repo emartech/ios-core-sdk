@@ -18,15 +18,15 @@ typedef void (^RunnerBlock)();
 @property(nonatomic, strong) id <EMSQueueProtocol> queue;
 @property(nonatomic, strong) id <EMSWorkerProtocol> worker;
 
-- (id)initWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
-                errorBlock:(nullable CoreErrorBlock)errorBlock;
+- (instancetype)initWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
+                          errorBlock:(nullable CoreErrorBlock)errorBlock;
 
 - (void)runInCoreQueueWithBlock:(RunnerBlock)runnerBlock;
 
 @end
 
 @implementation EMSRequestManager {
-    NSOperationQueue * _coreQueue;
+    NSOperationQueue *_coreQueue;
 }
 
 #pragma mark - Init
@@ -37,17 +37,25 @@ typedef void (^RunnerBlock)();
                                                 errorBlock:errorBlock];
 }
 
-- (id)initWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
-                errorBlock:(nullable CoreErrorBlock)errorBlock {
+- (instancetype)initWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
+                          errorBlock:(nullable CoreErrorBlock)errorBlock {
+    id <EMSQueueProtocol> queue = [[EMSSQLiteQueue alloc] initWithSQLiteHelper:[[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
+                                                                                                              schemaDelegate:[EMSSqliteQueueSchemaHandler new]]];
+    return [self initWithWorker:[[EMSDefaultWorker alloc] initWithQueue:queue
+                                                           successBlock:successBlock
+                                                             errorBlock:errorBlock]
+                          queue:queue];
+}
+
+- (instancetype)initWithWorker:(id <EMSWorkerProtocol>)worker
+                         queue:(id <EMSQueueProtocol>)queue {
     if (self = [super init]) {
-        _queue = [[EMSSQLiteQueue alloc] initWithSQLiteHelper:[[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
-                                                                                             schemaDelegate:[EMSSqliteQueueSchemaHandler new]]];
-        _worker = [[EMSDefaultWorker alloc] initWithQueue:_queue
-                                             successBlock:successBlock
-                                               errorBlock:errorBlock];
+        _queue = queue;
+        _worker = worker;
     }
     return self;
 }
+
 
 #pragma mark - Public methods
 

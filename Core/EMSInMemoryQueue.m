@@ -37,4 +37,9 @@
     return [_data count] == 0;;
 }
 
+- (int)count {
+    return [_data count];
+}
+
+
 @end
