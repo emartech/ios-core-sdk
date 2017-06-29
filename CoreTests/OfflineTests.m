@@ -106,6 +106,93 @@ SPEC_BEGIN(OfflineTests)
             [[expectFutureValue(completionHandler.errorCount) shouldEventually] equal:@0];
             [[expectFutureValue(theValue(queue.count)) shouldEventually] equal:theValue(3)];
         });
+
+        it(@"should receive 2 response, queue count 1 when 3 request sent and connections:YES, YES, NO", ^{
+            EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://www.google.com"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+            EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://www.yahoo.com"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+            EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://www.wolframalpha.com"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+
+            EMSInMemoryQueue *queue = [EMSInMemoryQueue new];
+            FakeConnectionWatchdog *watchdog = [[FakeConnectionWatchdog alloc] initWithConnectionResponses:@[@YES, @YES, @NO]];
+            FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
+            EMSRequestManager *manager = requestManager(queue, watchdog, completionHandler.successBlock, completionHandler.errorBlock);
+
+            [manager submit:model1];
+            [manager submit:model2];
+            [manager submit:model3];
+
+            [[expectFutureValue(watchdog.isConnectedCallCount) shouldEventuallyBeforeTimingOutAfter(10)] equal:@3];
+            [[expectFutureValue(completionHandler.successCount) shouldEventually] equal:@2];
+            [[expectFutureValue(completionHandler.errorCount) shouldEventually] equal:@0];
+            [[expectFutureValue(theValue(queue.count)) shouldEventually] equal:theValue(1)];
+        });
+
+        it(@"should stop the queue when response is 500", ^{
+            EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://www.google.com"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+            EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:[NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", @"/error500"]];
+                [builder setMethod:HTTPMethodGET];
+            }];
+            EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://www.wolframalpha.com"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+
+            EMSInMemoryQueue *queue = [EMSInMemoryQueue new];
+            FakeConnectionWatchdog *watchdog = [[FakeConnectionWatchdog alloc] initWithConnectionResponses:@[@YES, @YES, @YES]];
+            FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
+            EMSRequestManager *manager = requestManager(queue, watchdog, completionHandler.successBlock, completionHandler.errorBlock);
+
+            [manager submit:model1];
+            [manager submit:model2];
+            [manager submit:model3];
+
+            [[expectFutureValue(watchdog.isConnectedCallCount) shouldEventuallyBeforeTimingOutAfter(10)] equal:@2];
+            [[expectFutureValue(completionHandler.successCount) shouldEventually] equal:@1];
+            [[expectFutureValue(completionHandler.errorCount) shouldEventually] equal:@0];
+            [[expectFutureValue(theValue(queue.count)) shouldEventually] equal:theValue(2)];
+        });
+
+        it(@"should not stop the queue when response is 4xx", ^{
+            EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://www.google.com"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+            EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://alma.korte.szilva/egyeb/palinkagyumolcsok"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+            EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://www.wolframalpha.com"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+
+            EMSInMemoryQueue *queue = [EMSInMemoryQueue new];
+            FakeConnectionWatchdog *watchdog = [[FakeConnectionWatchdog alloc] initWithConnectionResponses:@[@YES, @YES, @YES]];
+            FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
+            EMSRequestManager *manager = requestManager(queue, watchdog, completionHandler.successBlock, completionHandler.errorBlock);
+
+            [manager submit:model1];
+            [manager submit:model2];
+            [manager submit:model3];
+
+            [[expectFutureValue(watchdog.isConnectedCallCount) shouldEventuallyBeforeTimingOutAfter(10)] equal:@3];
+            [[expectFutureValue(completionHandler.successCount) shouldEventually] equal:@2];
+            [[expectFutureValue(completionHandler.errorCount) shouldEventually] equal:@1];
+            [[expectFutureValue(theValue(queue.count)) shouldEventually] equal:theValue(0)];
+        });
     });
 
 SPEC_END
