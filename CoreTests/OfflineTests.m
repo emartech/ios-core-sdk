@@ -193,6 +193,35 @@ SPEC_BEGIN(OfflineTests)
             [[expectFutureValue(completionHandler.errorCount) shouldEventually] equal:@1];
             [[expectFutureValue(theValue(queue.count)) shouldEventually] equal:theValue(0)];
         });
+
+        it(@"should stop the queue when response is 408", ^{
+            EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://www.google.com"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+            EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:[NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", @"/408"]];
+                [builder setMethod:HTTPMethodGET];
+            }];
+            EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://www.wolframalpha.com"];
+                [builder setMethod:HTTPMethodGET];
+            }];
+
+            EMSInMemoryQueue *queue = [EMSInMemoryQueue new];
+            FakeConnectionWatchdog *watchdog = [[FakeConnectionWatchdog alloc] initWithConnectionResponses:@[@YES, @YES, @YES]];
+            FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
+            EMSRequestManager *manager = requestManager(queue, watchdog, completionHandler.successBlock, completionHandler.errorBlock);
+
+            [manager submit:model1];
+            [manager submit:model2];
+            [manager submit:model3];
+
+            [[expectFutureValue(watchdog.isConnectedCallCount) shouldEventuallyBeforeTimingOutAfter(10)] equal:@2];
+            [[expectFutureValue(completionHandler.successCount) shouldEventually] equal:@1];
+            [[expectFutureValue(completionHandler.errorCount) shouldEventually] equal:@0];
+            [[expectFutureValue(theValue(queue.count)) shouldEventually] equal:theValue(2)];
+        });
     });
 
 SPEC_END
