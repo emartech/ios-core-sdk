@@ -47,6 +47,15 @@ SPEC_BEGIN(BuilderTest)
             [[model.url should] equal:url];
         });
 
+        it(@"should create a model with specified expiry when setExpiry is called on the builder", ^{
+           EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+               [builder setUrl:@"http://www.google.com"];
+               [builder setExpiry:3];
+           }];
+
+            [[theValue(model.expiry) should] equal:theValue(3)];
+        });
+
         it(@"should create a model with specified body when setBody is called on builder", ^{
             NSString *urlString = @"http://www.google.com";
             NSDictionary *payload = @{@"key": @"value"};

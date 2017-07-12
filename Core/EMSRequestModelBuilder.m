@@ -35,6 +35,11 @@
     return self;
 }
 
+- (EMSRequestModelBuilder *)setExpiry:(NSTimeInterval)expiry {
+    _expiry = expiry;
+    return self;
+}
+
 - (EMSRequestModelBuilder *)setPayload:(NSDictionary<NSString *, id> *)payload {
     _payload = payload;
     return self;

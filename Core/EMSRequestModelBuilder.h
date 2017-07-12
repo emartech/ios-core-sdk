@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString *requestId;
 @property (nonatomic, readonly) NSDate *timestamp;
+@property (nonatomic, readonly) NSTimeInterval expiry;
 @property(nonatomic, readonly) NSURL *requestUrl;
 @property(nonatomic, readonly) NSString *requestMethod;
 @property (nonatomic, readonly) NSDictionary<NSString *, id> *payload;
@@ -21,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (EMSRequestModelBuilder *)setMethod:(HTTPMethod)method;
 - (EMSRequestModelBuilder *)setUrl:(NSString *)url;
+- (EMSRequestModelBuilder *)setExpiry:(NSTimeInterval)expiry;
 - (EMSRequestModelBuilder *)setPayload:(NSDictionary<NSString *, id> *)payload;
 - (EMSRequestModelBuilder *)setHeaders:(NSDictionary<NSString *, NSString *> *)headers;
 

@@ -74,6 +74,7 @@ typedef void (^RunnerBlock)();
             }
             requestModel = [[EMSRequestModel alloc] initWithRequestId:model.requestId
                                                             timestamp:model.timestamp
+                                                               expiry:model.expiry
                                                                   url:model.url
                                                                method:model.method
                                                               payload:model.payload

@@ -64,6 +64,25 @@ SPEC_BEGIN(SQLiteQueueTests)
     });
 
     describe(@"pushAndPop", ^{
+
+        it(@"should pop the same element that were pushed in", ^{
+            id <EMSQueueProtocol> queue = createQueue();
+
+            EMSRequestModel *firstModel = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"https://url1.com"];
+                [builder setMethod:HTTPMethodPOST];
+                [builder setExpiry:42];
+                [builder setPayload:@{@"payloadKey1" : @"payloadValue1"}];
+                [builder setHeaders:@{@"headkey1" : @"headerValue1"}];
+            }];
+
+            [queue push:firstModel];
+
+            [[theValue([queue isEmpty]) should] beFalse];
+            [[[queue pop] should] equal:firstModel];
+            [[theValue([queue isEmpty]) should] beTrue];
+        });
+
         it(@"should keep the order of the elements", ^{
             id <EMSQueueProtocol> queue = createQueue();
 
@@ -88,6 +107,8 @@ SPEC_BEGIN(SQLiteQueueTests)
 
             [queue push:firstModel];
             [queue push:secondModel];
+
+            EMSRequestModel *resultModel = [queue peek];
 
             [[[queue peek] should] equal:firstModel];
             [[[queue peek] should] equal:firstModel];
