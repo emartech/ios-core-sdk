@@ -43,7 +43,7 @@ SPEC_BEGIN(CoreTest)
 
             [core submit:model];
 
-            [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];
+            [[checkableRequestId shouldEventually] equal:model.requestId];
         });
 
         it(@"should do networking with the gained EMSRequestModel and return failure", ^{
@@ -66,14 +66,15 @@ SPEC_BEGIN(CoreTest)
                                                                       }];
             [core submit:model];
 
-            [[expectFutureValue(checkableRequestId) shouldEventually] equal:model.requestId];
-            [[expectFutureValue(checkableError) shouldNotEventually] beNil];
+            [[checkableRequestId shouldEventually] equal:model.requestId];
+            [[checkableError shouldNotEventually] beNil];
         });
 
         it(@"should throw an exception, when model is nil", ^{
             EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
                     }
-                                                                      errorBlock:^(NSString *requestId, NSError *error) {
+                                                                        errorBlock:^(NSString *requestId, NSError *error) {
+
                                                                       }];
             @try {
                 [core submit:nil];

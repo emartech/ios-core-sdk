@@ -37,6 +37,9 @@
 - (BOOL)executeCommand:(NSString *)command
              withValue:(NSString *)value;
 
+- (BOOL)executeCommand:(NSString *)command
+             withTimeIntervalValue:(NSTimeInterval)value;
+
 - (NSArray *)executeQuery:(NSString *)query mapper:(id <EMSModelMapperProtocol>)mapper;
 
 - (BOOL)insertModel:(id)model

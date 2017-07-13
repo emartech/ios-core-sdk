@@ -83,7 +83,8 @@ typedef void(^BindBlock)(sqlite3_stmt *statement);
 
 - (BOOL)execute:(NSString *)command withBindBlock:(BindBlock)bindBlock {
     sqlite3_stmt *statement;
-    if (sqlite3_prepare_v2(_db, [command UTF8String], -1, &statement, nil) == SQLITE_OK) {
+    int i = sqlite3_prepare_v2(_db, [command UTF8String], -1, &statement, nil);
+    if (i == SQLITE_OK) {
         bindBlock(statement);
         int value = sqlite3_step(statement);
         sqlite3_finalize(statement);
@@ -95,6 +96,12 @@ typedef void(^BindBlock)(sqlite3_stmt *statement);
 - (BOOL)executeCommand:(NSString *)command withValue:(NSString *)value {
     return [self execute:command withBindBlock:^(sqlite3_stmt *statement) {
         sqlite3_bind_text(statement, 1, [value UTF8String], -1, SQLITE_TRANSIENT);
+    }];
+}
+
+- (BOOL)executeCommand:(NSString *)command withTimeIntervalValue:(NSTimeInterval)value {
+    return [self execute:command withBindBlock:^(sqlite3_stmt *statement) {
+        sqlite3_bind_double(statement, 1, value);
     }];
 }
 

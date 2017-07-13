@@ -52,12 +52,12 @@ SPEC_BEGIN(DennaTest)
                                                                   }];
         [core submit:model];
 
-        [[expectFutureValue(resultMethod) shouldEventually] equal:method];
-        [[expectFutureValue(@(expectedSubsetOfResultHeaders)) shouldEventually] equal:@YES];
+        [[resultMethod shouldEventuallyBeforeTimingOutAfter(10.0)] equal:method];
+        [[theValue(expectedSubsetOfResultHeaders) shouldEventuallyBeforeTimingOutAfter(10.0)] equal:theValue(YES)];
         if (body) {
-            [[expectFutureValue(resultPayload) shouldEventually] equal:body];
+            [[resultPayload shouldEventuallyBeforeTimingOutAfter(10.0)] equal:body];
         }
-        [[expectFutureValue(model.requestId) shouldEventually] equal:checkableRequestId];
+        [[model.requestId shouldEventuallyBeforeTimingOutAfter(10.0)] equal:checkableRequestId];
     };
 
 

@@ -29,14 +29,6 @@ typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
                           payload:(NSDictionary<NSString *, id> *)payload
                           headers:(NSDictionary<NSString *, NSString *> *)headers;
 
-- (BOOL)isEqual:(id)other;
-
-- (BOOL)isEqualToModel:(EMSRequestModel *)model;
-
-- (NSUInteger)hash;
-
-- (NSString *)description;
-
 @end
 
 NS_ASSUME_NONNULL_END

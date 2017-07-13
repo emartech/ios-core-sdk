@@ -11,6 +11,7 @@
         _requestId = [[NSUUID UUID] UUIDString];
         _timestamp = [NSDate date];
         _requestMethod = @"POST";
+        _expiry = DEFAULT_REQUESTMODEL_EXPIRY;
     }
     return self;
 }

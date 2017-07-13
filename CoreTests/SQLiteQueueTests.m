@@ -108,8 +108,6 @@ SPEC_BEGIN(SQLiteQueueTests)
             [queue push:firstModel];
             [queue push:secondModel];
 
-            EMSRequestModel *resultModel = [queue peek];
-
             [[[queue peek] should] equal:firstModel];
             [[[queue peek] should] equal:firstModel];
         });

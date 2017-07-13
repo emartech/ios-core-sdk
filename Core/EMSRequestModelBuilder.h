@@ -9,6 +9,8 @@ typedef enum {
     HTTPMethodGET
 } HTTPMethod;
 
+#define DEFAULT_REQUESTMODEL_EXPIRY DBL_MAX
+
 NS_ASSUME_NONNULL_BEGIN
 @interface EMSRequestModelBuilder : NSObject
 

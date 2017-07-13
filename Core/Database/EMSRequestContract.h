@@ -19,3 +19,6 @@
 #define SQL_DELETE_ITEM [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?;", TABLE_NAME, COLUMN_NAME_REQUEST_ID]
 #define SQL_PURGE [NSString stringWithFormat:@"DELETE FROM %@;", TABLE_NAME]
 #define SQL_COUNT [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@;", TABLE_NAME]
+
+#define SCHEMA_UPGRADE_FROM_1_TO_2 [NSString stringWithFormat:@"ALTER TABLE request ADD COLUMN %@ REAL;", COLUMN_NAME_EXPIRY]
+#define SET_DEFAULT_VALUES_FROM_1_TO_2 [NSString stringWithFormat:@"UPDATE request SET expiry = 7200;"]
