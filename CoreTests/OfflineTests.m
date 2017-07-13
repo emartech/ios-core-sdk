@@ -30,6 +30,8 @@ SPEC_BEGIN(OfflineTests)
     };
 
     beforeEach(^{
+        [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
+                                                   error:nil];
         EMSSQLiteHelper *helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
                                                                  schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
         [helper open];

@@ -18,6 +18,8 @@
 SPEC_BEGIN(DennaTest)
 
     beforeEach(^{
+        [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
+                                                   error:nil];
         EMSSQLiteHelper *helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
                                                                  schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
         [helper open];
@@ -52,12 +54,12 @@ SPEC_BEGIN(DennaTest)
                                                                   }];
         [core submit:model];
 
-        [[resultMethod shouldEventuallyBeforeTimingOutAfter(10.0)] equal:method];
+        [[expectFutureValue(resultMethod) shouldEventuallyBeforeTimingOutAfter(10.0)] equal:method];
         [[theValue(expectedSubsetOfResultHeaders) shouldEventuallyBeforeTimingOutAfter(10.0)] equal:theValue(YES)];
         if (body) {
-            [[resultPayload shouldEventuallyBeforeTimingOutAfter(10.0)] equal:body];
+            [[expectFutureValue(resultPayload) shouldEventuallyBeforeTimingOutAfter(10.0)] equal:body];
         }
-        [[model.requestId shouldEventuallyBeforeTimingOutAfter(10.0)] equal:checkableRequestId];
+        [[expectFutureValue(model.requestId) shouldEventuallyBeforeTimingOutAfter(10.0)] equal:checkableRequestId];
     };
 
 
