@@ -19,8 +19,6 @@ SPEC_BEGIN(SQLiteHelperTests)
     beforeEach(^{
         [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH
                                                    error:nil];
-        [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH
-                                                   error:nil];
         dbHelper = [[EMSSQLiteHelper alloc] initWithDatabasePath:TEST_DB_PATH];
     });
 
@@ -37,10 +35,6 @@ SPEC_BEGIN(SQLiteHelperTests)
         }];
     };
 
-    NSString *(^insertCommandWith)(NSString *requestId) = ^NSString *(NSString *requestId) {
-        return [NSString stringWithFormat:@"INSERT INTO request (request_id, method, url, headers, payload, timestamp) VALUES (%@, 'GET', 'https://www.google.com', NULL, NULL, 1234);", requestId];
-    };
-
     void (^runCommandOnTestDB)(NSString *sql) = ^(NSString *sql) {
         sqlite3 *db;
         sqlite3_open([TEST_DB_PATH UTF8String], &db);
@@ -51,7 +45,7 @@ SPEC_BEGIN(SQLiteHelperTests)
     };
 
     void (^createVersionOneDatabase)() = ^() {
-        runCommandOnTestDB(@"CREATE TABLE request (request_id TEXT,method TEXT,url TEXT,headers BLOB,payload BLOB,timestamp REAL)");
+        runCommandOnTestDB(@"CREATE TABLE request (request_id TEXT, method TEXT, url TEXT, headers BLOB, payload BLOB, timestamp REAL)");
         runCommandOnTestDB(@"PRAGMA user_version=1;");
     };
 
@@ -195,7 +189,7 @@ SPEC_BEGIN(SQLiteHelperTests)
                 int result = sqlite3_step(statement);
                 if (result == SQLITE_ROW) {
                     [[[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)] should]
-                            equal:@"CREATE TABLE request (request_id TEXT,method TEXT,url TEXT,headers BLOB,payload BLOB,timestamp REAL, expiry REAL)"];
+                            equal:@"CREATE TABLE request (request_id TEXT, method TEXT, url TEXT, headers BLOB, payload BLOB, timestamp REAL, expiry REAL)"];
                 } else {
                     fail(@"sqlite3_step failed");
                 }
@@ -203,25 +197,6 @@ SPEC_BEGIN(SQLiteHelperTests)
                 fail(@"sqlite3_prepare_v2 failed");
             };
             sqlite3_close(db);
-        });
-
-        xit(@"should set default expiry for all persisted RequestModels", ^{
-            createVersionOneDatabase();
-
-            runCommandOnTestDB(insertCommandWith(@"123456"));
-            runCommandOnTestDB(insertCommandWith(@"asdfgh"));
-            runCommandOnTestDB(insertCommandWith(@"qwerty"));
-
-            [dbHelper setSchemaHandler:[EMSSqliteQueueSchemaHandler new]];
-            [dbHelper open];
-
-            NSArray<EMSRequestModel *> *models = [dbHelper executeQuery:@"SELECT * FROM request;" mapper:[EMSRequestModelMapper new]];
-            [[theValue([models count]) should] equal:theValue(3)];
-            [[theValue([models[0] expiry]) should] equal:theValue(DEFAULT_REQUESTMODEL_EXPIRY)];
-            [[theValue([models[1] expiry]) should] equal:theValue(DEFAULT_REQUESTMODEL_EXPIRY)];
-            [[theValue([models[2] expiry]) should] equal:theValue(DEFAULT_REQUESTMODEL_EXPIRY)];
-
-            [dbHelper close];
         });
     });
 
