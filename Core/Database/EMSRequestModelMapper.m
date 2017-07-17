@@ -54,7 +54,7 @@
     NSData *payload = [[model payload] archive];
     sqlite3_bind_blob(statement, 5, [payload bytes], (int) [payload length], SQLITE_TRANSIENT);
     sqlite3_bind_double(statement, 6, [[model timestamp] timeIntervalSince1970]);
-    sqlite3_bind_double(statement, 7, [model expiry]);
+    sqlite3_bind_double(statement, 7, [model ttl]);
     return statement;
 }
 

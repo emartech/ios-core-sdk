@@ -113,7 +113,7 @@
 }
 
 - (BOOL)isExpired:(EMSRequestModel *)model {
-    return [[NSDate date] timeIntervalSince1970] - [[model timestamp] timeIntervalSince1970] > [model expiry];
+    return [[NSDate date] timeIntervalSince1970] - [[model timestamp] timeIntervalSince1970] > [model ttl];
 }
 
 @end

@@ -25,7 +25,7 @@
     if (self = [super init]) {
         _requestId = requestId;
         _timestamp = timestamp;
-        _expiry = expiry;
+        _ttl = expiry;
         _method = method;
         _url = url;
         _payload = payload;
@@ -39,7 +39,7 @@
     if (self = [super init]) {
         _requestId = builder.requestId;
         _timestamp = builder.timestamp;
-        _expiry = builder.expiry;
+        _ttl = builder.expiry;
         _method = builder.requestMethod;
         _url = builder.requestUrl;
         _payload = builder.payload;
@@ -66,7 +66,7 @@
         return NO;
     if (self.timestamp != model.timestamp && [self.timestamp timeIntervalSince1970] != [model.timestamp timeIntervalSince1970])
         return NO;
-    if (self.expiry != model.expiry)
+    if (self.ttl != model.ttl)
         return NO;
     if (self.url != model.url && ![self.url isEqual:model.url])
         return NO;
@@ -82,7 +82,7 @@
 - (NSUInteger)hash {
     NSUInteger hash = [self.requestId hash];
     hash = hash * 31u + [self.timestamp hash];
-    hash = hash * 31u + [[NSNumber numberWithDouble:self.expiry] hash];
+    hash = hash * 31u + [[NSNumber numberWithDouble:self.ttl] hash];
     hash = hash * 31u + [self.url hash];
     hash = hash * 31u + [self.method hash];
     hash = hash * 31u + [self.payload hash];
@@ -94,7 +94,7 @@
     NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: ", NSStringFromClass([self class])];
     [description appendFormat:@"self.requestId=%@", self.requestId];
     [description appendFormat:@", self.timestamp=%@", self.timestamp];
-    [description appendFormat:@", self.expiry=%lf", self.expiry];
+    [description appendFormat:@", self.ttl=%lf", self.ttl];
     [description appendFormat:@", self.url=%@", self.url];
     [description appendFormat:@", self.method=%@", self.method];
     [description appendFormat:@", self.payload=%@", self.payload];

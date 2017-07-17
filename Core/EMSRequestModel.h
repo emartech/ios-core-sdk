@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString *requestId;
 @property (nonatomic, readonly) NSDate *timestamp;
-@property (nonatomic, readonly) NSTimeInterval expiry;
+@property(nonatomic, readonly) NSTimeInterval ttl;
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSString *method;
 @property (nonatomic, readonly) NSDictionary<NSString *, id> *payload;
