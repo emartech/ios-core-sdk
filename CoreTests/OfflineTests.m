@@ -13,6 +13,7 @@
 #import "EMSRequestManager+Private.h"
 #import "EMSWorkerProtocol.h"
 #import "EMSDefaultWorker.h"
+#import "EMSDefaultWorker+Private.h"
 #import "EMSRESTClient.h"
 #import "EMSInMemoryQueue.h"
 #import "FakeCompletionHandler.h"

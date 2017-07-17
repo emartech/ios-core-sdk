@@ -4,11 +4,13 @@
 
 #import "Kiwi.h"
 #import "EMSDefaultWorker.h"
+#import "EMSDefaultWorker+Private.h"
 #import "TestUtils.h"
 #import "EMSInMemoryQueue.h"
 #import "EMSSQLiteQueue.h"
 #import "EMSRequestModelBuilder.h"
 #import "EMSRESTClient.h"
+#import "FakeCompletionHandler.h"
 
 SPEC_BEGIN(DefaultWorkerTests)
 
@@ -60,11 +62,14 @@ SPEC_BEGIN(DefaultWorkerTests)
 
     describe(@"run", ^{
 
-        id (^requestModel)(NSString *url, NSDictionary *payload) = ^id(NSString *url, NSDictionary *payload) {
+        id (^requestModel)(NSString *url, NSDictionary *payload, BOOL expired) = ^id(NSString *url, NSDictionary *payload, BOOL expired) {
             return [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:url];
                 [builder setMethod:HTTPMethodPOST];
                 [builder setPayload:payload];
+                if (expired) {
+                    [builder setExpiry:-1];
+                }
             }];
         };
 
@@ -76,7 +81,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             [watchdog stub:@selector(isConnected)
                  andReturn:theValue(YES)];
             EMSInMemoryQueue *queue = [EMSInMemoryQueue new];
-            [queue push:requestModel(@"https://url1.com", nil)];
+            [queue push:requestModel(@"https://url1.com", nil, NO)];
 
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queue
                                                             connectionWatchdog:watchdog
@@ -127,7 +132,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             [[queueMock should] receive:@selector(isEmpty)
                               andReturn:theValue(NO)];
 
-            [[queueMock should] receive:@selector(peek)];
+            [[worker should] receive:@selector(nextNonExpiredModel)];
             [worker run];
         });
 
@@ -146,10 +151,10 @@ SPEC_BEGIN(DefaultWorkerTests)
             [[queueMock should] receive:@selector(isEmpty)
                               andReturn:theValue(NO)];
 
-            EMSRequestModel *expectedModel = requestModel(@"https://url1.com", nil);
+            EMSRequestModel *expectedModel = requestModel(@"https://url1.com", nil, NO);
 
-            [[queueMock should] receive:@selector(peek)
-                              andReturn:expectedModel];
+            [[worker should] receive:@selector(nextNonExpiredModel)
+                           andReturn:expectedModel];
             KWCaptureSpy *requestSpy = [clientMock captureArgument:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:)
                                                            atIndex:0];
             [worker run];
@@ -173,10 +178,10 @@ SPEC_BEGIN(DefaultWorkerTests)
             [[queueMock should] receive:@selector(isEmpty)
                               andReturn:theValue(NO)];
 
-            EMSRequestModel *expectedModel = requestModel(@"https://url1.com", nil);
+            EMSRequestModel *expectedModel = requestModel(@"https://url1.com", nil, NO);
 
-            [[queueMock should] receive:@selector(peek)
-                              andReturn:expectedModel];
+            [[worker should] receive:@selector(nextNonExpiredModel)
+                           andReturn:expectedModel];
             KWCaptureSpy *completionSpy = [clientMock captureArgument:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:)
                                                               atIndex:1];
             [worker run];
@@ -203,10 +208,10 @@ SPEC_BEGIN(DefaultWorkerTests)
             [[queueMock should] receive:@selector(isEmpty)
                               andReturn:theValue(NO)];
 
-            EMSRequestModel *expectedModel = requestModel(@"https://url1.com", nil);
+            EMSRequestModel *expectedModel = requestModel(@"https://url1.com", nil, NO);
 
-            [[queueMock should] receive:@selector(peek)
-                              andReturn:expectedModel];
+            [[worker should] receive:@selector(nextNonExpiredModel)
+                           andReturn:expectedModel];
             KWCaptureSpy *completionSpy = [clientMock captureArgument:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:)
                                                               atIndex:1];
             [worker run];
@@ -223,6 +228,85 @@ SPEC_BEGIN(DefaultWorkerTests)
 
         });
 
+        it(@"should pop expired requestModels", ^{
+            EMSInMemoryQueue *queue = [EMSInMemoryQueue new];
+            EMSRequestModel *expectedModel = requestModel(@"https://url123.com", nil, NO);
+            [queue push:requestModel(@"https://url1.com", nil, YES)];
+            [queue push:requestModel(@"https://url1.com", nil, YES)];
+            [queue push:requestModel(@"https://url1.com", nil, YES)];
+            [queue push:expectedModel];
+
+            EMSConnectionWatchdog *watchDog = [EMSConnectionWatchdog mock];
+            [watchDog stub:@selector(isConnected) andReturn:theValue(YES)];
+            [watchDog stub:@selector(setConnectionChangeListener:)];
+
+            EMSRESTClient *clientMock = [EMSRESTClient mock];
+
+            FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queue
+                                                                  successBlock:completionHandler.successBlock
+                                                                    errorBlock:completionHandler.errorBlock];
+            [worker setConnectionWatchdog:watchDog];
+            [worker setClient:clientMock];
+
+            KWCaptureSpy *requestSpy = [clientMock captureArgument:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:)
+                                                           atIndex:0];
+            [worker run];
+
+            EMSRequestModel *model = requestSpy.argument;
+            [[model.requestId should] equal:expectedModel.requestId];
+            [[theValue([queue count]) should] equal:theValue(1)];
+            EMSRequestModel *poppedModel = [queue pop];
+            [[poppedModel.requestId should] equal:expectedModel.requestId];
+            [[theValue([queue isEmpty]) should] beYes];
+        });
+
+        it(@"should report as error when request is expired", ^{
+            EMSInMemoryQueue *queue = [EMSInMemoryQueue new];
+            EMSRequestModel *expectedModel = requestModel(@"https://url123.com", nil, NO);
+            [queue push:requestModel(@"https://url1.com", nil, YES)];
+            [queue push:requestModel(@"https://url1.com", nil, YES)];
+            [queue push:requestModel(@"https://url1.com", nil, YES)];
+            [queue push:expectedModel];
+
+            EMSConnectionWatchdog *watchDog = [EMSConnectionWatchdog mock];
+            [watchDog stub:@selector(isConnected) andReturn:theValue(YES)];
+            [watchDog stub:@selector(setConnectionChangeListener:)];
+
+            EMSRESTClient *clientMock = [EMSRESTClient mock];
+            [[clientMock should] receive:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:) withArguments:expectedModel, any()];
+
+            FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queue
+                                                                  successBlock:completionHandler.successBlock
+                                                                    errorBlock:completionHandler.errorBlock];
+            [worker setClient:clientMock];
+
+            [worker run];
+
+            [[expectFutureValue(completionHandler.successCount) shouldEventually] equal:@0];
+            [[expectFutureValue(completionHandler.errorCount) shouldEventually] equal:@3];
+        });
+
+        it(@"should unlock if only expired models were in the queue", ^{
+            EMSInMemoryQueue *queue = [EMSInMemoryQueue new];
+            [queue push:requestModel(@"https://url1.com", nil, YES)];
+            [queue push:requestModel(@"https://url1.com", nil, YES)];
+            [queue push:requestModel(@"https://url1.com", nil, YES)];
+
+            EMSConnectionWatchdog *watchDog = [EMSConnectionWatchdog mock];
+            [watchDog stub:@selector(isConnected) andReturn:theValue(YES)];
+            [watchDog stub:@selector(setConnectionChangeListener:)];
+
+            FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithQueue:queue
+                                                                  successBlock:completionHandler.successBlock
+                                                                    errorBlock:completionHandler.errorBlock];
+
+            [worker run];
+
+            [[theValue([worker isLocked]) should] beNo];
+        });
     });
 
 

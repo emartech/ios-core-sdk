@@ -6,6 +6,7 @@
 #import "EMSRequestModel.h"
 #import "EMSRESTClient.h"
 #import "EMSQueueProtocol.h"
+#import "NSError+EMSCore.h"
 
 @interface EMSDefaultWorker ()
 
@@ -13,6 +14,11 @@
 @property(nonatomic, strong) EMSConnectionWatchdog *connectionWatchdog;
 @property(nonatomic, strong) id <EMSQueueProtocol> queue;
 @property(nonatomic, strong) EMSRESTClient *client;
+@property(nonatomic, strong) CoreErrorBlock errorBlock;
+
+- (EMSRequestModel *)nextNonExpiredModel;
+
+- (BOOL)isExpired:(EMSRequestModel *)model;
 
 @end
 
@@ -25,6 +31,7 @@
                    errorBlock:(CoreErrorBlock)errorBlock {
     NSParameterAssert(successBlock);
     NSParameterAssert(errorBlock);
+    _errorBlock = errorBlock;
     return [self initWithQueue:queue
             connectionWatchdog:[EMSConnectionWatchdog new]
                     restClient:[EMSRESTClient clientWithSuccessBlock:successBlock
@@ -53,18 +60,22 @@
 - (void)run {
     if (![self isLocked] && [self.connectionWatchdog isConnected] && ![self.queue isEmpty]) {
         [self lock];
-        EMSRequestModel *model = [self.queue peek];
+        EMSRequestModel *model = [self nextNonExpiredModel];
         __weak typeof(self) weakSelf = self;
-        [self.client executeTaskWithOfflineCallbackStrategyWithRequestModel:model
-                                                                 onComplete:^(BOOL shouldContinue) {
-                                                                     [weakSelf unlock];
-                                                                     if (shouldContinue) {
-                                                                         [weakSelf.queue pop];
-                                                                         [[NSOperationQueue currentQueue] addOperationWithBlock:^{
-                                                                             [weakSelf run];
-                                                                         }];
-                                                                     }
-                                                                 }];
+        if (model) {
+            [self.client executeTaskWithOfflineCallbackStrategyWithRequestModel:model
+                                                                     onComplete:^(BOOL shouldContinue) {
+                                                                         [weakSelf unlock];
+                                                                         if (shouldContinue) {
+                                                                             [weakSelf.queue pop];
+                                                                             [[NSOperationQueue currentQueue] addOperationWithBlock:^{
+                                                                                 [weakSelf run];
+                                                                             }];
+                                                                         }
+                                                                     }];
+        } else {
+            [self unlock];
+        }
     }
 }
 
@@ -91,5 +102,18 @@
     }
 }
 
+#pragma mark - Private methods
+
+- (EMSRequestModel *)nextNonExpiredModel {
+    while (![self.queue isEmpty] && [self isExpired:[self.queue peek]]) {
+        self.errorBlock([self.queue pop].requestId, [NSError errorWithCode:408
+                                                      localizedDescription:@"Request expired"]);
+    }
+    return [self.queue peek];
+}
+
+- (BOOL)isExpired:(EMSRequestModel *)model {
+    return [[NSDate date] timeIntervalSince1970] - [[model timestamp] timeIntervalSince1970] > [model expiry];
+}
 
 @end

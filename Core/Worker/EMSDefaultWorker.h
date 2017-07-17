@@ -18,10 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
                  successBlock:(CoreSuccessBlock)successBlock
                    errorBlock:(CoreErrorBlock)errorBlock;
-
-- (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
-           connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
-                   restClient:(EMSRESTClient *)client;
 @end
 
 NS_ASSUME_NONNULL_END
