@@ -181,6 +181,7 @@ SPEC_BEGIN(SQLiteHelperTests)
             createVersionOneDatabase();
             [dbHelper setSchemaHandler:[EMSSqliteQueueSchemaHandler new]];
             [dbHelper open];
+            [dbHelper close];
 
             sqlite3 *db;
             sqlite3_open([TEST_DB_PATH UTF8String], &db);
@@ -192,6 +193,34 @@ SPEC_BEGIN(SQLiteHelperTests)
                             equal:@"CREATE TABLE request (request_id TEXT, method TEXT, url TEXT, headers BLOB, payload BLOB, timestamp REAL, expiry REAL)"];
                 } else {
                     fail(@"sqlite3_step failed");
+                }
+            } else {
+                fail(@"sqlite3_prepare_v2 failed");
+            };
+            sqlite3_close(db);
+        });
+
+        NSString *(^insertCommandWith)(NSString *requestId) = ^NSString *(NSString *requestId) {
+            return [NSString stringWithFormat:@"INSERT INTO request (request_id, method, url, headers, payload, timestamp) VALUES (%@, 'GET', 'https://www.google.com', NULL, NULL, 1234);", requestId];
+        };
+
+        it(@"should set the default expiry for existing items", ^{
+            createVersionOneDatabase();
+            runCommandOnTestDB(insertCommandWith(@"123456"));
+            runCommandOnTestDB(insertCommandWith(@"asdfgh"));
+            runCommandOnTestDB(insertCommandWith(@"qwerty"));
+
+            [dbHelper setSchemaHandler:[EMSSqliteQueueSchemaHandler new]];
+            [dbHelper open];
+            [dbHelper close];
+
+            sqlite3 *db;
+            sqlite3_open([TEST_DB_PATH UTF8String], &db);
+            sqlite3_stmt *statement;
+            if (sqlite3_prepare_v2(db, [@"SELECT expiry FROM request;" UTF8String], -1, &statement, nil) == SQLITE_OK) {
+                while (sqlite3_step(statement) == SQLITE_ROW) {
+                    double expiry = sqlite3_column_double(statement, 0);
+                    [[theValue(expiry) should] equal:theValue(DEFAULT_REQUESTMODEL_EXPIRY)];
                 }
             } else {
                 fail(@"sqlite3_prepare_v2 failed");

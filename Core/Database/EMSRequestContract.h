@@ -1,6 +1,7 @@
 //
 //  Copyright (c) 2017 Emarsys. All rights reserved.
 //
+#import "EMSRequestModelBuilder.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
@@ -21,4 +22,4 @@
 #define SQL_COUNT [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@;", TABLE_NAME]
 
 #define SCHEMA_UPGRADE_FROM_1_TO_2 [NSString stringWithFormat:@"ALTER TABLE request ADD COLUMN %@ REAL;", COLUMN_NAME_EXPIRY]
-#define SET_DEFAULT_VALUES_FROM_1_TO_2 [NSString stringWithFormat:@"UPDATE request SET expiry = 7200;"]
+#define SET_DEFAULT_VALUES_FROM_1_TO_2 [NSString stringWithFormat:@"UPDATE request SET expiry = %f;", DEFAULT_REQUESTMODEL_EXPIRY]

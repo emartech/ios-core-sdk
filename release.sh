@@ -32,8 +32,8 @@ function release {
   git push
   git push --tags
 
-  pod spec lint
-  pod trunk push CoreSDK.podspec
+  pod spec lint --allow-warnings
+  pod trunk push CoreSDK.podspec --allow-warnings
 
   printf "[$VERSION_NUMBER] released, go eat some cookies."
 }
