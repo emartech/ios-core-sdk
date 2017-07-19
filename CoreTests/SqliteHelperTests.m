@@ -165,7 +165,7 @@ SPEC_BEGIN(SQLiteHelperTests)
                 int result = sqlite3_step(statement);
                 if (result == SQLITE_ROW) {
                     [[[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)] should]
-                            equal:@"CREATE TABLE request (request_id TEXT,method TEXT,url TEXT,headers BLOB,payload BLOB,timestamp REAL,expiry REAL)"];
+                            equal:@"CREATE TABLE request (request_id TEXT,method TEXT,url TEXT,headers BLOB,payload BLOB,timestamp REAL,expiry DOUBLE)"];
                 } else {
                     fail(@"sqlite3_step failed");
                 }
@@ -190,7 +190,7 @@ SPEC_BEGIN(SQLiteHelperTests)
                 int result = sqlite3_step(statement);
                 if (result == SQLITE_ROW) {
                     [[[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)] should]
-                            equal:@"CREATE TABLE request (request_id TEXT, method TEXT, url TEXT, headers BLOB, payload BLOB, timestamp REAL, expiry REAL)"];
+                            equal:@"CREATE TABLE request (request_id TEXT, method TEXT, url TEXT, headers BLOB, payload BLOB, timestamp REAL, expiry DOUBLE)"];
                 } else {
                     fail(@"sqlite3_step failed");
                 }
