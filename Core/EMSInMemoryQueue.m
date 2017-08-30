@@ -38,7 +38,7 @@
 }
 
 - (int)count {
-    return [_data count];
+    return (int)[_data count];
 }
 
 
