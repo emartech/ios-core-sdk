@@ -6,7 +6,7 @@
 
 @protocol EMSConnectionChangeListener
 
-- (void)connectionChangedToNetworkStatus:(NetworkStatus)networkStatus
+- (void)connectionChangedToNetworkStatus:(EMSNetworkStatus)networkStatus
                         connectionStatus:(BOOL)connected;
 
 @end
@@ -17,7 +17,7 @@
 
 - (instancetype)initWithReachability:(EMSReachability *)reachability;
 
-- (NetworkStatus)connectionState;
+- (EMSNetworkStatus)connectionState;
 
 - (BOOL)isConnected;
 

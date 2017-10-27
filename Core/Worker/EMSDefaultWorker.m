@@ -95,7 +95,7 @@
 
 #pragma mark - EMSConnectionChangeListener
 
-- (void)connectionChangedToNetworkStatus:(NetworkStatus)networkStatus
+- (void)connectionChangedToNetworkStatus:(EMSNetworkStatus)networkStatus
                         connectionStatus:(BOOL)connected {
     if (connected) {
         [self run];
