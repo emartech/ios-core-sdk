@@ -26,7 +26,7 @@
     return self;
 }
 
-- (NetworkStatus)connectionState {
+- (EMSNetworkStatus)connectionState {
     return [self.reachability currentReachabilityStatus];
 }
 
@@ -53,7 +53,7 @@
 
 - (void)startObserving {
     __weak typeof(self) weakSelf = self;
-    self.notificationToken = [[NSNotificationCenter defaultCenter] addObserverForName:kReachabilityChangedNotification object:self.reachability queue:[NSOperationQueue currentQueue] usingBlock:^(NSNotification *note) {
+    self.notificationToken = [[NSNotificationCenter defaultCenter] addObserverForName:kEMSReachabilityChangedNotification object:self.reachability queue:[NSOperationQueue currentQueue] usingBlock:^(NSNotification *note) {
         [weakSelf.connectionChangeListener connectionChangedToNetworkStatus:[weakSelf connectionState] connectionStatus:[weakSelf isConnected]];
     }];
     [self.reachability startNotifier];
