@@ -82,7 +82,7 @@ SPEC_BEGIN(EMSConnectionWatchdogTest)
             EMSConnectionWatchdog *watchdog = [[EMSConnectionWatchdog alloc] initWithReachability:reachabilityMock];
             watchdog.connectionChangeListener = listener;
 
-            [[NSNotificationCenter defaultCenter] postNotificationName:kReachabilityChangedNotification object:reachabilityMock];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kEMSReachabilityChangedNotification object:reachabilityMock];
         });
     });
 
