@@ -51,4 +51,9 @@
     return self;
 }
 
+- (EMSRequestModelBuilder *)setExtras:(NSDictionary<NSString *, NSString *> *)extras {
+    _extras = extras;
+    return self;
+}
+
 @end

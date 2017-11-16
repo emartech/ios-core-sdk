@@ -80,6 +80,19 @@ SPEC_BEGIN(BuilderTest)
             [[model.headers should] equal:headers];
         });
 
+        it(@"should create a model with specified extras when setExtras is called on builder", ^{
+            NSDictionary<NSString *, NSString *> *extras = @{
+                    @"extra1": @"value1",
+                    @"extra2": @"value2"
+            };
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:@"http://www.google.com"];
+                [builder setExtras:extras];
+            }];
+
+            [[model.extras should] equal:extras];
+        });
+
         it(@"should throw an exception, when builderBlock is nil", ^{
             @try {
                 [EMSRequestModel makeWithBuilder:nil];

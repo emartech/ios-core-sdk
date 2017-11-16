@@ -41,7 +41,8 @@
                                                   url:url
                                                method:method
                                               payload:payload
-                                              headers:headers];
+                                              headers:headers
+                                               extras:nil];
 }
 
 - (sqlite3_stmt *)bindStatement:(sqlite3_stmt *)statement fromModel:(EMSRequestModel *)model {

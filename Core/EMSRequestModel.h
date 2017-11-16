@@ -11,11 +11,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString *requestId;
 @property (nonatomic, readonly) NSDate *timestamp;
-@property(nonatomic, readonly) NSTimeInterval ttl;
+@property (nonatomic, readonly) NSTimeInterval ttl;
 @property (nonatomic, readonly) NSURL *url;
 @property (nonatomic, readonly) NSString *method;
-@property (nonatomic, readonly) NSDictionary<NSString *, id> *payload;
-@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
+@property (nonatomic, readonly, nullable) NSDictionary<NSString *, id> *payload;
+@property (nonatomic, readonly, nullable) NSDictionary<NSString *, NSString *> *headers;
+@property (nonatomic, readonly, nullable) NSDictionary<NSString *, NSString *> *extras;
 
 typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
 
@@ -27,7 +28,8 @@ typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
                               url:(NSURL *)url
                            method:(NSString *)method
                           payload:(NSDictionary<NSString *, id> *)payload
-                          headers:(NSDictionary<NSString *, NSString *> *)headers;
+                          headers:(NSDictionary<NSString *, NSString *> *)headers
+                          extras:(NSDictionary<NSString *, NSString *> *)extras;
 
 @end
 

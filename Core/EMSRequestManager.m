@@ -78,7 +78,8 @@ typedef void (^RunnerBlock)();
                                                                   url:model.url
                                                                method:model.method
                                                               payload:model.payload
-                                                              headers:[NSDictionary dictionaryWithDictionary:headers]];
+                                                              headers:[NSDictionary dictionaryWithDictionary:headers]
+                                                               extras:[NSDictionary dictionaryWithDictionary:model.extras]];
         }
         [weakSelf.queue push:requestModel];
         [weakSelf.worker run];

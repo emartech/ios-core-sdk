@@ -21,7 +21,8 @@
                               url:(NSURL *)url
                            method:(NSString *)method
                           payload:(NSDictionary<NSString *, id> *)payload
-                          headers:(NSDictionary<NSString *, NSString *> *)headers {
+                          headers:(NSDictionary<NSString *, NSString *> *)headers
+                           extras:(NSDictionary<NSString *, NSString *> *)extras {
     if (self = [super init]) {
         _requestId = requestId;
         _timestamp = timestamp;
@@ -30,6 +31,7 @@
         _url = url;
         _payload = payload;
         _headers = headers;
+        _extras = extras;
     }
     return self;
 }
@@ -44,6 +46,7 @@
         _url = builder.requestUrl;
         _payload = builder.payload;
         _headers = builder.headers;
+        _extras = builder.extras;
     }
     return self;
 }
