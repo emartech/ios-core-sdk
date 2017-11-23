@@ -16,5 +16,19 @@
     return self;
 }
 
+- (id)initWithStatusCode:(NSInteger)statusCode headers:(NSDictionary<NSString *, NSString *> *)headers
+                    body:(NSData *)body {
+    if (self = [super init]) {
+        _statusCode = statusCode;
+        _headers = headers;
+        _body = body;
+    }
+    return self;
+}
+
+- (id)parsedBody {
+    return _body ? [NSJSONSerialization JSONObjectWithData:_body options:0 error:nil] : nil;
+}
+
 
 @end

@@ -11,9 +11,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger statusCode;
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *headers;
 @property(nonatomic, strong) NSData *body;
+@property(nonatomic, readonly) id parsedBody;
 
 - (id)initWithHttpUrlResponse:(NSHTTPURLResponse *)httpUrlResponse
                          data:(NSData *)data;
+
+- (id)initWithStatusCode:(NSInteger)statusCode
+                 headers:(NSDictionary<NSString *, NSString *> *)headers
+                    body:(NSData *)body;
+
+- (id)parsedBody;
 
 @end
 
