@@ -17,7 +17,8 @@ Pod::Spec.new do |spec|
 		'Core/EMSDeviceInfo.h',
 		'Core/NSError+EMSCore.h',
         'Core/EMSCoreCompletion.h',
-        'Core/Worker/EMSRESTClient.h'
+        'Core/Worker/EMSRESTClient.h',
+        'Core/EMSTimestampProvider.h'
 	]
 	spec.libraries = 'z', 'c++', 'sqlite3'
 end

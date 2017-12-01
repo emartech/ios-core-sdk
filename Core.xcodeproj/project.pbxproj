@@ -13,6 +13,8 @@
 		164B99AB1E8021EA00371ED4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 164B99A91E8021EA00371ED4 /* Main.storyboard */; };
 		164B99AD1E8021EA00371ED4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 164B99AC1E8021EA00371ED4 /* Assets.xcassets */; };
 		164B99B01E8021EA00371ED4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 164B99AE1E8021EA00371ED4 /* LaunchScreen.storyboard */; };
+		168B56A91FD1579F00E67128 /* EMSTimestampProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 168B56A71FD1579F00E67128 /* EMSTimestampProvider.m */; };
+		168B56AB1FD157B500E67128 /* EMSTimestampProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 168B56AA1FD157B500E67128 /* EMSTimestampProviderTests.m */; };
 		32C6F0251B86D48127D82123 /* OfflineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FD45657DA2A21B4748E1 /* OfflineTests.m */; };
 		32C6F1123216F1A8712571E1 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C6F81DA4AD75BF5509BA76 /* AdSupport.framework */; };
 		32C6F30986F0DAC6691E5353 /* DeviceInfoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6FA6E0EA9D9AAD4DC672F /* DeviceInfoTests.m */; };
@@ -100,6 +102,9 @@
 		164B99AC1E8021EA00371ED4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		164B99AF1E8021EA00371ED4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		164B99B11E8021EA00371ED4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		168B56A71FD1579F00E67128 /* EMSTimestampProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSTimestampProvider.m; sourceTree = "<group>"; };
+		168B56A81FD1579F00E67128 /* EMSTimestampProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSTimestampProvider.h; sourceTree = "<group>"; };
+		168B56AA1FD157B500E67128 /* EMSTimestampProviderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSTimestampProviderTests.m; sourceTree = "<group>"; };
 		312B33223F508F1401A7B0F4 /* Pods-CoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CoreTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CoreTests/Pods-CoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		32C6F0C2DA10099C0D910845 /* EMSRESTClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSRESTClient.m; sourceTree = "<group>"; };
 		32C6F111B22EFDD9272AD8DB /* EMSResponseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSResponseModel.h; sourceTree = "<group>"; };
@@ -273,6 +278,7 @@
 			children = (
 				32C6FF2D1BDE7D01E33F9A88 /* Info.plist */,
 				32C6F98B5EE5C0D2ACF0E7A2 /* CoreTests.m */,
+				168B56AA1FD157B500E67128 /* EMSTimestampProviderTests.m */,
 				32C6F2AB679CB5977743368C /* RequestModelTests.m */,
 				32C6FD211CA97AFDCB057A0B /* NSURLRequest+CoreTests.m */,
 				32C6FA6E0EA9D9AAD4DC672F /* DeviceInfoTests.m */,
@@ -348,6 +354,8 @@
 		32C6FF9E5946A30CD82FC305 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				168B56A81FD1579F00E67128 /* EMSTimestampProvider.h */,
+				168B56A71FD1579F00E67128 /* EMSTimestampProvider.m */,
 				32C6F9CD5D62584032E40BFB /* EMSRequestManager.h */,
 				32C6FAAA04CBA3BEA822B3B4 /* EMSRequestManager.m */,
 				32C6F67BC379469363FE4145 /* EMSRequestModel.m */,
@@ -549,13 +557,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CoreTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DA7913FA25BCB5400E6D5FD3 /* [CP] Embed Pods Frameworks */ = {
@@ -593,6 +604,7 @@
 				32C6F4BF4DB889C37CF9D860 /* CoreTests.m in Sources */,
 				32C6FAF16A4C8B9CB6AC9650 /* RequestModelTests.m in Sources */,
 				32C6F4FB32D0E7B1776A956F /* NSURLRequest+CoreTests.m in Sources */,
+				168B56AB1FD157B500E67128 /* EMSTimestampProviderTests.m in Sources */,
 				32C6F30986F0DAC6691E5353 /* DeviceInfoTests.m in Sources */,
 				32C6F8EF730857715A355B8F /* AuthenticationTests.m in Sources */,
 				32C6FF26FD11DBF3A076278A /* DennaTests.m in Sources */,
@@ -627,6 +639,7 @@
 				32C6F4F52F1413204BF12C04 /* NSDictionary+EMSCore.m in Sources */,
 				37460599D8C020B3E049289A /* EMSInMemoryQueue.m in Sources */,
 				32C6F4004C9B5EC85DF88267 /* EMSSqliteQueueSchemaHandler.m in Sources */,
+				168B56A91FD1579F00E67128 /* EMSTimestampProvider.m in Sources */,
 				32C6FC54107F80706F7D208E /* EMSRequestModelMapper.m in Sources */,
 				37460E029F5671D4F868223C /* EMSCountMapper.m in Sources */,
 				37460BD85EFEA7297E6B7B1D /* EMSSQLiteQueue.m in Sources */,
