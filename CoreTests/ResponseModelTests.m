@@ -66,6 +66,17 @@ SPEC_BEGIN(ResponseModelTests)
             [[model.parsedBody should] beNil];
         });
 
+        it(@"should only parse once, when called multiple times", ^{
+            NSDictionary *dict = @{@"b1": @"bv1", @"deep": @{@"child1": @"value1"}};
+            NSData *responseBody = [NSJSONSerialization dataWithJSONObject:dict options:0 error:nil];
+            EMSResponseModel *model = [[EMSResponseModel alloc] initWithStatusCode:402 headers:@{} body:responseBody];
+
+            id parsedBody1 = model.parsedBody;
+            id parsedBody2 = model.parsedBody;
+
+            [[theValue(parsedBody1 == parsedBody2) should] beTrue];
+        });
+
     });
 
 SPEC_END

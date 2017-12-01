@@ -4,7 +4,9 @@
 
 #import "EMSResponseModel.h"
 
-@implementation EMSResponseModel
+@implementation EMSResponseModel {
+    id _parsedBody;
+}
 
 - (id)initWithHttpUrlResponse:(NSHTTPURLResponse *)httpUrlResponse
                          data:(NSData *)data {
@@ -27,8 +29,10 @@
 }
 
 - (id)parsedBody {
-    return _body ? [NSJSONSerialization JSONObjectWithData:_body options:0 error:nil] : nil;
+    if (!_parsedBody && _body) {
+        _parsedBody = [NSJSONSerialization JSONObjectWithData:_body options:0 error:nil];
+    }
+    return _parsedBody;
 }
-
 
 @end
