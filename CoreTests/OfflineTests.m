@@ -21,6 +21,8 @@
 
 SPEC_BEGIN(OfflineTests)
 
+    __block EMSSQLiteHelper *helper;
+
     id (^requestManager)(id <EMSQueueProtocol> queue, EMSConnectionWatchdog *watchdog, CoreSuccessBlock successBlock, CoreErrorBlock errorBlock) = ^id(id <EMSQueueProtocol> queue, EMSConnectionWatchdog *watchdog, CoreSuccessBlock successBlock, CoreErrorBlock errorBlock) {
         id <EMSWorkerProtocol> worker = [[EMSDefaultWorker alloc] initWithQueue:queue
                                                              connectionWatchdog:watchdog
@@ -33,10 +35,14 @@ SPEC_BEGIN(OfflineTests)
     beforeEach(^{
         [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
                                                    error:nil];
-        EMSSQLiteHelper *helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
-                                                                 schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
+        helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
+                                                schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
         [helper open];
         [helper executeCommand:SQL_PURGE];
+        [helper close];
+    });
+
+    afterEach(^{
         [helper close];
     });
 

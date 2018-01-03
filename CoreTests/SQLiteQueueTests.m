@@ -13,9 +13,16 @@
 
 SPEC_BEGIN(SQLiteQueueTests)
 
+    __block EMSSQLiteHelper *helper;
+
     beforeEach(^{
         [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH
                                                    error:nil];
+    });
+
+
+    afterEach(^{
+        [helper close];
     });
 
 
@@ -28,7 +35,7 @@ SPEC_BEGIN(SQLiteQueueTests)
     };
 
     id (^createQueue)() = ^id <EMSQueueProtocol>() {
-        EMSSQLiteHelper *helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:TEST_DB_PATH
+        helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:TEST_DB_PATH
                                                                  schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
         return [[EMSSQLiteQueue alloc] initWithSQLiteHelper:helper];
     };

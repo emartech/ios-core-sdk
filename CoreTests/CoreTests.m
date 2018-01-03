@@ -13,13 +13,20 @@
 
 SPEC_BEGIN(CoreTest)
 
+    __block EMSSQLiteHelper *helper;
+
     beforeEach(^{
-        EMSSQLiteHelper *helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
-                                                                 schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
+        helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
+                                                schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
         [helper open];
         [helper executeCommand:SQL_PURGE];
         [helper close];
     });
+
+    afterEach(^{
+        [helper close];
+    });
+
 
     describe(@"EMSRequestManager", ^{
 
@@ -73,7 +80,7 @@ SPEC_BEGIN(CoreTest)
         it(@"should throw an exception, when model is nil", ^{
             EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
                     }
-                                                                        errorBlock:^(NSString *requestId, NSError *error) {
+                                                                      errorBlock:^(NSString *requestId, NSError *error) {
 
                                                                       }];
             @try {

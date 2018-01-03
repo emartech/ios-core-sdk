@@ -3,8 +3,6 @@
 //
 #import "EMSRequestModelBuilder.h"
 
-#define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
-
 #define TABLE_NAME @"request"
 #define COLUMN_NAME_REQUEST_ID @"request_id"
 #define COLUMN_NAME_METHOD @"method"
