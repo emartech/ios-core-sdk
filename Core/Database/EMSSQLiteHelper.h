@@ -5,6 +5,8 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
+typedef void(^BindBlock)(sqlite3_stmt *statement);
+
 @class EMSSQLiteHelper;
 @protocol EMSModelMapperProtocol;
 
@@ -39,6 +41,8 @@
 
 - (BOOL)executeCommand:(NSString *)command
              withTimeIntervalValue:(NSTimeInterval)value;
+
+- (BOOL)execute:(NSString *)command withBindBlock:(BindBlock)bindBlock;
 
 - (NSArray *)executeQuery:(NSString *)query mapper:(id <EMSModelMapperProtocol>)mapper;
 

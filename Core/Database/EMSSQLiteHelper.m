@@ -79,8 +79,6 @@
     return NO;
 }
 
-typedef void(^BindBlock)(sqlite3_stmt *statement);
-
 - (BOOL)execute:(NSString *)command withBindBlock:(BindBlock)bindBlock {
     sqlite3_stmt *statement;
     int i = sqlite3_prepare_v2(_db, [command UTF8String], -1, &statement, nil);
