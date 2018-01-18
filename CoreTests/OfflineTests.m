@@ -5,7 +5,6 @@
 #import "Kiwi.h"
 #import "EMSRequestManager.h"
 #import "EMSRequestModelBuilder.h"
-#import "EMSRequestModel.h"
 #import "EMSSQLiteHelper.h"
 #import "EMSSqliteQueueSchemaHandler.h"
 #import "EMSRequestContract.h"
@@ -13,13 +12,12 @@
 #import "EMSWorkerProtocol.h"
 #import "EMSDefaultWorker.h"
 #import "EMSDefaultWorker+Private.h"
-#import "EMSRESTClient.h"
 #import "FakeCompletionHandler.h"
 #import "FakeConnectionWatchdog.h"
 #import "EMSRequestModelRepository.h"
 #import "EMSRequestModelSelectAllSpecification.h"
 
-#define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
+#define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
 SPEC_BEGIN(OfflineTests)
 
@@ -39,9 +37,9 @@ SPEC_BEGIN(OfflineTests)
     describe(@"EMSRequestManager", ^{
 
         beforeEach(^{
-            [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
+            [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH
                                                        error:nil];
-            helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
+            helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:TEST_DB_PATH
                                                     schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
             [helper open];
             [helper executeCommand:SQL_PURGE];
@@ -51,7 +49,7 @@ SPEC_BEGIN(OfflineTests)
 
         afterEach(^{
             [helper close];
-            [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
+            [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH
                                                        error:nil];
         });
 

@@ -8,13 +8,10 @@
 #import "EMSRequestManager.h"
 #import "EMSResponseModel.h"
 #import "NSDictionary+EMSCore.h"
-#import "EMSSQLiteHelper.h"
-#import "EMSSqliteQueueSchemaHandler.h"
-#import "EMSRequestContract.h"
-#import "EMSRequestModelRepository.h"
 
 #define DennaUrl(ending) [NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", ending];
-#define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
+#define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
+#define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
 SPEC_BEGIN(DennaTest)
 
@@ -22,9 +19,6 @@ SPEC_BEGIN(DennaTest)
     NSString *echo = DennaUrl(@"/echo");
     NSDictionary *inputHeaders = @{@"Header1": @"value1", @"Header2": @"value2"};
     NSDictionary *payload = @{@"key1": @"val1", @"key2": @"val2", @"key3": @"val3"};
-
-    __block EMSSQLiteHelper *helper;
-    __block EMSRequestModelRepository *repository;
 
     void (^shouldEventuallySucceed)(EMSRequestModel *model, NSString *method, NSDictionary<NSString *, NSString *> *headers, NSDictionary<NSString *, id> *body) = ^(EMSRequestModel *model, NSString *method, NSDictionary<NSString *, NSString *> *headers, NSDictionary<NSString *, id> *body) {
         __block NSString *checkableRequestId;
@@ -44,7 +38,7 @@ SPEC_BEGIN(DennaTest)
         }                                                         errorBlock:^(NSString *requestId, NSError *error) {
             NSLog(@"ERROR!");
             fail(@"errorblock invoked");
-        }                                                  requestRepository:repository];
+        }];
         [core submit:model];
 
         [[expectFutureValue(resultMethod) shouldEventuallyBeforeTimingOutAfter(10.0)] equal:method];
@@ -59,16 +53,9 @@ SPEC_BEGIN(DennaTest)
     describe(@"EMSRequestManager", ^{
 
         beforeEach(^{
-            helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
-                                                    schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
-            [helper open];
-            repository = [[EMSRequestModelRepository alloc] initWithDbHelper:helper];
-        });
+            [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH error:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:DB_PATH error:nil];
 
-        afterEach(^{
-            [helper close];
-            [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
-                                                       error:nil];
         });
 
         it(@"should invoke errorBlock when calling error500 on Denna", ^{
@@ -86,7 +73,7 @@ SPEC_BEGIN(DennaTest)
                 checkableRequestId = requestId;
                 NSLog(@"ERROR!");
                 fail(@"errorBlock invoked :'(");
-            }                                                  requestRepository:repository];
+            }];
             [core submit:model];
             [[expectFutureValue(checkableRequestId) shouldEventually] beNil];
         });

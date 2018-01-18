@@ -6,6 +6,7 @@
 #import "EMSRequestModelMapper.h"
 #import "EMSRequestContract.h"
 #import "EMSCountMapper.h"
+#import <UIKit/UIKit.h>
 
 @interface EMSRequestModelRepository ()
 
@@ -22,6 +23,15 @@
     if (self = [super init]) {
         _dbHelper = sqliteHelper;
         _mapper = [EMSRequestModelMapper new];
+        _dbHelper = sqliteHelper;
+        [_dbHelper open];
+
+        __weak typeof(self) weakSelf = self;
+        [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillTerminateNotification object:nil
+                                                           queue:[NSOperationQueue mainQueue]
+                                                      usingBlock:^(NSNotification *note) {
+                                                          [weakSelf.dbHelper close];
+                                                      }];
     }
     return self;
 }

@@ -6,6 +6,10 @@
 #import "EMSResponseModel.h"
 #import "EMSWorkerProtocol.h"
 #import "EMSDefaultWorker.h"
+#import "EMSRequestModelRepository.h"
+#import "EMSSqliteQueueSchemaHandler.h"
+
+#define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
 typedef void (^RunnerBlock)();
 
@@ -23,6 +27,13 @@ typedef void (^RunnerBlock)();
 }
 
 #pragma mark - Init
+
++ (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
+                             errorBlock:(nullable CoreErrorBlock)errorBlock {
+    EMSRequestModelRepository *repository = [[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
+                                                                                                                               schemaDelegate:[EMSSqliteQueueSchemaHandler new]]];
+    return [EMSRequestManager managerWithSuccessBlock:successBlock errorBlock:errorBlock requestRepository:repository];
+}
 
 + (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
                              errorBlock:(nullable CoreErrorBlock)errorBlock

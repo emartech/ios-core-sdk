@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *additionalHeaders;
 
 + (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
+                             errorBlock:(nullable CoreErrorBlock)errorBlock;
+
++ (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
                              errorBlock:(nullable CoreErrorBlock)errorBlock
                       requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository;
 
