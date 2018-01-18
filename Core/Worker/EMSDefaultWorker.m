@@ -5,8 +5,8 @@
 #import "EMSDefaultWorker.h"
 #import "EMSRESTClient.h"
 #import "NSError+EMSCore.h"
-#import "EMSQueueProtocol.h"
 #import "EMSRequestModelSelectFirstSpecification.h"
+#import "EMSRequestModelDeleteByIdsSpecification.h"
 
 @interface EMSDefaultWorker ()
 
@@ -67,7 +67,7 @@
                                                                      onComplete:^(BOOL shouldContinue) {
                                                                          [weakSelf unlock];
                                                                          if (shouldContinue) {
-                                                                             [weakSelf.repository remove:[EMSRequestModelSelectFirstSpecification new]];
+                                                                             [weakSelf.repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:model]];
                                                                              [[NSOperationQueue currentQueue] addOperationWithBlock:^{
                                                                                  [weakSelf run];
                                                                              }];
@@ -105,13 +105,13 @@
 #pragma mark - Private methods
 
 - (EMSRequestModel *)nextNonExpiredModel {
-    while (![self.repository isEmpty] && [self isExpired:[self.repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject]) {
-        EMSRequestModel *model = [self.repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject;
-        [self.repository remove:[EMSRequestModelSelectFirstSpecification new]];
+    EMSRequestModel *model;
+    while ((model = [self.repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject) && [self isExpired:model]) {
+        [self.repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:model]];
         self.errorBlock(model.requestId, [NSError errorWithCode:408
                                                       localizedDescription:@"Request expired"]);
     }
-    return [self.repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject;
+    return model;
 }
 
 - (BOOL)isExpired:(EMSRequestModel *)model {

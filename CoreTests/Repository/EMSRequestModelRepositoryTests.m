@@ -11,6 +11,8 @@
 #import "EMSQueueProtocol.h"
 #import "EMSRequestModelSelectFirstSpecification.h"
 #import "EMSRequestModelSelectAllSpecification.h"
+#import "EMSRequestModelDeleteByIdsSpecification.h"
+#import "EMSCompositeRequestModel.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
@@ -78,7 +80,7 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
         it(@"should delete the model from the table", ^{
             EMSRequestModel *expectedModel = requestModel(@"https://url1.com", @{@"key1": @"value1"});
             [repository add:expectedModel];
-            [repository remove:[EMSRequestModelSelectFirstSpecification new]];
+            [repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:expectedModel]];
             NSArray<EMSRequestModel *> *result = [repository query:[EMSRequestModelSelectFirstSpecification new]];
             [[result should] beEmpty];
         });
@@ -95,9 +97,9 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
             [repository add:secondModel];
 
             EMSRequestModel *result1 = [repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject;
-            [repository remove:[EMSRequestModelSelectFirstSpecification new]];
+            [repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:firstModel]];
             EMSRequestModel *result2 = [repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject;
-            [repository remove:[EMSRequestModelSelectFirstSpecification new]];
+            [repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:secondModel]];
 
             [[result1 should] equal:firstModel];
             [[result2 should] equal:secondModel];
@@ -119,6 +121,49 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
 
             [[theValue([results count]) should] equal:theValue(3)];
         });
+    });
+
+
+    describe(@"EMSRequestModelDeleteByIdsSpecification", ^{
+
+        it(@"should delete the correct requestmodel", ^{
+            EMSRequestModel *firstModel = requestModelWithTTL(@"https://url2.com", 58);
+            EMSRequestModel *secondModel = requestModelWithTTL(@"https://url2.com", 57);
+            EMSRequestModel *thirdModel = requestModelWithTTL(@"https://url3.com", 59);
+
+            [repository add:firstModel];
+            [repository add:secondModel];
+            [repository add:thirdModel];
+
+            [repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:secondModel]];
+
+            NSArray *results = [repository query:[EMSRequestModelSelectAllSpecification new]];
+            [[results[0] should] equal:firstModel];
+            [[results[1] should] equal:thirdModel];
+        });
+
+        it(@"should delete the original requestmodels for the composit request model", ^{
+            EMSRequestModel *firstModel = requestModelWithTTL(@"https://url2.com", 58);
+            EMSRequestModel *secondModel = requestModelWithTTL(@"https://url2.com", 57);
+            EMSRequestModel *thirdModel = requestModelWithTTL(@"https://url3.com", 59);
+            EMSRequestModel *fourthModel = requestModelWithTTL(@"https://url4.com", 88);
+
+            [repository add:firstModel];
+            [repository add:secondModel];
+            [repository add:thirdModel];
+            [repository add:fourthModel];
+
+            EMSCompositeRequestModel *compositeRequestModel = [EMSCompositeRequestModel new];
+            compositeRequestModel.originalRequestIds = @[firstModel.requestId, thirdModel.requestId];
+
+            [repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:compositeRequestModel]];
+
+            NSArray *results = [repository query:[EMSRequestModelSelectAllSpecification new]];
+            [[theValue([results count]) should] equal:theValue(2)];
+            [[results[0] should] equal:secondModel];
+            [[results[1] should] equal:fourthModel];
+        });
+
     });
 
 

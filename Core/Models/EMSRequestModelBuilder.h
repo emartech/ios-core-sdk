@@ -12,22 +12,28 @@ typedef enum {
 #define DEFAULT_REQUESTMODEL_EXPIRY FLT_MAX
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface EMSRequestModelBuilder : NSObject
 
-@property (nonatomic, readonly) NSString *requestId;
-@property (nonatomic, readonly) NSDate *timestamp;
-@property (nonatomic, readonly) NSTimeInterval expiry;
-@property (nonatomic, readonly) NSURL *requestUrl;
-@property (nonatomic, readonly) NSString *requestMethod;
-@property (nonatomic, readonly) NSDictionary<NSString *, id> *payload;
-@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
-@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *extras;
+@property(nonatomic, readonly) NSString *requestId;
+@property(nonatomic, readonly) NSDate *timestamp;
+@property(nonatomic, readonly) NSTimeInterval expiry;
+@property(nonatomic, readonly) NSURL *requestUrl;
+@property(nonatomic, readonly) NSString *requestMethod;
+@property(nonatomic, readonly) NSDictionary<NSString *, id> *payload;
+@property(nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
+@property(nonatomic, readonly) NSDictionary<NSString *, NSString *> *extras;
 
 - (EMSRequestModelBuilder *)setMethod:(HTTPMethod)method;
+
 - (EMSRequestModelBuilder *)setUrl:(NSString *)url;
+
 - (EMSRequestModelBuilder *)setExpiry:(NSTimeInterval)expiry;
+
 - (EMSRequestModelBuilder *)setPayload:(NSDictionary<NSString *, id> *)payload;
+
 - (EMSRequestModelBuilder *)setHeaders:(NSDictionary<NSString *, NSString *> *)headers;
+
 - (EMSRequestModelBuilder *)setExtras:(NSDictionary<NSString *, NSString *> *)extras;
 
 @end

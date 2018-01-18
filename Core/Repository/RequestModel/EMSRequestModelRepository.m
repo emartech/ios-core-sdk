@@ -36,9 +36,7 @@
 }
 
 - (void)remove:(id <EMSSQLSpecificationProtocol>)sqlSpecification {
-    EMSRequestModel *model = [[self.dbHelper executeQuery:sqlSpecification.sql
-                                                   mapper:self.mapper] firstObject];
-    [self.dbHelper executeCommand:SQL_DELETE_ITEM withValue:[model requestId]];
+    [self.dbHelper executeCommand:sqlSpecification.sql];
 }
 
 - (NSArray<EMSRequestModel *> *)query:(id <EMSSQLSpecificationProtocol>)sqlSpecification {

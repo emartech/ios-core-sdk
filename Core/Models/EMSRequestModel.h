@@ -7,16 +7,17 @@
 @class EMSRequestModelBuilder;
 
 NS_ASSUME_NONNULL_BEGIN
+
 @interface EMSRequestModel : NSObject
 
-@property (nonatomic, readonly) NSString *requestId;
-@property (nonatomic, readonly) NSDate *timestamp;
-@property (nonatomic, readonly) NSTimeInterval ttl;
-@property (nonatomic, readonly) NSURL *url;
-@property (nonatomic, readonly) NSString *method;
-@property (nonatomic, readonly, nullable) NSDictionary<NSString *, id> *payload;
-@property (nonatomic, readonly, nullable) NSDictionary<NSString *, NSString *> *headers;
-@property (nonatomic, readonly, nullable) NSDictionary<NSString *, NSString *> *extras;
+@property(nonatomic, readonly) NSString *requestId;
+@property(nonatomic, readonly) NSDate *timestamp;
+@property(nonatomic, readonly) NSTimeInterval ttl;
+@property(nonatomic, readonly) NSURL *url;
+@property(nonatomic, readonly) NSString *method;
+@property(nonatomic, readonly, nullable) NSDictionary<NSString *, id> *payload;
+@property(nonatomic, readonly, nullable) NSDictionary<NSString *, NSString *> *headers;
+@property(nonatomic, readonly, nullable) NSDictionary<NSString *, NSString *> *extras;
 
 typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
 
@@ -29,7 +30,7 @@ typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
                            method:(NSString *)method
                           payload:(NSDictionary<NSString *, id> *)payload
                           headers:(NSDictionary<NSString *, NSString *> *)headers
-                          extras:(NSDictionary<NSString *, NSString *> *)extras;
+                           extras:(NSDictionary<NSString *, NSString *> *)extras;
 
 @end
 

@@ -17,6 +17,7 @@
 #define SQL_SELECTFIRST [NSString stringWithFormat:@"SELECT * FROM %@ ORDER BY ROWID ASC LIMIT 1;", TABLE_NAME]
 #define SQL_SELECTALL [NSString stringWithFormat:@"SELECT * FROM %@ ORDER BY ROWID ASC;", TABLE_NAME]
 #define SQL_DELETE_ITEM [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ = ?;", TABLE_NAME, COLUMN_NAME_REQUEST_ID]
+#define SQL_DELETE_MULTIPLE_ITEM(ids) [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@ IN (%@);", TABLE_NAME, COLUMN_NAME_REQUEST_ID, ids]
 #define SQL_PURGE [NSString stringWithFormat:@"DELETE FROM %@;", TABLE_NAME]
 #define SQL_COUNT [NSString stringWithFormat:@"SELECT COUNT(*) FROM %@;", TABLE_NAME]
 
