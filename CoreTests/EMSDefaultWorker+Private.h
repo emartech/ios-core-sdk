@@ -4,16 +4,17 @@
 
 #import <Foundation/Foundation.h>
 #import "EMSDefaultWorker.h"
+#import "EMSRESTClient.h"
 
 @interface EMSDefaultWorker (Private)
 
-- (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
-           connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
-                   restClient:(EMSRESTClient *)client;
+- (instancetype)initWithRequestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
+                       connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
+                               restClient:(EMSRESTClient *)client;
 
 - (void)setConnectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog;
 
-- (void)setQueue:(id <EMSQueueProtocol>)queue;
+- (void)setRepository:(id <EMSRequestModelRepositoryProtocol>)repository;
 
 - (void)setClient:(EMSRESTClient *)client;
 

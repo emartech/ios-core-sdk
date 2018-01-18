@@ -1,10 +1,10 @@
 //
 // Copyright (c) 2018 Emarsys. All rights reserved.
 //
-#import "EMSRequestModelFilterSelectFirstSpecification.h"
+#import "EMSRequestModelSelectFirstSpecification.h"
 #import "EMSRequestContract.h"
 
-@implementation EMSRequestModelFilterSelectFirstSpecification
+@implementation EMSRequestModelSelectFirstSpecification
 
 - (NSString *)sql {
     return SQL_SELECTFIRST;

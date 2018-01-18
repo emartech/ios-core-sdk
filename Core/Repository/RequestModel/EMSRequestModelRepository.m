@@ -5,6 +5,7 @@
 #import "EMSRequestModelRepository.h"
 #import "EMSRequestModelMapper.h"
 #import "EMSRequestContract.h"
+#import "EMSCountMapper.h"
 
 @interface EMSRequestModelRepository ()
 
@@ -49,5 +50,11 @@
 
     return result;
 }
+
+- (BOOL)isEmpty {
+    NSNumber *count = [[self.dbHelper executeQuery:SQL_COUNT mapper:[EMSCountMapper new]] firstObject];
+    return [count integerValue] == 0;
+}
+
 
 @end

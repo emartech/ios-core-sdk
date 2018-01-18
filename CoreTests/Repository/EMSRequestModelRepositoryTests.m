@@ -9,7 +9,8 @@
 #import "EMSRequestModelRepository.h"
 #import "EMSSqliteQueueSchemaHandler.h"
 #import "EMSQueueProtocol.h"
-#import "EMSRequestModelFilterSelectFirstSpecification.h"
+#import "EMSRequestModelSelectFirstSpecification.h"
+#import "EMSRequestModelSelectAllSpecification.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
@@ -50,7 +51,7 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
 
     describe(@"query", ^{
         it(@"should return empty array when the table is isEmpty", ^{
-            NSArray<EMSRequestModel *> *result = [repository query:[EMSRequestModelFilterSelectFirstSpecification new]];
+            NSArray<EMSRequestModel *> *result = [repository query:[EMSRequestModelSelectFirstSpecification new]];
             [[result should] beEmpty];
         });
     });
@@ -68,7 +69,7 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
         it(@"should insert the requestModel to the repository", ^{
             EMSRequestModel *expectedModel = requestModel(@"https://url1.com", @{@"key1": @"value1"});
             [repository add:expectedModel];
-            NSArray<EMSRequestModel *> *result = [repository query:[EMSRequestModelFilterSelectFirstSpecification new]];
+            NSArray<EMSRequestModel *> *result = [repository query:[EMSRequestModelSelectFirstSpecification new]];
             [[result.firstObject should] equal:expectedModel];
         });
     });
@@ -77,8 +78,8 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
         it(@"should delete the model from the table", ^{
             EMSRequestModel *expectedModel = requestModel(@"https://url1.com", @{@"key1": @"value1"});
             [repository add:expectedModel];
-            [repository remove:[EMSRequestModelFilterSelectFirstSpecification new]];
-            NSArray<EMSRequestModel *> *result = [repository query:[EMSRequestModelFilterSelectFirstSpecification new]];
+            [repository remove:[EMSRequestModelSelectFirstSpecification new]];
+            NSArray<EMSRequestModel *> *result = [repository query:[EMSRequestModelSelectFirstSpecification new]];
             [[result should] beEmpty];
         });
     });
@@ -89,17 +90,34 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
         it(@"should keep the order of the elements", ^{
             EMSRequestModel *firstModel = requestModelWithTTL(@"https://url2.com", 58);
             EMSRequestModel *secondModel = requestModelWithTTL(@"https://url2.com", 57);
-            
+
             [repository add:firstModel];
             [repository add:secondModel];
 
-            EMSRequestModel *result1 = [repository query:[EMSRequestModelFilterSelectFirstSpecification new]].firstObject;
-            [repository remove:[EMSRequestModelFilterSelectFirstSpecification new]];
-            EMSRequestModel *result2 = [repository query:[EMSRequestModelFilterSelectFirstSpecification new]].firstObject;
-            [repository remove:[EMSRequestModelFilterSelectFirstSpecification new]];
+            EMSRequestModel *result1 = [repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject;
+            [repository remove:[EMSRequestModelSelectFirstSpecification new]];
+            EMSRequestModel *result2 = [repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject;
+            [repository remove:[EMSRequestModelSelectFirstSpecification new]];
 
             [[result1 should] equal:firstModel];
             [[result2 should] equal:secondModel];
+        });
+    });
+
+    describe(@"EMSRequestModelSelectAllSpecification", ^{
+
+        it(@"should return all of the models", ^{
+            EMSRequestModel *firstModel = requestModelWithTTL(@"https://url2.com", 58);
+            EMSRequestModel *secondModel = requestModelWithTTL(@"https://url2.com", 57);
+            EMSRequestModel *thirdModel = requestModelWithTTL(@"https://url3.com", 59);
+
+            [repository add:firstModel];
+            [repository add:secondModel];
+            [repository add:thirdModel];
+
+            NSArray *results = [repository query:[EMSRequestModelSelectAllSpecification new]];
+
+            [[theValue([results count]) should] equal:theValue(3)];
         });
     });
 

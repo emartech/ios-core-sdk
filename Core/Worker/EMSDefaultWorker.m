@@ -3,16 +3,16 @@
 //
 
 #import "EMSDefaultWorker.h"
-#import "EMSRequestModel.h"
 #import "EMSRESTClient.h"
-#import "EMSQueueProtocol.h"
 #import "NSError+EMSCore.h"
+#import "EMSQueueProtocol.h"
+#import "EMSRequestModelSelectFirstSpecification.h"
 
 @interface EMSDefaultWorker ()
 
 @property(nonatomic, assign) BOOL locked;
 @property(nonatomic, strong) EMSConnectionWatchdog *connectionWatchdog;
-@property(nonatomic, strong) id <EMSQueueProtocol> queue;
+@property(nonatomic, strong) id <EMSRequestModelRepositoryProtocol> repository;
 @property(nonatomic, strong) EMSRESTClient *client;
 @property(nonatomic, strong) CoreErrorBlock errorBlock;
 
@@ -26,29 +26,29 @@
 
 #pragma mark - Init
 
-- (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
-                 successBlock:(CoreSuccessBlock)successBlock
-                   errorBlock:(CoreErrorBlock)errorBlock {
+- (instancetype)initWithRequestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
+                             successBlock:(CoreSuccessBlock)successBlock
+                               errorBlock:(CoreErrorBlock)errorBlock {
     NSParameterAssert(successBlock);
     NSParameterAssert(errorBlock);
     _errorBlock = errorBlock;
-    return [self initWithQueue:queue
-            connectionWatchdog:[EMSConnectionWatchdog new]
-                    restClient:[EMSRESTClient clientWithSuccessBlock:successBlock
-                                                          errorBlock:errorBlock]];
+    return [self initWithRequestRepository:repository
+                        connectionWatchdog:[EMSConnectionWatchdog new]
+                                restClient:[EMSRESTClient clientWithSuccessBlock:successBlock
+                                                                      errorBlock:errorBlock]];
 }
 
-- (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
-           connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
-                   restClient:(EMSRESTClient *)client {
+- (instancetype)initWithRequestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
+                       connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
+                               restClient:(EMSRESTClient *)client {
     if (self = [super init]) {
-        NSParameterAssert(queue);
+        NSParameterAssert(repository);
         NSParameterAssert(connectionWatchdog);
         NSParameterAssert(client);
 
         _connectionWatchdog = connectionWatchdog;
         [_connectionWatchdog setConnectionChangeListener:self];
-        _queue = queue;
+        _repository = repository;
         _client = client;
     }
 
@@ -58,7 +58,7 @@
 #pragma mark - WorkerProtocol
 
 - (void)run {
-    if (![self isLocked] && [self.connectionWatchdog isConnected] && ![self.queue isEmpty]) {
+    if (![self isLocked] && [self.connectionWatchdog isConnected] && ![self.repository isEmpty]) {
         [self lock];
         EMSRequestModel *model = [self nextNonExpiredModel];
         __weak typeof(self) weakSelf = self;
@@ -67,7 +67,7 @@
                                                                      onComplete:^(BOOL shouldContinue) {
                                                                          [weakSelf unlock];
                                                                          if (shouldContinue) {
-                                                                             [weakSelf.queue pop];
+                                                                             [weakSelf.repository remove:[EMSRequestModelSelectFirstSpecification new]];
                                                                              [[NSOperationQueue currentQueue] addOperationWithBlock:^{
                                                                                  [weakSelf run];
                                                                              }];
@@ -105,11 +105,13 @@
 #pragma mark - Private methods
 
 - (EMSRequestModel *)nextNonExpiredModel {
-    while (![self.queue isEmpty] && [self isExpired:[self.queue peek]]) {
-        self.errorBlock([self.queue pop].requestId, [NSError errorWithCode:408
+    while (![self.repository isEmpty] && [self isExpired:[self.repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject]) {
+        EMSRequestModel *model = [self.repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject;
+        [self.repository remove:[EMSRequestModelSelectFirstSpecification new]];
+        self.errorBlock(model.requestId, [NSError errorWithCode:408
                                                       localizedDescription:@"Request expired"]);
     }
-    return [self.queue peek];
+    return [self.repository query:[EMSRequestModelSelectFirstSpecification new]].firstObject;
 }
 
 - (BOOL)isExpired:(EMSRequestModel *)model {

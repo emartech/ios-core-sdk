@@ -4,6 +4,7 @@
 
 #import <Foundation/Foundation.h>
 #import "EMSCoreCompletion.h"
+#import "EMSRequestModelRepositoryProtocol.h"
 
 @class EMSRequestModel;
 
@@ -14,7 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *additionalHeaders;
 
 + (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
-                             errorBlock:(nullable CoreErrorBlock)errorBlock;
+                             errorBlock:(nullable CoreErrorBlock)errorBlock
+                      requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository;
 
 - (void)submit:(EMSRequestModel *)model;
 

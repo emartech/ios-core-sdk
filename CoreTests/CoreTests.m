@@ -7,28 +7,34 @@
 #import "EMSRequestModelBuilder.h"
 #import "EMSRequestModel.h"
 #import "EMSSQLiteHelper.h"
-#import "EMSSQLiteQueue.h"
 #import "EMSSqliteQueueSchemaHandler.h"
 #import "EMSRequestContract.h"
+#import "EMSRequestModelRepository.h"
+
+
+#define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
 SPEC_BEGIN(CoreTest)
 
     __block EMSSQLiteHelper *helper;
-
-    beforeEach(^{
-        helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
-                                                schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
-        [helper open];
-        [helper executeCommand:SQL_PURGE];
-        [helper close];
-    });
-
-    afterEach(^{
-        [helper close];
-    });
+    __block EMSRequestModelRepository *repository;
 
 
     describe(@"EMSRequestManager", ^{
+
+        beforeEach(^{
+            helper = [[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
+                                                    schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
+            [helper open];
+            [helper executeCommand:SQL_PURGE];
+            repository = [[EMSRequestModelRepository alloc] initWithDbHelper:helper];
+        });
+
+        afterEach(^{
+            [helper close];
+            [[NSFileManager defaultManager] removeItemAtPath:DB_PATH
+                                                       error:nil];
+        });
 
         it(@"should do networking with the gained EMSRequestModel and return success", ^{
             NSString *url = @"https://www.google.com";
@@ -41,12 +47,11 @@ SPEC_BEGIN(CoreTest)
             __block NSString *checkableRequestId;
 
             EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
-                        checkableRequestId = requestId;
-                    }
-                                                                      errorBlock:^(NSString *requestId, NSError *error) {
-                                                                          NSLog(@"ERROR: %@", error);
-                                                                          fail([NSString stringWithFormat:@"errorBlock: %@", error]);
-                                                                      }];
+                checkableRequestId = requestId;
+            }                                                         errorBlock:^(NSString *requestId, NSError *error) {
+                NSLog(@"ERROR: %@", error);
+                fail([NSString stringWithFormat:@"errorBlock: %@", error]);
+            }                                                  requestRepository:repository];
 
             [core submit:model];
 
@@ -65,12 +70,11 @@ SPEC_BEGIN(CoreTest)
             __block NSError *checkableError;
 
             EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
-                        fail([NSString stringWithFormat:@"SuccessBlock: %@", response]);
-                    }
-                                                                      errorBlock:^(NSString *requestId, NSError *error) {
-                                                                          checkableRequestId = requestId;
-                                                                          checkableError = error;
-                                                                      }];
+                fail([NSString stringWithFormat:@"SuccessBlock: %@", response]);
+            }                                                         errorBlock:^(NSString *requestId, NSError *error) {
+                checkableRequestId = requestId;
+                checkableError = error;
+            }                                                  requestRepository:repository];
             [core submit:model];
 
             [[checkableRequestId shouldEventually] equal:model.requestId];
@@ -79,10 +83,9 @@ SPEC_BEGIN(CoreTest)
 
         it(@"should throw an exception, when model is nil", ^{
             EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
-                    }
-                                                                      errorBlock:^(NSString *requestId, NSError *error) {
+            }                                                         errorBlock:^(NSString *requestId, NSError *error) {
 
-                                                                      }];
+            }                                                  requestRepository:repository];
             @try {
                 [core submit:nil];
                 fail(@"Expected exception when model is nil");

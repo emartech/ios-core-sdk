@@ -14,4 +14,6 @@
 
 - (NSArray<EMSRequestModel *> *)query:(id <EMSSQLSpecificationProtocol>)sqlSpecification;
 
+- (BOOL)isEmpty;
+
 @end

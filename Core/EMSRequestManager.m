@@ -3,23 +3,16 @@
 //
 
 #import "EMSRequestManager.h"
-#import "EMSRequestModel.h"
 #import "EMSResponseModel.h"
-#import "EMSSQLiteQueue.h"
 #import "EMSWorkerProtocol.h"
-#import "EMSSQLiteHelper.h"
-#import "EMSSqliteQueueSchemaHandler.h"
 #import "EMSDefaultWorker.h"
 
 typedef void (^RunnerBlock)();
 
 @interface EMSRequestManager () <NSURLSessionDelegate>
 
-@property(nonatomic, strong) id <EMSQueueProtocol> queue;
+@property(nonatomic, strong) id <EMSRequestModelRepositoryProtocol> repository;
 @property(nonatomic, strong) id <EMSWorkerProtocol> worker;
-
-- (instancetype)initWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
-                          errorBlock:(nullable CoreErrorBlock)errorBlock;
 
 - (void)runInCoreQueueWithBlock:(RunnerBlock)runnerBlock;
 
@@ -32,25 +25,18 @@ typedef void (^RunnerBlock)();
 #pragma mark - Init
 
 + (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
-                             errorBlock:(nullable CoreErrorBlock)errorBlock {
-    return [[EMSRequestManager alloc] initWithSuccessBlock:successBlock
-                                                errorBlock:errorBlock];
-}
-
-- (instancetype)initWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
-                          errorBlock:(nullable CoreErrorBlock)errorBlock {
-    id <EMSQueueProtocol> queue = [[EMSSQLiteQueue alloc] initWithSQLiteHelper:[[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
-                                                                                                              schemaDelegate:[EMSSqliteQueueSchemaHandler new]]];
-    return [self initWithWorker:[[EMSDefaultWorker alloc] initWithQueue:queue
-                                                           successBlock:successBlock
-                                                             errorBlock:errorBlock]
-                          queue:queue];
+                             errorBlock:(nullable CoreErrorBlock)errorBlock
+                      requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository {
+    return [[EMSRequestManager alloc] initWithWorker:[[EMSDefaultWorker alloc] initWithRequestRepository:repository
+                                                                                            successBlock:successBlock
+                                                                                              errorBlock:errorBlock]
+                                   requestRepository:repository];
 }
 
 - (instancetype)initWithWorker:(id <EMSWorkerProtocol>)worker
-                         queue:(id <EMSQueueProtocol>)queue {
+             requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository {
     if (self = [super init]) {
-        _queue = queue;
+        _repository = repository;
         _worker = worker;
     }
     return self;
@@ -81,7 +67,7 @@ typedef void (^RunnerBlock)();
                                                               headers:[NSDictionary dictionaryWithDictionary:headers]
                                                                extras:[NSDictionary dictionaryWithDictionary:model.extras]];
         }
-        [weakSelf.queue push:requestModel];
+        [weakSelf.repository add:requestModel];
         [weakSelf.worker run];
     }];
 }

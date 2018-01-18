@@ -10,6 +10,6 @@
 @interface EMSRequestManager (Private)
 
 - (instancetype)initWithWorker:(id <EMSWorkerProtocol>)worker
-                         queue:(id <EMSQueueProtocol>)queue;
+             requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository;
 
 @end

@@ -4,6 +4,6 @@
 #import <Foundation/Foundation.h>
 #import "EMSSQLSpecificationProtocol.h"
 
-@interface EMSRequestModelFilterSelectFirstSpecification : NSObject <EMSSQLSpecificationProtocol>
 
+@interface EMSRequestModelCountSpecification : NSObject <EMSSQLSpecificationProtocol>
 @end

@@ -6,18 +6,15 @@
 #import "EMSWorkerProtocol.h"
 #import "EMSCoreCompletion.h"
 #import "EMSConnectionWatchdog.h"
-
-@protocol EMSQueueProtocol;
-@class EMSConnectionWatchdog;
-@class EMSRESTClient;
+#import "EMSRequestModelRepositoryProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EMSDefaultWorker : NSObject <EMSWorkerProtocol, EMSConnectionChangeListener>
 
-- (instancetype)initWithQueue:(id <EMSQueueProtocol>)queue
-                 successBlock:(CoreSuccessBlock)successBlock
-                   errorBlock:(CoreErrorBlock)errorBlock;
+- (instancetype)initWithRequestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
+                             successBlock:(CoreSuccessBlock)successBlock
+                               errorBlock:(CoreErrorBlock)errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END
