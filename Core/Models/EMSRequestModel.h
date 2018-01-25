@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
 
-+ (EMSRequestModel *)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock;
++ (instancetype)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock;
 
 - (instancetype)initWithRequestId:(NSString *)requestId
                         timestamp:(NSDate *)timestamp

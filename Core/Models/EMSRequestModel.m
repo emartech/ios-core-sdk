@@ -7,12 +7,12 @@
 
 @implementation EMSRequestModel
 
-+ (nonnull EMSRequestModel *)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock {
++ (nonnull instancetype)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock {
     NSParameterAssert(builderBlock);
     EMSRequestModelBuilder *builder = [EMSRequestModelBuilder new];
     builderBlock(builder);
     NSParameterAssert(builder.requestUrl);
-    return [[EMSRequestModel alloc] initWithBuilder:builder];
+    return [[self alloc] initWithBuilder:builder];
 }
 
 - (instancetype)initWithRequestId:(NSString *)requestId
