@@ -9,8 +9,6 @@
 #import "EMSRequestModelRepository.h"
 #import "EMSSqliteQueueSchemaHandler.h"
 
-#define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
-
 typedef void (^RunnerBlock)();
 
 @interface EMSRequestManager () <NSURLSessionDelegate>

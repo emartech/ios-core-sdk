@@ -8,7 +8,11 @@
 @implementation EMSTimestampProvider
 
 - (NSNumber *)currentTimeStamp {
-    return @((NSUInteger) (1000 * [[NSDate date] timeIntervalSince1970]));
+    return [self timeStampOfDate:[NSDate date]];
+}
+
+- (NSNumber *)timeStampOfDate:(NSDate *)date {
+    return @((NSUInteger) (1000 * [date timeIntervalSince1970]));;
 }
 
 @end

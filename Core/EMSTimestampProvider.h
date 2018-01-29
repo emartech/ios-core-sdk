@@ -9,4 +9,6 @@
 
 - (NSNumber *)currentTimeStamp;
 
+- (NSNumber *)timeStampOfDate:(NSDate *)date;
+
 @end
