@@ -4,6 +4,7 @@
 
 #import "EMSSQLiteHelper.h"
 #import "EMSModelMapperProtocol.h"
+#import "EMSSqliteQueueSchemaHandler.h"
 
 #define DEFAULT_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
@@ -17,7 +18,7 @@
 @implementation EMSSQLiteHelper
 
 - (instancetype)initWithDefaultDatabase {
-    return [self initWithDatabasePath:DEFAULT_DB_PATH];
+    return [self initWithDatabasePath:DEFAULT_DB_PATH schemaDelegate:[EMSSqliteQueueSchemaHandler new]];
 }
 
 - (instancetype)initWithDatabasePath:(NSString *)path {
