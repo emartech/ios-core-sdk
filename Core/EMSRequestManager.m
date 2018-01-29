@@ -28,8 +28,7 @@ typedef void (^RunnerBlock)();
 
 + (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
                              errorBlock:(nullable CoreErrorBlock)errorBlock {
-    EMSRequestModelRepository *repository = [[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDatabasePath:DB_PATH
-                                                                                                                               schemaDelegate:[EMSSqliteQueueSchemaHandler new]]];
+    EMSRequestModelRepository *repository = [[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDefaultDatabase]];
     return [EMSRequestManager managerWithSuccessBlock:successBlock errorBlock:errorBlock requestRepository:repository];
 }
 
