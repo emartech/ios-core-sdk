@@ -7,13 +7,11 @@
 #import "EMSWorkerProtocol.h"
 #import "EMSDefaultWorker.h"
 #import "EMSRequestModelRepository.h"
-#import "EMSSqliteQueueSchemaHandler.h"
 
 typedef void (^RunnerBlock)();
 
 @interface EMSRequestManager () <NSURLSessionDelegate>
 
-@property(nonatomic, strong) id <EMSRequestModelRepositoryProtocol> repository;
 @property(nonatomic, strong) id <EMSWorkerProtocol> worker;
 
 - (void)runInCoreQueueWithBlock:(RunnerBlock)runnerBlock;
