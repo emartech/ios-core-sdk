@@ -10,6 +10,7 @@
 #import "EMSRequestModelBuilder.h"
 #import "NSURLRequest+EMSCore.h"
 #import "NSError+EMSCore.h"
+#import "EMSCompositeRequestModel.h"
 
 SPEC_BEGIN(EMSRESTClientTests)
 
@@ -26,17 +27,28 @@ SPEC_BEGIN(EMSRESTClientTests)
         }];
     };
 
+    id (^compositeRequestModel)(NSString *url, NSDictionary *payload, NSArray<NSString *> *ids) = ^id(NSString *url, NSDictionary *payload, NSArray<NSString *> *ids) {
+        EMSCompositeRequestModel *model = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+            [builder setUrl:url];
+            [builder setMethod:HTTPMethodPOST];
+            [builder setPayload:payload];
+        }];
+        model.originalRequestIds = ids;
+
+        return model;
+    };
+
     typedef void(^SessionMockBlock)(NSURLSession *session);
-    void(^sessionMockWithCannedResponse)(EMSRequestModel *requestModel, int responseStatusCode, NSData *responseData, NSError *responseError, SessionMockBlock actionBlock) = ^(EMSRequestModel *requestModel, int responseStatusCode, NSData *responseData, NSError *responseError, SessionMockBlock actionBlock) {
+    void (^sessionMockWithCannedResponse)(EMSRequestModel *requestModel, int responseStatusCode, NSData *responseData, NSError *responseError, SessionMockBlock actionBlock) = ^(EMSRequestModel *requestModel, int responseStatusCode, NSData *responseData, NSError *responseError, SessionMockBlock actionBlock) {
         NSURLSession *sessionMock = [NSURLSession mock];
         NSURLResponse *urlResponse = [[NSHTTPURLResponse alloc] initWithURL:requestModel.url
                                                                  statusCode:responseStatusCode
                                                                 HTTPVersion:nil
                                                                headerFields:nil];
         KWCaptureSpy *blockSpy = [sessionMock captureArgument:@selector(dataTaskWithRequest:completionHandler:)
-                                                                atIndex:1];
+                                                      atIndex:1];
         actionBlock(sessionMock);
-        void (^onComplete)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) = blockSpy.argument;
+        void (^onComplete)(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) = blockSpy.argument;
         onComplete(responseData, urlResponse, responseError);
     };
 
@@ -296,28 +308,114 @@ SPEC_BEGIN(EMSRESTClientTests)
             [[expectFutureValue(theValue(returnedShouldContinue)) shouldEventually] beYes];
         });
 
+
+        it(@"should call onSuccess with the correct requestIDs for CompositeRequestModel", ^{
+            __block NSMutableArray *_requestIds = [NSMutableArray new];
+            __block NSError *_error;
+            __block EMSRESTClient *_client;
+
+            NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
+            NSArray *idList = @[@"12", @"23", @"34", @"56"];
+            EMSRequestModel *model = compositeRequestModel(@"https://www.google.com", nil, idList);
+
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForExpectation"];
+
+            sessionMockWithCannedResponse(model, 200, originalResponseData, nil, ^(NSURLSession *session) {
+                _client = [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+                    [_requestIds addObject:requestId];
+                    if ([_requestIds count] >= 4) {
+                        [exp fulfill];
+                    }
+                }                                    errorBlock:^(NSString *requestId, NSError *error) {
+
+                }                                       session:session];
+
+                [_client executeTaskWithOfflineCallbackStrategyWithRequestModel:model onComplete:^(BOOL shouldContinue) {
+                }];
+            });
+
+            [XCTWaiter waitForExpectations:@[exp] timeout:10];
+
+            [[theValue([_requestIds count]) should] equal:theValue(4)];
+            [[_requestIds[0] should] equal:@"12"];
+            [[_requestIds[1] should] equal:@"23"];
+            [[_requestIds[2] should] equal:@"34"];
+            [[_requestIds[3] should] equal:@"56"];
+        });
+
+
+        it(@"should call onError with the correct requestIDs for CompositeRequestModel", ^{
+            __block NSMutableArray *_requestIds = [NSMutableArray new];
+            __block NSError *_error;
+            __block EMSRESTClient *_client;
+
+            NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
+            NSArray *idList = @[@"12", @"23", @"34", @"56"];
+            EMSRequestModel *model = compositeRequestModel(@"https://www.google.com", nil, idList);
+
+            XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForExpectation"];
+
+            sessionMockWithCannedResponse(model, 404, originalResponseData, nil, ^(NSURLSession *session) {
+                _client = [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+                        }
+                                                     errorBlock:^(NSString *requestId, NSError *error) {
+                                                         [_requestIds addObject:requestId];
+                                                         if ([_requestIds count] >= 4) {
+                                                             [exp fulfill];
+                                                         }
+                                                     } session:session];
+
+                [_client executeTaskWithOfflineCallbackStrategyWithRequestModel:model onComplete:^(BOOL shouldContinue) {
+                }];
+            });
+
+            [XCTWaiter waitForExpectations:@[exp] timeout:10];
+
+            [[theValue([_requestIds count]) should] equal:theValue(4)];
+            [[_requestIds[0] should] equal:@"12"];
+            [[_requestIds[1] should] equal:@"23"];
+            [[_requestIds[2] should] equal:@"34"];
+            [[_requestIds[3] should] equal:@"56"];
+        });
+
     });
 
     describe(@"executeTaskWithRequestModel:onSuccess:onError", ^{
 
-        it(@"should call onSuccess if the request was successful", ^{
+        it(@"should call onSuccess with the response data if the request was successful", ^{
             __block NSData *_data;
             __block NSError *_error;
 
             NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
             id model = requestModel(@"https://www.google.com", nil);
-            sessionMockWithCannedResponse(model, 200, originalResponseData, nil, ^(NSURLSession *session){
+            sessionMockWithCannedResponse(model, 200, originalResponseData, nil, ^(NSURLSession *session) {
                 EMSRESTClient *client = [EMSRESTClient clientWithSession:session];
                 [client executeTaskWithRequestModel:model successBlock:^(NSString *requestId, EMSResponseModel *response) {
                     _data = response.body;
-                } errorBlock:^(NSString *requestId, NSError *error) {
+                }                        errorBlock:^(NSString *requestId, NSError *error) {
                     _error = error;
                 }];
             });
 
-
-
             [[originalResponseData shouldEventually] equal:_data];
+        });
+
+        it(@"should call onSuccess with the correct requestID", ^{
+            __block NSString *_requestId;
+            __block NSError *_error;
+
+            NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
+            EMSRequestModel *model = requestModel(@"https://www.google.com", nil);
+            sessionMockWithCannedResponse(model, 200, originalResponseData, nil, ^(NSURLSession *session) {
+                EMSRESTClient *client = [EMSRESTClient clientWithSession:session];
+                [client executeTaskWithRequestModel:model successBlock:^(NSString *requestId, EMSResponseModel *response) {
+                    _requestId = requestId;
+                }                        errorBlock:^(NSString *requestId, NSError *error) {
+                    _error = error;
+                }];
+            });
+
+            [[model.requestId shouldEventually] equal:_requestId];
         });
 
         it(@"should call onError if the request gone crazy", ^{
@@ -327,11 +425,11 @@ SPEC_BEGIN(EMSRESTClientTests)
             NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
             NSError *originalError = [NSError errorWithCode:42 localizedDescription:@"desc"];
             id model = requestModel(@"https://www.google.com", nil);
-            sessionMockWithCannedResponse(model, 500, nil, originalError, ^(NSURLSession *session){
+            sessionMockWithCannedResponse(model, 500, nil, originalError, ^(NSURLSession *session) {
                 EMSRESTClient *client = [EMSRESTClient clientWithSession:session];
                 [client executeTaskWithRequestModel:model successBlock:^(NSString *requestId, EMSResponseModel *response) {
                     _data = response.body;
-                } errorBlock:^(NSString *requestId, NSError *error) {
+                }                        errorBlock:^(NSString *requestId, NSError *error) {
                     _error = error;
                 }];
             });

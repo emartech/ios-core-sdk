@@ -6,6 +6,7 @@
 #import "NSURLRequest+EMSCore.h"
 #import "NSError+EMSCore.h"
 #import "EMSResponseModel.h"
+#import "EMSCompositeRequestModel.h"
 
 @interface EMSRESTClient () <NSURLSessionDelegate>
 
@@ -41,8 +42,10 @@
 }
 
 + (EMSRESTClient *)clientWithSession:(NSURLSession *)session {
-    return [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {}
-                                      errorBlock:^(NSString *requestId, NSError *error) {}
+    return [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+            }
+                                      errorBlock:^(NSString *requestId, NSError *error) {
+                                      }
                                          session:session];
 }
 
@@ -111,18 +114,42 @@
     const BOOL nonRetriableRequest = [self isStatusCodeNonRetriable:statusCode] || [self isErrorNonRetriable:error];
 
     if (self.errorBlock && nonRetriableRequest) {
-        self.errorBlock(requestModel.requestId,
-                error ? error : [self errorWithData:data statusCode:statusCode]);
+        [self executeErrorBlockWithModel:requestModel responseData:data statusCode:statusCode error:error];
     }
 
     if (self.successBlock && !hasError) {
-        self.successBlock(requestModel.requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
-                                                                                               data:data]);
+        [self executeSuccessBlockWithModel:requestModel responseData:data response:httpUrlResponse];
     }
 
     if (onComplete) {
         const BOOL shouldContinue = !hasError || nonRetriableRequest;
         onComplete(shouldContinue);
+    }
+}
+
+- (void)executeSuccessBlockWithModel:(EMSRequestModel *)requestModel responseData:(NSData *)data response:(NSHTTPURLResponse *)httpUrlResponse {
+    if ([requestModel isKindOfClass:[EMSCompositeRequestModel class]]) {
+        NSArray<NSString *> *idlist = [(EMSCompositeRequestModel *) requestModel originalRequestIds];
+        for (NSString *requestId in idlist) {
+            self.successBlock(requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
+                                                                                      data:data]);
+        }
+    } else {
+        self.successBlock(requestModel.requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
+                                                                                               data:data]);
+    }
+}
+
+- (void)executeErrorBlockWithModel:(EMSRequestModel *)requestModel responseData:(NSData *)data statusCode:(NSInteger)statusCode error:(NSError *)error {
+    if ([requestModel isKindOfClass:[EMSCompositeRequestModel class]]) {
+        NSArray<NSString *> *idlist = [(EMSCompositeRequestModel *) requestModel originalRequestIds];
+        for (NSString *requestId in idlist) {
+            self.errorBlock(requestId,
+                    error ? error : [self errorWithData:data statusCode:statusCode]);
+        }
+    } else {
+        self.errorBlock(requestModel.requestId,
+                error ? error : [self errorWithData:data statusCode:statusCode]);
     }
 }
 
