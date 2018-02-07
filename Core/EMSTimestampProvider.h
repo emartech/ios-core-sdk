@@ -11,4 +11,8 @@
 
 - (NSNumber *)timeStampOfDate:(NSDate *)date;
 
++ (NSString *)utcFormattedStringFromDate:(NSDate *)date;
+
++ (NSString *)currentTimestampInUTC;
+
 @end

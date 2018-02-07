@@ -33,6 +33,28 @@ SPEC_BEGIN(EMSTimestampProviderTests)
         it(@"should return the corrent timestamp format if it has fractions", ^{
             [[[provider timeStampOfDate:[NSDate dateWithTimeIntervalSince1970:12345.5]] should] equal:theValue(12345500)];
         });
+
+    });
+
+    describe(@"TimestampProvider:utcFormattedStringFromDate", ^{
+
+        it(@"should return with the correct formatted dateString", ^{
+            NSString *expected = @"2017-12-07T10:46:09.100Z";
+
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"];
+            [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+            NSDate *date = [dateFormatter dateFromString:expected];
+
+            [[[EMSTimestampProvider utcFormattedStringFromDate:date] should] equal:expected];
+        });
+
+        it(@"should fdsa", ^{
+            [EMSTimestampProvider currentTimestampInUTC];
+            [EMSTimestampProvider currentTimestampInUTC];
+            [EMSTimestampProvider currentTimestampInUTC];
+        });
+
     });
 
 SPEC_END
