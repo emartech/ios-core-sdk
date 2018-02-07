@@ -14,6 +14,10 @@
     return @((NSUInteger) (1000 * [date timeIntervalSince1970]));;
 }
 
+- (NSString *)currentTimestampInUTC {
+    return [EMSTimestampProvider currentTimestampInUTC];
+}
+
 + (NSString *)utcFormattedStringFromDate:(NSDate *)date {
     return [[EMSTimestampProvider utcDateFormatter] stringFromDate:date];
 }
