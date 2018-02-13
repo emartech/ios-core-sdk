@@ -4,7 +4,8 @@
 
 #import <Foundation/Foundation.h>
 #import "EMSRequestModelRepositoryProtocol.h"
-#import "EMSSQLiteHelper.h"
+
+@class EMSSQLiteHelper;
 
 @interface EMSRequestModelRepository : NSObject <EMSRequestModelRepositoryProtocol>
 

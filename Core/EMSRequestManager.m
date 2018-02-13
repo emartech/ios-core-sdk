@@ -7,6 +7,7 @@
 #import "EMSWorkerProtocol.h"
 #import "EMSDefaultWorker.h"
 #import "EMSRequestModelRepository.h"
+#import "EMSSQLiteHelper.h"
 
 typedef void (^RunnerBlock)();
 
