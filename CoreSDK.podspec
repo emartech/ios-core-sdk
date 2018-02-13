@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'CoreSDK'
-	spec.version              = '1.0.0'
+	spec.version              = '1.0.1'
 	spec.homepage             = 'https://help.emarsys.com/hc/en-us/articles/115002410625'
 	spec.license              = 'Mozilla Public License 2.0'
 	spec.author               = { 'Emarsys Technologies' => 'mobile-team@emarsys.com' }
@@ -15,6 +15,7 @@ Pod::Spec.new do |spec|
                 'Core/Models/EMSResponseModel.h',
                 'Core/Models/EMSCompositeRequestModel.h',
                 'Core/Repository/RequestModel/EMSRequestModelRepositoryProtocol.h',
+                'Core/Repository/RequestModel/EMSRequestModelRepository.h',
                 'Core/Repository/EMSRepositoryProtocol.h',
                 'Core/Repository/EMSSQLSpecificationProtocol.h',
                 'Core/EMSAuthentication.h',
