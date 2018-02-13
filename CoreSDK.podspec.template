@@ -15,6 +15,7 @@ Pod::Spec.new do |spec|
                 'Core/Models/EMSResponseModel.h',
                 'Core/Models/EMSCompositeRequestModel.h',
                 'Core/Repository/RequestModel/EMSRequestModelRepositoryProtocol.h',
+                'Core/Repository/RequestModel/EMSRequestModelRepository.h',
                 'Core/Repository/EMSRepositoryProtocol.h',
                 'Core/Repository/EMSSQLSpecificationProtocol.h',
                 'Core/EMSAuthentication.h',
