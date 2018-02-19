@@ -306,7 +306,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             [watchDog stub:@selector(setConnectionChangeListener:)];
 
             EMSRESTClient *clientMock = [EMSRESTClient mock];
-            [[clientMock should] receive:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:) withArguments:expectedModel, any()];
+            [[clientMock should] receive:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:) withArguments:expectedModel, kw_any()];
 
             FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
             EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithRequestRepository:repository
@@ -316,8 +316,8 @@ SPEC_BEGIN(DefaultWorkerTests)
 
             [worker run];
 
-            [[expectFutureValue(completionHandler.successCount) shouldEventually] equal:@0];
-            [[expectFutureValue(completionHandler.errorCount) shouldEventually] equal:@3];
+            [[expectFutureValue(completionHandler.successCount) shouldEventually] equal:theValue(0)];
+            [[expectFutureValue(completionHandler.errorCount) shouldEventually] equal:theValue(3)];
         });
 
         it(@"should unlock if only expired models were in the repository", ^{

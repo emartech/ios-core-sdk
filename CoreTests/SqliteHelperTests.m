@@ -79,7 +79,7 @@ SPEC_BEGIN(SQLiteHelperTests)
         it(@"should call onCreate when the database is opened the first time", ^{
             EMSSqliteQueueSchemaHandler *schemaDelegate = [EMSSqliteQueueSchemaHandler mock];
             dbHelper.schemaHandler = schemaDelegate;
-            [[schemaDelegate should] receive:@selector(onCreateWithDbHelper:) withArguments:any()];
+            [[schemaDelegate should] receive:@selector(onCreateWithDbHelper:) withArguments:kw_any()];
 
             [dbHelper open];
         });
@@ -91,7 +91,7 @@ SPEC_BEGIN(SQLiteHelperTests)
             dbHelper.schemaHandler = schemaDelegate;
             [[schemaDelegate should] receive:@selector(schemaVersion) andReturn:theValue(100)];
             [[schemaDelegate should] receive:@selector(onUpgradeWithDbHelper:oldVersion:newVersion:)
-                               withArguments:any(), theValue(2), theValue(100)];
+                               withArguments:kw_any(), theValue(2), theValue(100)];
 
             [dbHelper open];
         });
