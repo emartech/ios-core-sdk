@@ -1,0 +1,6 @@
+framework module EmarsysCore {
+  umbrella header "EmarsysCore.h"
+
+  export *
+  module * { export * }
+}
