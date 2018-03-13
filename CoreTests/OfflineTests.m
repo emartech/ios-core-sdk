@@ -27,8 +27,7 @@ SPEC_BEGIN(OfflineTests)
     id (^requestManager)(id <EMSRequestModelRepositoryProtocol> repository, EMSConnectionWatchdog *watchdog, CoreSuccessBlock successBlock, CoreErrorBlock errorBlock) = ^id(id <EMSRequestModelRepositoryProtocol> repository, EMSConnectionWatchdog *watchdog, CoreSuccessBlock successBlock, CoreErrorBlock errorBlock) {
         id <EMSWorkerProtocol> worker = [[EMSDefaultWorker alloc] initWithRequestRepository:repository
                                                                          connectionWatchdog:watchdog
-                                                                                 restClient:[EMSRESTClient clientWithSuccessBlock:successBlock
-                                                                                                                       errorBlock:errorBlock]];
+                                                                                 restClient:[EMSRESTClient clientWithSuccessBlock:successBlock errorBlock:errorBlock logRepository:nil]];
         return [[EMSRequestManager alloc] initWithWorker:worker
                                        requestRepository:repository];
     };
@@ -79,9 +78,9 @@ SPEC_BEGIN(OfflineTests)
                 } else {
                     checkableRequestId3 = requestId;
                 }
-            }                                                         errorBlock:^(NSString *requestId, NSError *error) {
+            }        errorBlock:^(NSString *requestId, NSError *error) {
                 fail([NSString stringWithFormat:@"errorBlock: %@", error]);
-            }                                                  requestRepository:repository];
+            } requestRepository:repository logRepository:nil];
             [core submit:model1];
             [core submit:model2];
             [core submit:model3];

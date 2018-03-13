@@ -26,16 +26,18 @@
 
 #pragma mark - Init
 
-- (instancetype)initWithRequestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
-                             successBlock:(CoreSuccessBlock)successBlock
-                               errorBlock:(CoreErrorBlock)errorBlock {
+- (instancetype)initWithSuccessBlock:(CoreSuccessBlock)successBlock
+                          errorBlock:(CoreErrorBlock)errorBlock
+                   requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
+                       logRepository:(id <EMSLogRepositoryProtocol>)logRepository {
     NSParameterAssert(successBlock);
     NSParameterAssert(errorBlock);
     _errorBlock = errorBlock;
     return [self initWithRequestRepository:repository
                         connectionWatchdog:[EMSConnectionWatchdog new]
                                 restClient:[EMSRESTClient clientWithSuccessBlock:successBlock
-                                                                      errorBlock:errorBlock]];
+                                                                      errorBlock:errorBlock
+                                                                   logRepository:logRepository]];
 }
 
 - (instancetype)initWithRequestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
@@ -51,7 +53,6 @@
         _repository = repository;
         _client = client;
     }
-
     return self;
 }
 

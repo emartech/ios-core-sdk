@@ -50,7 +50,7 @@ SPEC_BEGIN(CoreTest)
             }                                                         errorBlock:^(NSString *requestId, NSError *error) {
                 NSLog(@"ERROR: %@", error);
                 fail([NSString stringWithFormat:@"errorBlock: %@", error]);
-            }                                                  requestRepository:repository];
+            }                                                  requestRepository:repository logRepository:nil];
 
             [core submit:model];
 
@@ -73,7 +73,7 @@ SPEC_BEGIN(CoreTest)
             }                                                         errorBlock:^(NSString *requestId, NSError *error) {
                 checkableRequestId = requestId;
                 checkableError = error;
-            }                                                  requestRepository:repository];
+            }                                                  requestRepository:repository logRepository:nil];
             [core submit:model];
 
             [[checkableRequestId shouldEventually] equal:model.requestId];
@@ -82,9 +82,11 @@ SPEC_BEGIN(CoreTest)
 
         it(@"should throw an exception, when model is nil", ^{
             EMSRequestManager *core = [EMSRequestManager managerWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
-            }                                                         errorBlock:^(NSString *requestId, NSError *error) {
 
-            }];
+            } errorBlock:^(NSString *requestId, NSError *error) {
+
+            } requestRepository:[[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDefaultDatabase]] logRepository:nil];
+
             @try {
                 [core submit:nil];
                 fail(@"Expected exception when model is nil");

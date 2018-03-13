@@ -20,12 +20,14 @@
 
 - (instancetype)initWithSuccessBlock:(CoreSuccessBlock)successBlock
                           errorBlock:(CoreErrorBlock)errorBlock
-                             session:(NSURLSession *)session {
+                             session:(NSURLSession *)session
+                       logRepository:(nullable id <EMSLogRepositoryProtocol>)logRepository {
     if (self = [super init]) {
         NSParameterAssert(successBlock);
         NSParameterAssert(errorBlock);
         _successBlock = successBlock;
         _errorBlock = errorBlock;
+        _logRepository = logRepository;
         if (session) {
             _session = session;
         } else {
@@ -43,28 +45,32 @@
 
 + (EMSRESTClient *)clientWithSession:(NSURLSession *)session {
     return [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
-            }
-                                      errorBlock:^(NSString *requestId, NSError *error) {
-                                      }
-                                         session:session];
-}
-
-+ (EMSRESTClient *)clientWithSuccessBlock:(CoreSuccessBlock)successBlock
-                               errorBlock:(CoreErrorBlock)errorBlock {
-    return [EMSRESTClient clientWithSuccessBlock:successBlock
-                                      errorBlock:errorBlock
-                                         session:nil];
+    }                                 errorBlock:^(NSString *requestId, NSError *error) {
+    }                                    session:session logRepository:nil];
 }
 
 + (EMSRESTClient *)clientWithSuccessBlock:(CoreSuccessBlock)successBlock
                                errorBlock:(CoreErrorBlock)errorBlock
-                                  session:(nullable NSURLSession *)session {
-    return [[EMSRESTClient alloc] initWithSuccessBlock:successBlock
-                                            errorBlock:errorBlock
-                                               session:session];
+                            logRepository:(id <EMSLogRepositoryProtocol>)logRepository {
+    return [EMSRESTClient clientWithSuccessBlock:successBlock
+                                      errorBlock:errorBlock
+                                         session:nil
+                                   logRepository:logRepository];
 }
 
-- (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel successBlock:(CoreSuccessBlock)successBlock errorBlock:(CoreErrorBlock)errorBlock {
++ (EMSRESTClient *)clientWithSuccessBlock:(CoreSuccessBlock)successBlock
+                               errorBlock:(CoreErrorBlock)errorBlock
+                                  session:(nullable NSURLSession *)session
+                            logRepository:(nullable id <EMSLogRepositoryProtocol>)logRepository {
+    return [[EMSRESTClient alloc] initWithSuccessBlock:successBlock
+                                            errorBlock:errorBlock
+                                               session:session
+                                         logRepository:logRepository];
+}
+
+- (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel
+                       successBlock:(CoreSuccessBlock)successBlock
+                         errorBlock:(CoreErrorBlock)errorBlock {
     NSURLSessionDataTask *task =
             [self.session dataTaskWithRequest:[NSURLRequest requestWithRequestModel:requestModel]
                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {

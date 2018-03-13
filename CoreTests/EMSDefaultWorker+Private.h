@@ -18,4 +18,6 @@
 
 - (void)setClient:(EMSRESTClient *)client;
 
+- (EMSRESTClient *)client;
+
 @end

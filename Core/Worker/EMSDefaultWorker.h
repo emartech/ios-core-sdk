@@ -7,14 +7,16 @@
 #import "EMSCoreCompletion.h"
 #import "EMSConnectionWatchdog.h"
 #import "EMSRequestModelRepositoryProtocol.h"
+#import "EMSLogRepositoryProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EMSDefaultWorker : NSObject <EMSWorkerProtocol, EMSConnectionChangeListener>
 
-- (instancetype)initWithRequestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
-                             successBlock:(CoreSuccessBlock)successBlock
-                               errorBlock:(CoreErrorBlock)errorBlock;
+- (instancetype)initWithSuccessBlock:(CoreSuccessBlock)successBlock
+                          errorBlock:(CoreErrorBlock)errorBlock
+                   requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
+                       logRepository:(id <EMSLogRepositoryProtocol>)logRepository;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -6,8 +6,6 @@
 #import "EMSResponseModel.h"
 #import "EMSWorkerProtocol.h"
 #import "EMSDefaultWorker.h"
-#import "EMSRequestModelRepository.h"
-#import "EMSSQLiteHelper.h"
 
 typedef void (^RunnerBlock)();
 
@@ -26,18 +24,14 @@ typedef void (^RunnerBlock)();
 #pragma mark - Init
 
 + (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
-                             errorBlock:(nullable CoreErrorBlock)errorBlock {
-    EMSRequestModelRepository *repository = [[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDefaultDatabase]];
-    return [EMSRequestManager managerWithSuccessBlock:successBlock errorBlock:errorBlock requestRepository:repository];
-}
-
-+ (instancetype)managerWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
                              errorBlock:(nullable CoreErrorBlock)errorBlock
-                      requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository {
-    return [[EMSRequestManager alloc] initWithWorker:[[EMSDefaultWorker alloc] initWithRequestRepository:repository
-                                                                                            successBlock:successBlock
-                                                                                              errorBlock:errorBlock]
-                                   requestRepository:repository];
+                      requestRepository:(id <EMSRequestModelRepositoryProtocol>)requestRepository
+                          logRepository:(id <EMSLogRepositoryProtocol>)logRepository {
+    return [[EMSRequestManager alloc] initWithWorker:[[EMSDefaultWorker alloc] initWithSuccessBlock:successBlock
+                                                                                         errorBlock:errorBlock
+                                                                                  requestRepository:requestRepository
+                                                                                      logRepository:logRepository]
+                                   requestRepository:requestRepository];
 }
 
 - (instancetype)initWithWorker:(id <EMSWorkerProtocol>)worker

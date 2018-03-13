@@ -8,6 +8,8 @@
 #import "EMSRequestManager.h"
 #import "EMSResponseModel.h"
 #import "NSDictionary+EMSCore.h"
+#import "EMSSQLiteHelper.h"
+#import "EMSRequestModelRepository.h"
 
 #define DennaUrl(ending) [NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", ending];
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
@@ -38,7 +40,7 @@ SPEC_BEGIN(DennaTest)
         }                                                         errorBlock:^(NSString *requestId, NSError *error) {
             NSLog(@"ERROR!");
             fail(@"errorblock invoked");
-        }];
+        } requestRepository:[[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDefaultDatabase]] logRepository:nil];
         [core submit:model];
 
         [[expectFutureValue(resultMethod) shouldEventuallyBeforeTimingOutAfter(10.0)] equal:method];
@@ -73,7 +75,8 @@ SPEC_BEGIN(DennaTest)
                 checkableRequestId = requestId;
                 NSLog(@"ERROR!");
                 fail(@"errorBlock invoked :'(");
-            }];
+            } requestRepository:[[EMSRequestModelRepository alloc] initWithDbHelper:[[EMSSQLiteHelper alloc] initWithDefaultDatabase]] logRepository:nil];
+
             [core submit:model];
             [[expectFutureValue(checkableRequestId) shouldEventually] beNil];
         });

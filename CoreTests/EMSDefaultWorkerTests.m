@@ -12,10 +12,11 @@
 #import "EMSSqliteQueueSchemaHandler.h"
 #import "EMSRequestModelRepository.h"
 #import "EMSRequestModelSelectAllSpecification.h"
+#import "FakeLogRepository.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
-SPEC_BEGIN(DefaultWorkerTests)
+SPEC_BEGIN(EMSDefaultWorkerTests)
 
     void (^successBlock)(NSString *, EMSResponseModel *)=^(NSString *requestId, EMSResponseModel *response) {
     };
@@ -55,9 +56,7 @@ SPEC_BEGIN(DefaultWorkerTests)
         });
 
         itShouldThrowException(@"should throw exception, when repository is nil", ^{
-            [[EMSDefaultWorker alloc] initWithRequestRepository:nil
-                                                   successBlock:successBlock
-                                                     errorBlock:errorBlock];
+            [[EMSDefaultWorker alloc] initWithSuccessBlock:successBlock errorBlock:errorBlock requestRepository:nil logRepository:nil];
         });
 
 
@@ -78,6 +77,17 @@ SPEC_BEGIN(DefaultWorkerTests)
             EMSDefaultWorker *worker = createWorker();
 
             [[theValue([worker isLocked]) should] beNo];
+        });
+
+        it(@"should create restClient with logRepository", ^{
+            FakeLogRepository *fakeLogRepository = [FakeLogRepository new];
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
+                    }
+                                                                           errorBlock:^(NSString *requestId, NSError *error) {
+                                                                           }
+                                                                    requestRepository:[EMSRequestModelRepository mock]
+                                                                        logRepository:fakeLogRepository];
+            [[fakeLogRepository should] equal:worker.client.logRepository];
         });
 
     });
@@ -274,9 +284,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             EMSRESTClient *clientMock = [EMSRESTClient mock];
 
             FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
-            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithRequestRepository:repository
-                                                                              successBlock:completionHandler.successBlock
-                                                                                errorBlock:completionHandler.errorBlock];
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithSuccessBlock:completionHandler.successBlock errorBlock:completionHandler.errorBlock requestRepository:repository logRepository:nil];
             [worker setConnectionWatchdog:watchDog];
             [worker setClient:clientMock];
 
@@ -309,9 +317,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             [[clientMock should] receive:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:) withArguments:expectedModel, kw_any()];
 
             FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
-            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithRequestRepository:repository
-                                                                              successBlock:completionHandler.successBlock
-                                                                                errorBlock:completionHandler.errorBlock];
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithSuccessBlock:completionHandler.successBlock errorBlock:completionHandler.errorBlock requestRepository:repository logRepository:nil];
             [worker setClient:clientMock];
 
             [worker run];
@@ -330,9 +336,7 @@ SPEC_BEGIN(DefaultWorkerTests)
             [watchDog stub:@selector(setConnectionChangeListener:)];
 
             FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
-            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithRequestRepository:repository
-                                                                              successBlock:completionHandler.successBlock
-                                                                                errorBlock:completionHandler.errorBlock];
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithSuccessBlock:completionHandler.successBlock errorBlock:completionHandler.errorBlock requestRepository:repository logRepository:nil];
 
             [worker run];
 
