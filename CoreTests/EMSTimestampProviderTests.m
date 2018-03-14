@@ -57,4 +57,15 @@ SPEC_BEGIN(EMSTimestampProviderTests)
 
     });
 
+        describe(@"TimestampProvider:timeIntervalSince1970", ^{
+
+            it(@"should return the current timeInterval", ^{
+                NSTimeInterval before = [[NSDate date] timeIntervalSince1970];
+                NSTimeInterval timeInterval = [EMSTimestampProvider timeIntervalSince1970];
+                NSTimeInterval after = [[NSDate date] timeIntervalSince1970];
+                [[theValue(timeInterval) should] beBetween:theValue(before) and:theValue(after)];
+            });
+
+        });
+
 SPEC_END

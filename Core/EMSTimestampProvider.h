@@ -17,4 +17,6 @@
 
 + (NSString *)currentTimestampInUTC;
 
++ (NSTimeInterval)timeIntervalSince1970;
+
 @end
