@@ -8,7 +8,6 @@
 #import "EMSRequestModelRepositoryProtocol.h"
 #import "EMSRequestModelRepository.h"
 #import "EMSSqliteQueueSchemaHandler.h"
-#import "EMSQueueProtocol.h"
 #import "EMSRequestModelSelectFirstSpecification.h"
 #import "EMSRequestModelSelectAllSpecification.h"
 #import "EMSRequestModelDeleteByIdsSpecification.h"
@@ -154,7 +153,7 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
             [repository add:fourthModel];
 
             EMSCompositeRequestModel *compositeRequestModel = [EMSCompositeRequestModel new];
-            compositeRequestModel.originalRequestIds = @[firstModel.requestId, thirdModel.requestId];
+            compositeRequestModel.originalRequests = @[firstModel.requestId, thirdModel.requestId];
 
             [repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:compositeRequestModel]];
 

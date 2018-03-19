@@ -7,6 +7,6 @@
 
 @interface EMSCompositeRequestModel : EMSRequestModel
 
-@property(nonatomic, strong) NSArray<NSString *> *originalRequestIds;
+@property(nonatomic, strong) NSArray<EMSRequestModel *> *originalRequests;
 
 @end

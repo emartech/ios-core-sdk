@@ -27,13 +27,13 @@ SPEC_BEGIN(EMSRESTClientTests)
         }];
     };
 
-    id (^compositeRequestModel)(NSString *url, NSDictionary *payload, NSArray<NSString *> *ids) = ^id(NSString *url, NSDictionary *payload, NSArray<NSString *> *ids) {
+        id (^compositeRequestModel)(NSString *url, NSDictionary *payload, NSArray<EMSRequestModel *> *originals) = ^id(NSString *url, NSDictionary *payload, NSArray<EMSRequestModel *> *originals) {
         EMSCompositeRequestModel *model = [EMSCompositeRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
             [builder setUrl:url];
             [builder setMethod:HTTPMethodPOST];
             [builder setPayload:payload];
         }];
-        model.originalRequestIds = ids;
+            model.originalRequests = originals;
 
         return model;
     };
@@ -300,15 +300,19 @@ SPEC_BEGIN(EMSRESTClientTests)
             __block EMSRESTClient *_client;
 
             NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
-            NSArray *idList = @[@"12", @"23", @"34", @"56"];
-            EMSRequestModel *model = compositeRequestModel(@"https://www.google.com", nil, idList);
+            EMSRequestModel *originalRequestModel1 = requestModel(@"https://www.emarsys.com", nil);
+            EMSRequestModel *originalRequestModel2 = requestModel(@"https://www.emarsys.com", nil);
+            EMSRequestModel *originalRequestModel3 = requestModel(@"https://www.emarsys.com", nil);
+            NSArray *originals = @[originalRequestModel1, originalRequestModel2, originalRequestModel3];
+
+            EMSRequestModel *model = compositeRequestModel(@"https://www.google.com", nil, originals);
 
             XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForExpectation"];
 
             sessionMockWithCannedResponse(model, 200, originalResponseData, nil, ^(NSURLSession *session) {
                 _client = [EMSRESTClient clientWithSuccessBlock:^(NSString *requestId, EMSResponseModel *response) {
                     [_requestIds addObject:requestId];
-                    if ([_requestIds count] >= 4) {
+                    if ([_requestIds count] >= 3) {
                         [exp fulfill];
                     }
                 }                                    errorBlock:^(NSString *requestId, NSError *error) {
@@ -321,11 +325,10 @@ SPEC_BEGIN(EMSRESTClientTests)
 
             [XCTWaiter waitForExpectations:@[exp] timeout:10];
 
-            [[theValue([_requestIds count]) should] equal:theValue(4)];
-            [[_requestIds[0] should] equal:@"12"];
-            [[_requestIds[1] should] equal:@"23"];
-            [[_requestIds[2] should] equal:@"34"];
-            [[_requestIds[3] should] equal:@"56"];
+            [[theValue([_requestIds count]) should] equal:theValue(3)];
+            [[_requestIds[0] should] equal:originalRequestModel1.requestId];
+            [[_requestIds[1] should] equal:originalRequestModel2.requestId];
+            [[_requestIds[2] should] equal:originalRequestModel3.requestId];
         });
 
 
@@ -335,8 +338,12 @@ SPEC_BEGIN(EMSRESTClientTests)
             __block EMSRESTClient *_client;
 
             NSData *originalResponseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
-            NSArray *idList = @[@"12", @"23", @"34", @"56"];
-            EMSRequestModel *model = compositeRequestModel(@"https://www.google.com", nil, idList);
+            EMSRequestModel *originalRequestModel1 = requestModel(@"https://www.emarsys.com", nil);
+            EMSRequestModel *originalRequestModel2 = requestModel(@"https://www.emarsys.com", nil);
+            EMSRequestModel *originalRequestModel3 = requestModel(@"https://www.emarsys.com", nil);
+            NSArray *originals = @[originalRequestModel1, originalRequestModel2, originalRequestModel3];
+
+            EMSRequestModel *model = compositeRequestModel(@"https://www.google.com", nil, originals);
 
             XCTestExpectation *exp = [[XCTestExpectation alloc] initWithDescription:@"waitForExpectation"];
 
@@ -355,11 +362,10 @@ SPEC_BEGIN(EMSRESTClientTests)
 
             [XCTWaiter waitForExpectations:@[exp] timeout:10];
 
-            [[theValue([_requestIds count]) should] equal:theValue(4)];
-            [[_requestIds[0] should] equal:@"12"];
-            [[_requestIds[1] should] equal:@"23"];
-            [[_requestIds[2] should] equal:@"34"];
-            [[_requestIds[3] should] equal:@"56"];
+            [[theValue([_requestIds count]) should] equal:theValue(3)];
+            [[_requestIds[0] should] equal:originalRequestModel1.requestId];
+            [[_requestIds[1] should] equal:originalRequestModel2.requestId];
+            [[_requestIds[2] should] equal:originalRequestModel3.requestId];
         });
 
     });
