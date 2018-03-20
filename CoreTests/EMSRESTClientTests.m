@@ -12,6 +12,7 @@
 #import "EMSCompositeRequestModel.h"
 #import "FakeLogRepository.h"
 #import "EMSTimestampProvider.h"
+#import "FakeTimeStampProvider.h"
 
 SPEC_BEGIN(EMSRESTClientTests)
 
@@ -481,9 +482,8 @@ SPEC_BEGIN(EMSRESTClientTests)
                 __block EMSRESTClient *restClient;
 
                 EMSTimestampProvider *timestampProvider = [EMSTimestampProvider mock];
-                NSDate *networkingStart = [NSDate new];
                 [[timestampProvider should] receive:@selector(provideTimestamp)
-                                          andReturn:theValue(networkingStart)
+                                          andReturn:[NSDate dateWithTimeIntervalSince1970:[model.timestamp timeIntervalSince1970] + 53.3333]
                                    withCountAtLeast:2];
 
                 sessionMockWithCannedResponse(model, 200, originalResponseData, nil, ^(NSURLSession *session) {
@@ -503,7 +503,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                 [[logElement should] equal:@{
                         @"request_id": model.requestId,
                         @"url": model.url.absoluteString,
-                        @"in_database": @(networkingStart.timeIntervalSince1970 - model.timestamp.timeIntervalSince1970)}];
+                        @"in_database": @53333}];
             });
 
             it(@"should log networking time", ^{
@@ -514,11 +514,10 @@ SPEC_BEGIN(EMSRESTClientTests)
                 NSData *responseData = [@"OK" dataUsingEncoding:NSUTF8StringEncoding];
                 __block EMSRESTClient *restClient;
 
-                EMSTimestampProvider *timestampProvider = [EMSTimestampProvider mock];
-                NSDate *networkingEndTime = [NSDate new];
-                [[timestampProvider should] receive:@selector(provideTimestamp)
-                                          andReturn:theValue(networkingEndTime)
-                                   withCountAtLeast:2];
+                NSDate *firstDate = [[NSDate alloc] initWithTimeIntervalSince1970:35.3456];
+                NSDate *secondDate = [[NSDate alloc] initWithTimeIntervalSince1970:77.2347];
+
+                EMSTimestampProvider *timestampProvider = [[FakeTimeStampProvider alloc] initWithTimestamps:@[firstDate, secondDate]];
 
                 sessionMockWithCannedResponse(model, 200, responseData, nil, ^(NSURLSession *session) {
                     restClient = [EMSRESTClient clientWithSuccessBlock:successBlock
@@ -537,7 +536,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                 [[logElement should] equal:@{
                         @"request_id": model.requestId,
                         @"url": model.url.absoluteString,
-                        @"networking_time": @(0)}];
+                        @"networking_time": @(41889)}];
             });
         });
 

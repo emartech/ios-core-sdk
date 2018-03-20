@@ -215,15 +215,20 @@
 
     const NSTimeInterval networkingStartTimeInterval = [networkingStartTime timeIntervalSince1970];
 
+    long databaseTime = (long) ((networkingStartTimeInterval - requestModel.timestamp.timeIntervalSince1970) * 1000);
+
     [self.logRepository add:@{
             @"request_id": requestModel.requestId,
             @"url": requestModel.url.absoluteString,
-            @"in_database": @(networkingStartTimeInterval - requestModel.timestamp.timeIntervalSince1970)
+            @"in_database": @(databaseTime)
     }];
+
+
+    long networkingTime = (long) ((responseModel.timestamp.timeIntervalSince1970 - networkingStartTimeInterval) * 1000);
     [self.logRepository add:@{
             @"request_id": requestModel.requestId,
             @"url": requestModel.url.absoluteString,
-            @"networking_time": @(responseModel.timestamp.timeIntervalSince1970 - networkingStartTimeInterval)
+            @"networking_time": @(networkingTime)
     }];
 }
 
