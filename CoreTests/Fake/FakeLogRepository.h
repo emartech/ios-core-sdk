@@ -5,4 +5,7 @@
 #import "EMSLogRepositoryProtocol.h"
 
 @interface FakeLogRepository : NSObject <EMSLogRepositoryProtocol>
+
+@property(nonatomic, readonly) NSMutableArray <NSDictionary<NSString *, id> *> *loggedElements;
+
 @end

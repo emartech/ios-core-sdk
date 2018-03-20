@@ -7,12 +7,14 @@
 #import "NSError+EMSCore.h"
 #import "EMSResponseModel.h"
 #import "EMSCompositeRequestModel.h"
+#import "EMSTimestampProvider.h"
 
 @interface EMSRESTClient () <NSURLSessionDelegate>
 
 @property(nonatomic, strong) CoreSuccessBlock successBlock;
 @property(nonatomic, strong) CoreErrorBlock errorBlock;
 @property(nonatomic, strong) NSURLSession *session;
+@property(nonatomic, strong) EMSTimestampProvider *timestampProvider;
 
 @end
 
@@ -21,13 +23,16 @@
 - (instancetype)initWithSuccessBlock:(CoreSuccessBlock)successBlock
                           errorBlock:(CoreErrorBlock)errorBlock
                              session:(NSURLSession *)session
-                       logRepository:(nullable id <EMSLogRepositoryProtocol>)logRepository {
+                       logRepository:(nullable id <EMSLogRepositoryProtocol>)logRepository
+                   timestampProvider:(EMSTimestampProvider *)timestampProvider {
     if (self = [super init]) {
         NSParameterAssert(successBlock);
         NSParameterAssert(errorBlock);
+        NSParameterAssert(timestampProvider);
         _successBlock = successBlock;
         _errorBlock = errorBlock;
         _logRepository = logRepository;
+        _timestampProvider = timestampProvider;
         if (session) {
             _session = session;
         } else {
@@ -49,7 +54,8 @@
                                       errorBlock:^(NSString *requestId, NSError *error) {
                                       }
                                          session:session
-                                   logRepository:nil];
+                                   logRepository:nil
+                               timestampProvider:[EMSTimestampProvider new]];
 }
 
 + (EMSRESTClient *)clientWithSuccessBlock:(CoreSuccessBlock)successBlock
@@ -58,17 +64,20 @@
     return [EMSRESTClient clientWithSuccessBlock:successBlock
                                       errorBlock:errorBlock
                                          session:nil
-                                   logRepository:logRepository];
+                                   logRepository:logRepository
+                               timestampProvider:[EMSTimestampProvider new]];
 }
 
 + (EMSRESTClient *)clientWithSuccessBlock:(CoreSuccessBlock)successBlock
                                errorBlock:(CoreErrorBlock)errorBlock
                                   session:(nullable NSURLSession *)session
-                            logRepository:(nullable id <EMSLogRepositoryProtocol>)logRepository {
+                            logRepository:(nullable id <EMSLogRepositoryProtocol>)logRepository
+                        timestampProvider:(EMSTimestampProvider *)timestampProvider {
     return [[EMSRESTClient alloc] initWithSuccessBlock:successBlock
                                             errorBlock:errorBlock
                                                session:session
-                                         logRepository:logRepository];
+                                         logRepository:logRepository
+                                     timestampProvider:timestampProvider];
 }
 
 - (void)executeTaskWithRequestModel:(EMSRequestModel *)requestModel
@@ -88,7 +97,8 @@
                                 }
                                 if (successBlock && !hasError) {
                                     successBlock(requestModel.requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
-                                                                                                                      data:data]);
+                                                                                                                      data:data
+                                                                                                         timestampProvider:self.timestampProvider]);
                                 }
                             }];
     [task resume];
@@ -98,7 +108,7 @@
                                                     onComplete:(EMSRestClientCompletionBlock)onComplete {
     NSParameterAssert(onComplete);
     __weak typeof(self) weakSelf = self;
-    NSTimeInterval networkStartingTimeInterval = [NSDate date].timeIntervalSince1970;
+    NSDate *networkingStartTime = [self.timestampProvider provideTimestamp];
     NSOperationQueue *currentQueue = [NSOperationQueue currentQueue];
     NSURLSessionDataTask *task =
             [self.session dataTaskWithRequest:[NSURLRequest requestWithRequestModel:requestModel]
@@ -107,6 +117,7 @@
                                     [weakSelf handleResponse:requestModel
                                                         data:data
                                                     response:response
+                                         networkingStartTime:networkingStartTime
                                                        error:error
                                                   onComplete:onComplete];
                                 }];
@@ -117,6 +128,7 @@
 - (void)handleResponse:(EMSRequestModel *)requestModel
                   data:(NSData *)data
               response:(NSURLResponse *)response
+   networkingStartTime:(NSDate *)networkingStartTime
                  error:(NSError *)error
             onComplete:(EMSRestClientCompletionBlock)onComplete {
     NSHTTPURLResponse *httpUrlResponse = (NSHTTPURLResponse *) response;
@@ -132,7 +144,8 @@
     if (self.successBlock && !hasError) {
         [self executeSuccessBlockWithModel:requestModel
                               responseData:data
-                                  response:httpUrlResponse];
+                                  response:httpUrlResponse
+                       networkingStartTime:networkingStartTime];
     }
     if (onComplete) {
         const BOOL shouldContinue = !hasError || nonRetriableRequest;
@@ -142,16 +155,27 @@
 
 - (void)executeSuccessBlockWithModel:(EMSRequestModel *)requestModel
                         responseData:(NSData *)data
-                            response:(NSHTTPURLResponse *)httpUrlResponse {
+                            response:(NSHTTPURLResponse *)httpUrlResponse
+                 networkingStartTime:(NSDate *)networkingStartTime {
     if ([requestModel isKindOfClass:[EMSCompositeRequestModel class]]) {
         NSArray<EMSRequestModel *> *originalRequests = [(EMSCompositeRequestModel *) requestModel originalRequests];
-        for (EMSRequestModel *request in originalRequests) {
-            self.successBlock(request.requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
-                                                                                              data:data]);
+        for (EMSRequestModel *originalRequest in originalRequests) {
+            EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
+                                                                                           data:data
+                                                                              timestampProvider:self.timestampProvider];
+            [self logWithRequestModel:originalRequest
+                        responseModel:responseModel
+                  networkingStartTime:networkingStartTime];
+            self.successBlock(originalRequest.requestId, responseModel);
         }
     } else {
-        self.successBlock(requestModel.requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
-                                                                                               data:data]);
+        EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
+                                                                                       data:data
+                                                                          timestampProvider:self.timestampProvider];
+        [self logWithRequestModel:requestModel
+                    responseModel:responseModel
+              networkingStartTime:networkingStartTime];
+        self.successBlock(requestModel.requestId, responseModel);
     }
 }
 
@@ -183,6 +207,24 @@
             data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : @"Unknown error";
     return [NSError errorWithCode:@(statusCode).intValue
              localizedDescription:description];
+}
+
+- (void)logWithRequestModel:(EMSRequestModel *)requestModel
+              responseModel:(EMSResponseModel *)responseModel
+        networkingStartTime:(NSDate *)networkingStartTime {
+
+    const NSTimeInterval networkingStartTimeInterval = [networkingStartTime timeIntervalSince1970];
+
+    [self.logRepository add:@{
+            @"request_id": requestModel.requestId,
+            @"url": requestModel.url.absoluteString,
+            @"in_database": @(networkingStartTimeInterval - requestModel.timestamp.timeIntervalSince1970)
+    }];
+    [self.logRepository add:@{
+            @"request_id": requestModel.requestId,
+            @"url": requestModel.url.absoluteString,
+            @"networking_time": @(responseModel.timestamp.timeIntervalSince1970 - networkingStartTimeInterval)
+    }];
 }
 
 @end

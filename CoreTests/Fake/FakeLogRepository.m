@@ -5,8 +5,17 @@
 
 @implementation FakeLogRepository
 
-- (void)add:(NSDictionary<NSString *, id> *)item {
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _loggedElements = [NSMutableArray new];
+    }
 
+    return self;
+}
+
+- (void)add:(NSDictionary<NSString *, id> *)item {
+    [self.loggedElements addObject:item];
 }
 
 - (void)remove:(id <EMSSQLSpecificationProtocol>)sqlSpecification {

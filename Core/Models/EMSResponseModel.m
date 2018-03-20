@@ -3,27 +3,30 @@
 //
 
 #import "EMSResponseModel.h"
+#import "EMSTimestampProvider.h"
 
 @implementation EMSResponseModel {
     id _parsedBody;
 }
 
 - (id)initWithHttpUrlResponse:(NSHTTPURLResponse *)httpUrlResponse
-                         data:(NSData *)data {
-    if (self = [super init]) {
-        _statusCode = httpUrlResponse.statusCode;
-        _headers = httpUrlResponse.allHeaderFields;
-        _body = data;
-    }
-    return self;
+                         data:(NSData *)data
+            timestampProvider:(EMSTimestampProvider *)timestampProvider {
+    return [self initWithStatusCode:httpUrlResponse.statusCode
+                            headers:httpUrlResponse.allHeaderFields
+                               body:data
+                  timestampProvider:timestampProvider];
 }
 
-- (id)initWithStatusCode:(NSInteger)statusCode headers:(NSDictionary<NSString *, NSString *> *)headers
-                    body:(NSData *)body {
+- (id)initWithStatusCode:(NSInteger)statusCode
+                 headers:(NSDictionary<NSString *, NSString *> *)headers
+                    body:(NSData *)body
+       timestampProvider:(EMSTimestampProvider *)timestampProvider {
     if (self = [super init]) {
         _statusCode = statusCode;
         _headers = headers;
         _body = body;
+        _timestamp = [timestampProvider provideTimestamp];
     }
     return self;
 }

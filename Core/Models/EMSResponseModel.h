@@ -4,6 +4,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class EMSTimestampProvider;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EMSResponseModel : NSObject
@@ -11,13 +13,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) NSInteger statusCode;
 @property(nonatomic, strong) NSDictionary<NSString *, NSString *> *headers;
 @property(nonatomic, readonly) NSData *body;
+@property(nonatomic, readonly) NSDate *timestamp;
 
 - (id)initWithHttpUrlResponse:(NSHTTPURLResponse *)httpUrlResponse
-                         data:(NSData *)data;
+                         data:(NSData *)data
+            timestampProvider:(EMSTimestampProvider *)timestampProvider;
 
-- (id)initWithStatusCode:(NSInteger)statusCode
+- (id)initWithStatusCode:(NSInteger)statusCod
                  headers:(NSDictionary<NSString *, NSString *> *)headers
-                    body:(NSData *)body;
+                    body:(NSData *)body
+       timestampProvider:(EMSTimestampProvider *)timestampProvider;
 
 - (id)parsedBody;
 

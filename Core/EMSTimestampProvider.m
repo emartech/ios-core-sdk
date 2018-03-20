@@ -6,6 +6,10 @@
 
 @implementation EMSTimestampProvider
 
+- (NSDate *)provideTimestamp {
+    return [NSDate date];
+}
+
 - (NSNumber *)currentTimeStamp {
     return [self timeStampOfDate:[NSDate date]];
 }
@@ -16,6 +20,10 @@
 
 - (NSString *)currentTimestampInUTC {
     return [EMSTimestampProvider currentTimestampInUTC];
+}
+
+- (NSTimeInterval)timeIntervalSince1970 {
+    return [[NSDate date] timeIntervalSince1970];
 }
 
 + (NSString *)utcFormattedStringFromDate:(NSDate *)date {
@@ -36,10 +44,6 @@
     });
 
     return dateFormatter;
-}
-
-+ (NSTimeInterval)timeIntervalSince1970 {
-    return [[NSDate date] timeIntervalSince1970];
 }
 
 @end
