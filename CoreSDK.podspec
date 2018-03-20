@@ -24,9 +24,10 @@ Pod::Spec.new do |spec|
                 'Core/Database/EMSRequestContract.h',
                 'Core/Log/EMSLogger.h',
                 'Core/Log/EMSLoggerSettings.h',
+                'Core/Categories/NSError+EMSCore.h',
+                'Core/Categories/NSDate+EMSCore.h',
                 'Core/EMSAuthentication.h',
                 'Core/EMSDeviceInfo.h',
-                'Core/NSError+EMSCore.h',
                 'Core/EMSCoreCompletion.h',
                 'Core/Worker/EMSRESTClient.h',
                 'Core/EMSTimestampProvider.h'

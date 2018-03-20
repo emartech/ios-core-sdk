@@ -11,7 +11,7 @@
     return [NSError errorWithDomain:@"com.emarsys.mobileengage"
                                code:errorCode
                            userInfo:@{
-                                   NSLocalizedDescriptionKey: localizedDescription
+                               NSLocalizedDescriptionKey: localizedDescription
                            }];
 }
 

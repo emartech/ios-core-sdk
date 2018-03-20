@@ -8,6 +8,7 @@
 #import "EMSResponseModel.h"
 #import "EMSCompositeRequestModel.h"
 #import "EMSTimestampProvider.h"
+#import "NSDate+EMSCore.h"
 
 @interface EMSRESTClient () <NSURLSessionDelegate>
 
@@ -212,23 +213,16 @@
 - (void)logWithRequestModel:(EMSRequestModel *)requestModel
               responseModel:(EMSResponseModel *)responseModel
         networkingStartTime:(NSDate *)networkingStartTime {
-
-    const NSTimeInterval networkingStartTimeInterval = [networkingStartTime timeIntervalSince1970];
-
-    long databaseTime = (long) ((networkingStartTimeInterval - requestModel.timestamp.timeIntervalSince1970) * 1000);
-
     [self.logRepository add:@{
             @"request_id": requestModel.requestId,
             @"url": requestModel.url.absoluteString,
-            @"in_database": @(databaseTime)
+        @"in_database": [networkingStartTime numberValueInMillisFromDate:requestModel.timestamp]
     }];
 
-
-    long networkingTime = (long) ((responseModel.timestamp.timeIntervalSince1970 - networkingStartTimeInterval) * 1000);
     [self.logRepository add:@{
             @"request_id": requestModel.requestId,
             @"url": requestModel.url.absoluteString,
-            @"networking_time": @(networkingTime)
+        @"networking_time": [responseModel.timestamp numberValueInMillisFromDate:networkingStartTime]
     }];
 }
 
