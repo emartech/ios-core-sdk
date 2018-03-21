@@ -606,13 +606,14 @@
 				TargetAttributes = {
 					164B999D1E8021EA00371ED4 = {
 						CreatedOnToolsVersion = 8.2.1;
-						DevelopmentTeam = 8LAPGQR7L8;
+						DevelopmentTeam = 7ZFXXDJH82;
 						ProvisioningStyle = Automatic;
 					};
 					32C6F022FEEEC4E839D80D11 = {
 						DevelopmentTeam = 8LAPGQR7L8;
 					};
 					32C6F9A87B750E4422DAD612 = {
+						DevelopmentTeam = 7ZFXXDJH82;
 						TestTargetID = 164B999D1E8021EA00371ED4;
 					};
 				};
@@ -821,7 +822,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8LAPGQR7L8;
+				DEVELOPMENT_TEAM = 7ZFXXDJH82;
 				INFOPLIST_FILE = "Core Host/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -835,7 +836,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 8LAPGQR7L8;
+				DEVELOPMENT_TEAM = 7ZFXXDJH82;
 				INFOPLIST_FILE = "Core Host/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -969,7 +970,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7ZFXXDJH82;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1039,7 +1040,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7ZFXXDJH82;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
