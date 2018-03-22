@@ -176,7 +176,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                 [[expectFutureValue(successRequestId) shouldEventually] equal:model.requestId];
                 [[expectFutureValue(returnedResponse) shouldNotEventually] beNil];
                 [[expectFutureValue(returnedResponse.requestModel) shouldNot] beNil];
-                [[expectFutureValue([returnedResponse.requestModel.url absoluteString]) should] equal:urlString];
+                [[expectFutureValue(returnedResponse.requestModel) should] equal:model];
                 [[expectFutureValue(errorRequestId) shouldEventually] beNil];
                 [[expectFutureValue(returnedError) shouldEventually] beNil];
                 [[expectFutureValue(theValue(returnedShouldContinue)) shouldEventually] beYes];
