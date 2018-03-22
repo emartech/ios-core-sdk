@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable NSString *)applicationVersion;
 + (NSString *)deviceModel;
+
++ (NSString *)deviceType;
 + (NSString *)osVersion;
 + (NSString *)hardwareId;
 

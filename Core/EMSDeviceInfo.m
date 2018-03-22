@@ -36,6 +36,17 @@
     return @(systemInfo.machine);
 }
 
++ (NSString *)deviceType {
+    NSDictionary *idiomDict = @{
+        @(UIUserInterfaceIdiomUnspecified): @"UnspecifiediOS",
+        @(UIUserInterfaceIdiomPhone): @"iPhone",
+        @(UIUserInterfaceIdiomPad): @"iPad",
+        @(UIUserInterfaceIdiomTV): @"AppleTV",
+        @(UIUserInterfaceIdiomCarPlay): @"iPhone"
+    };
+    return idiomDict[@([UIDevice.currentDevice userInterfaceIdiom])];
+}
+
 + (NSString *)osVersion {
     return [UIDevice currentDevice].systemVersion;
 }
@@ -44,7 +55,7 @@
     NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:kSuiteName];
     NSString *hardwareId = [userDefaults objectForKey:kHardwareIdKey];
 
-    if(!hardwareId) {
+    if (!hardwareId) {
         hardwareId = [self getNewHardwareId];
         [userDefaults setObject:hardwareId forKey:kHardwareIdKey];
         [userDefaults synchronize];
@@ -56,7 +67,7 @@
 + (NSString *)getNewHardwareId {
     if ([[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled]) {
         return [[[ASIdentifierManager sharedManager] advertisingIdentifier]
-                UUIDString];
+            UUIDString];
     }
     return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 }

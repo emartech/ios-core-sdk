@@ -6,7 +6,7 @@
 #import "EMSDeviceInfo.h"
 #import <AdSupport/AdSupport.h>
 
-SPEC_BEGIN(DeviceInfoTests)
+SPEC_BEGIN(EMSDeviceInfoTests)
 
     context(@"Timezone", ^{
         __block NSTimeZone *cachedTimeZone;
@@ -43,6 +43,33 @@ SPEC_BEGIN(DeviceInfoTests)
             it(@"should not return nil", ^{
                 [[[EMSDeviceInfo deviceModel] shouldNot] beNil];
             });
+        });
+
+        describe(@"deviceType", ^{
+
+            void (^setUserInterfaceIdiom)(NSInteger userInterfaceIdiom) = ^(NSInteger userInterfaceIdiom) {
+                UIDevice *uiDevice = [UIDevice mock];
+                [[uiDevice should] receive:@selector(userInterfaceIdiom) andReturn:theValue(userInterfaceIdiom)];
+
+                [[UIDevice should] receive:@selector(currentDevice) andReturn:uiDevice];
+            };
+
+            it(@"should not return nil", ^{
+                [[[EMSDeviceInfo deviceType] shouldNot] beNil];
+            });
+
+            it(@"should return iPhone type", ^{
+                setUserInterfaceIdiom(UIUserInterfaceIdiomPhone);
+
+                [[[EMSDeviceInfo deviceType] should] equal:@"iPhone"];
+            });
+
+            it(@"should return iPad type", ^{
+                setUserInterfaceIdiom(UIUserInterfaceIdiomPad);
+
+                [[[EMSDeviceInfo deviceType] should] equal:@"iPad"];
+            });
+
         });
 
         describe(@"osVersion", ^{

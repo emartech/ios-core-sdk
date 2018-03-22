@@ -4,3 +4,4 @@ Core.xcodeproj/xcuserdata/
 Core.xcworkspace/
 Pods/
 /Podfile.lock
+test_output
