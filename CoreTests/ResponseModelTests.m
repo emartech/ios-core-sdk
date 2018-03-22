@@ -29,6 +29,7 @@ SPEC_BEGIN(ResponseModelTests)
                 NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
                 EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:response
                                                                                                data:data
+                                                                                       requestModel:[EMSRequestModel mock]
                                                                                   timestampProvider:timestampProvider];
                 NSString *responseDataString = [[NSString alloc] initWithData:responseModel.body
                                                                      encoding:NSUTF8StringEncoding];
@@ -43,6 +44,7 @@ SPEC_BEGIN(ResponseModelTests)
                 EMSResponseModel *model = [[EMSResponseModel alloc] initWithStatusCode:402
                                                                                headers:@{@"h1": @"hv1"}
                                                                                   body:responseBody
+                                                                          requestModel:[EMSRequestModel mock]
                                                                      timestampProvider:timestampProvider];
 
                 [[theValue(model.statusCode) should] equal:theValue(402)];
@@ -50,6 +52,37 @@ SPEC_BEGIN(ResponseModelTests)
 
                 NSDictionary *json = [NSJSONSerialization JSONObjectWithData:model.body options:0 error:nil];
                 [[json[@"b1"] should] equal:@"bv1"];
+            });
+
+            it(@"should not accept nil request model", ^{
+                @try {
+                    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:[[NSURL alloc] initWithString:@"host.com/url"]
+                                                                              statusCode:200
+                                                                             HTTPVersion:@"1.1"
+                                                                            headerFields:@{}];
+                    NSData *data = [@"dataString" dataUsingEncoding:NSUTF8StringEncoding];
+                    EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:response
+                                                                                                   data:data
+                                                                                           requestModel:nil
+                                                                                      timestampProvider:timestampProvider];
+                    fail(@"Expected exception when requestModel is nil");
+                } @catch (NSException *exception) {
+                    [[theValue(exception) shouldNot] beNil];
+                }
+            });
+
+            it(@"should make requestModel accessible through the property", ^{
+                NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:[[NSURL alloc] initWithString:@"host.com/url"]
+                                                                          statusCode:200
+                                                                         HTTPVersion:@"1.1"
+                                                                        headerFields:@{}];
+                NSData *data = [@"dataString" dataUsingEncoding:NSUTF8StringEncoding];
+                EMSRequestModel *expectedModel = [EMSRequestModel mock];
+                EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:response
+                                                                                               data:data
+                                                                                       requestModel:expectedModel
+                                                                                  timestampProvider:timestampProvider];
+                [[responseModel.requestModel should] equal:expectedModel];
             });
 
         });
@@ -62,6 +95,7 @@ SPEC_BEGIN(ResponseModelTests)
                 EMSResponseModel *model = [[EMSResponseModel alloc] initWithStatusCode:402
                                                                                headers:@{}
                                                                                   body:responseBody
+                                                                          requestModel:[EMSRequestModel mock]
                                                                      timestampProvider:timestampProvider];
 
                 [[model.parsedBody should] equal:dict];
@@ -71,6 +105,7 @@ SPEC_BEGIN(ResponseModelTests)
                 EMSResponseModel *model = [[EMSResponseModel alloc] initWithStatusCode:402
                                                                                headers:@{}
                                                                                   body:nil
+                                                                          requestModel:[EMSRequestModel mock]
                                                                      timestampProvider:timestampProvider];
 
                 [[model.parsedBody should] beNil];
@@ -80,6 +115,7 @@ SPEC_BEGIN(ResponseModelTests)
                 EMSResponseModel *model = [[EMSResponseModel alloc] initWithStatusCode:402
                                                                                headers:@{}
                                                                                   body:[@"Created" dataUsingEncoding:NSUTF8StringEncoding]
+                                                                          requestModel:[EMSRequestModel mock]
                                                                      timestampProvider:timestampProvider];
 
                 [[model.parsedBody should] beNil];
@@ -91,6 +127,7 @@ SPEC_BEGIN(ResponseModelTests)
                 EMSResponseModel *model = [[EMSResponseModel alloc] initWithStatusCode:402
                                                                                headers:@{}
                                                                                   body:responseBody
+                                                                          requestModel:[EMSRequestModel mock]
                                                                      timestampProvider:timestampProvider];
 
                 id parsedBody1 = model.parsedBody;
