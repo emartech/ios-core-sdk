@@ -11,21 +11,26 @@
 
 - (id)initWithHttpUrlResponse:(NSHTTPURLResponse *)httpUrlResponse
                          data:(NSData *)data
+                 requestModel:(EMSRequestModel *)requestModel
             timestampProvider:(EMSTimestampProvider *)timestampProvider {
     return [self initWithStatusCode:httpUrlResponse.statusCode
                             headers:httpUrlResponse.allHeaderFields
                                body:data
+                       requestModel:requestModel
                   timestampProvider:timestampProvider];
 }
 
 - (id)initWithStatusCode:(NSInteger)statusCode
                  headers:(NSDictionary<NSString *, NSString *> *)headers
                     body:(NSData *)body
+            requestModel:(EMSRequestModel *)requestModel
        timestampProvider:(EMSTimestampProvider *)timestampProvider {
     if (self = [super init]) {
+        NSParameterAssert(requestModel);
         _statusCode = statusCode;
         _headers = headers;
         _body = body;
+        _requestModel = requestModel;
         _timestamp = [timestampProvider provideTimestamp];
     }
     return self;
