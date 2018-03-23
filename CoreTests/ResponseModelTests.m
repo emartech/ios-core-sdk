@@ -6,7 +6,7 @@
 #import "EMSResponseModel.h"
 #import "EMSTimestampProvider.h"
 
-SPEC_BEGIN(ResponseModelTests)
+SPEC_BEGIN(EMSResponseModelTests)
 
         __block EMSTimestampProvider *timestampProvider;
 
@@ -18,8 +18,8 @@ SPEC_BEGIN(ResponseModelTests)
 
             it(@"should be created and fill all of properties, when correct NSHttpUrlResponse and NSData is passed", ^{
                 NSDictionary<NSString *, NSString *> *headers = @{
-                        @"key": @"value",
-                        @"key2": @"value2"
+                    @"key": @"value",
+                    @"key2": @"value2"
                 };
                 NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:[[NSURL alloc] initWithString:@"host.com/url"]
                                                                           statusCode:200
@@ -30,7 +30,7 @@ SPEC_BEGIN(ResponseModelTests)
                 EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:response
                                                                                                data:data
                                                                                        requestModel:[EMSRequestModel mock]
-                                                                                  timestampProvider:timestampProvider];
+                                                                                          timestamp:[timestampProvider provideTimestamp]];
                 NSString *responseDataString = [[NSString alloc] initWithData:responseModel.body
                                                                      encoding:NSUTF8StringEncoding];
                 [[@(responseModel.statusCode) should] equal:@200];
@@ -45,7 +45,7 @@ SPEC_BEGIN(ResponseModelTests)
                                                                                headers:@{@"h1": @"hv1"}
                                                                                   body:responseBody
                                                                           requestModel:[EMSRequestModel mock]
-                                                                     timestampProvider:timestampProvider];
+                                                                             timestamp:[timestampProvider provideTimestamp]];
 
                 [[theValue(model.statusCode) should] equal:theValue(402)];
                 [[model.headers[@"h1"] should] equal:@"hv1"];
@@ -64,7 +64,7 @@ SPEC_BEGIN(ResponseModelTests)
                     EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:response
                                                                                                    data:data
                                                                                            requestModel:nil
-                                                                                      timestampProvider:timestampProvider];
+                                                                                              timestamp:[timestampProvider provideTimestamp]];
                     fail(@"Expected exception when requestModel is nil");
                 } @catch (NSException *exception) {
                     [[theValue(exception) shouldNot] beNil];
@@ -81,7 +81,7 @@ SPEC_BEGIN(ResponseModelTests)
                 EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:response
                                                                                                data:data
                                                                                        requestModel:expectedModel
-                                                                                  timestampProvider:timestampProvider];
+                                                                                          timestamp:[timestampProvider provideTimestamp]];
                 [[responseModel.requestModel should] equal:expectedModel];
             });
 
@@ -96,7 +96,7 @@ SPEC_BEGIN(ResponseModelTests)
                                                                                headers:@{}
                                                                                   body:responseBody
                                                                           requestModel:[EMSRequestModel mock]
-                                                                     timestampProvider:timestampProvider];
+                                                                             timestamp:[timestampProvider provideTimestamp]];
 
                 [[model.parsedBody should] equal:dict];
             });
@@ -106,7 +106,7 @@ SPEC_BEGIN(ResponseModelTests)
                                                                                headers:@{}
                                                                                   body:nil
                                                                           requestModel:[EMSRequestModel mock]
-                                                                     timestampProvider:timestampProvider];
+                                                                             timestamp:[timestampProvider provideTimestamp]];
 
                 [[model.parsedBody should] beNil];
             });
@@ -116,7 +116,7 @@ SPEC_BEGIN(ResponseModelTests)
                                                                                headers:@{}
                                                                                   body:[@"Created" dataUsingEncoding:NSUTF8StringEncoding]
                                                                           requestModel:[EMSRequestModel mock]
-                                                                     timestampProvider:timestampProvider];
+                                                                             timestamp:[timestampProvider provideTimestamp]];
 
                 [[model.parsedBody should] beNil];
             });
@@ -128,7 +128,7 @@ SPEC_BEGIN(ResponseModelTests)
                                                                                headers:@{}
                                                                                   body:responseBody
                                                                           requestModel:[EMSRequestModel mock]
-                                                                     timestampProvider:timestampProvider];
+                                                                             timestamp:[timestampProvider provideTimestamp]];
 
                 id parsedBody1 = model.parsedBody;
                 id parsedBody2 = model.parsedBody;

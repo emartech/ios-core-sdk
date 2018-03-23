@@ -100,7 +100,7 @@
                                     successBlock(requestModel.requestId, [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
                                                                                                                       data:data
                                                                                                               requestModel:requestModel
-                                                                                                         timestampProvider:self.timestampProvider]);
+                                                                                                                 timestamp:[self.timestampProvider provideTimestamp]]);
                                 }
                             }];
     [task resume];
@@ -165,7 +165,7 @@
             EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
                                                                                            data:data
                                                                                    requestModel:requestModel
-                                                                              timestampProvider:self.timestampProvider];
+                                                                                      timestamp:[self.timestampProvider provideTimestamp]];
             [self logWithRequestModel:originalRequest
                         responseModel:responseModel
                   networkingStartTime:networkingStartTime];
@@ -175,7 +175,7 @@
         EMSResponseModel *responseModel = [[EMSResponseModel alloc] initWithHttpUrlResponse:httpUrlResponse
                                                                                        data:data
                                                                                requestModel:requestModel
-                                                                          timestampProvider:self.timestampProvider];
+                                                                                  timestamp:[self.timestampProvider provideTimestamp]];
         [self logWithRequestModel:requestModel
                     responseModel:responseModel
               networkingStartTime:networkingStartTime];

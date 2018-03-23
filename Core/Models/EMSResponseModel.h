@@ -20,13 +20,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (id)initWithHttpUrlResponse:(NSHTTPURLResponse *)httpUrlResponse
                          data:(NSData *)data
                  requestModel:(EMSRequestModel *)requestModel
-            timestampProvider:(EMSTimestampProvider *)timestampProvider;
+                    timestamp:(NSDate *)timestamp;
 
 - (id)initWithStatusCode:(NSInteger)statusCod
                  headers:(NSDictionary<NSString *, NSString *> *)headers
                     body:(NSData *)body
             requestModel:(EMSRequestModel *)requestModel
-       timestampProvider:(EMSTimestampProvider *)timestampProvider;
+               timestamp:(NSDate *)timestamp;
 
 - (id)parsedBody;
 
