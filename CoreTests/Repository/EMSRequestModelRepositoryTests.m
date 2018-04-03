@@ -153,7 +153,7 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
             [repository add:fourthModel];
 
             EMSCompositeRequestModel *compositeRequestModel = [EMSCompositeRequestModel new];
-            compositeRequestModel.originalRequests = @[firstModel.requestId, thirdModel.requestId];
+            compositeRequestModel.originalRequests = @[firstModel, thirdModel];
 
             [repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:compositeRequestModel]];
 

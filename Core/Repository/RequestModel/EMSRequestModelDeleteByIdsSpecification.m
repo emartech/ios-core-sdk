@@ -27,7 +27,11 @@
 - (NSString *)idListAsString {
     if ([self.requestModel isKindOfClass:[EMSCompositeRequestModel class]]) {
         EMSCompositeRequestModel *compositeModel = (EMSCompositeRequestModel *) self.requestModel;
-        return [compositeModel.originalRequests componentsJoinedByString:@"', '"];
+        NSMutableArray<NSString *> *originalRequestIds = [NSMutableArray array];
+        for (EMSRequestModel *emsRequestModel in compositeModel.originalRequests) {
+            [originalRequestIds addObject:emsRequestModel.requestId];
+        }
+        return [originalRequestIds componentsJoinedByString:@"', '"];
     }
 
     return self.requestModel.requestId;
