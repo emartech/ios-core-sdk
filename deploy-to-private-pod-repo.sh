@@ -18,7 +18,7 @@ function deploy {
 
   git push --tags
 
-  pod emapod push CoreSDK.podspec --allow-warnings
+  pod repo push emapod CoreSDK.podspec --allow-warnings
 
   printf "[$VERSION_NUMBER] deployed to private cocoapod."
 }

@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'CoreSDK'
-	spec.version              = '1.2.0'
+	spec.version              = '1.4.1'
 	spec.homepage             = 'https://help.emarsys.com/hc/en-us/articles/115002410625'
 	spec.license              = 'Mozilla Public License 2.0'
 	spec.author               = { 'Emarsys Technologies' => 'mobile-team@emarsys.com' }
@@ -8,8 +8,8 @@ Pod::Spec.new do |spec|
 	spec.platform             = :ios, '9.0'
 	spec.source               = { :git => 'https://github.com/emartech/ios-core-sdk.git', :tag => spec.version }
 	spec.source_files         = 'Core/**/*.{h,m}'
-	spec.public_header_files  = [
-                'Core/EMSRequestManager.h',
+	spec.public_header_files  = [        
+	        'Core/EMSRequestManager.h',
                 'Core/Models/EMSRequestModelBuilder.h',
                 'Core/Models/EMSRequestModel.h',
                 'Core/Models/EMSResponseModel.h',
@@ -17,6 +17,7 @@ Pod::Spec.new do |spec|
                 'Core/Repository/RequestModel/EMSRequestModelRepositoryProtocol.h',
                 'Core/Repository/RequestModel/EMSRequestModelRepository.h',
                 'Core/Repository/Log/EMSLogRepositoryProtocol.h',
+                'Core/Repository/Log/EMSLogHandlerProtocol.h',
                 'Core/Repository/EMSRepositoryProtocol.h',
                 'Core/Repository/EMSSQLSpecificationProtocol.h',
                 'Core/Database/EMSSQLiteHelper.h',
