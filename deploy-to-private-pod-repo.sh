@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function deploy {
-  VERSION_NUMBER="$1"
+  VERSION_NUMBER=$(git describe --tags --abbrev=0 | perl -pe 's/^((\d+\.)*)(\d+)(.*)$/$1.($3+1).$4/e;')
   if GIT_DIR=.git git rev-parse $VERSION_NUMBER >/dev/null 2>&1
   then
       printf "Version tag already exist, exiting...\n"
@@ -23,9 +23,4 @@ function deploy {
   printf "[$VERSION_NUMBER] deployed to private cocoapod."
 }
 
-if [ -z $1 ]; then
-  printf "USAGE: \r\n./deploy-to-private-pod-repo.sh <version-number>\n";
-  exit
-else
-  deploy $1
-fi
+deploy
