@@ -314,10 +314,14 @@ SPEC_BEGIN(EMSDefaultWorkerTests)
             [watchDog stub:@selector(setConnectionChangeListener:)];
 
             EMSRESTClient *clientMock = [EMSRESTClient mock];
-            [[clientMock should] receive:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:) withArguments:expectedModel, kw_any()];
+            [[clientMock should] receive:@selector(executeTaskWithOfflineCallbackStrategyWithRequestModel:onComplete:)
+                           withArguments:expectedModel, kw_any()];
 
             FakeCompletionHandler *completionHandler = [FakeCompletionHandler new];
-            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithSuccessBlock:completionHandler.successBlock errorBlock:completionHandler.errorBlock requestRepository:repository logRepository:nil];
+            EMSDefaultWorker *worker = [[EMSDefaultWorker alloc] initWithSuccessBlock:completionHandler.successBlock
+                                                                           errorBlock:completionHandler.errorBlock
+                                                                    requestRepository:repository
+                                                                        logRepository:nil];
             [worker setClient:clientMock];
 
             [worker run];

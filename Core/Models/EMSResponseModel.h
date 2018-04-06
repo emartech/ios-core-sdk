@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
             requestModel:(EMSRequestModel *)requestModel
                timestamp:(NSDate *)timestamp;
 
-- (id)parsedBody;
+- (nullable id)parsedBody;
 
 @end
 

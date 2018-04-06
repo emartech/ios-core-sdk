@@ -41,9 +41,6 @@
                                                       options:0
                                                         error:nil];
     }
-    if (_parsedBody == nil) {
-        _parsedBody = @{};
-    }
     return _parsedBody;
 }
 

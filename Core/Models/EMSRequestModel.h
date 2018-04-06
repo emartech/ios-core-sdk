@@ -28,8 +28,8 @@ typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
                            expiry:(NSTimeInterval)expiry
                               url:(NSURL *)url
                            method:(NSString *)method
-                          payload:(NSDictionary<NSString *, id> *)payload
-                          headers:(NSDictionary<NSString *, NSString *> *)headers
+                          payload:(nullable NSDictionary<NSString *, id> *)payload
+                          headers:(nullable NSDictionary<NSString *, NSString *> *)headers
                            extras:(nullable NSDictionary<NSString *, NSString *> *)extras;
 
 @end
