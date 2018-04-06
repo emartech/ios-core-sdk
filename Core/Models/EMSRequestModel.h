@@ -30,7 +30,7 @@ typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
                            method:(NSString *)method
                           payload:(NSDictionary<NSString *, id> *)payload
                           headers:(NSDictionary<NSString *, NSString *> *)headers
-                           extras:(NSDictionary<NSString *, NSString *> *)extras;
+                           extras:(nullable NSDictionary<NSString *, NSString *> *)extras;
 
 @end
 

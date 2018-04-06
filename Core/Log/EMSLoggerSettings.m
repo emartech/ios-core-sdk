@@ -25,4 +25,12 @@ static BOOL allEnabled;
     return allEnabled || [EMSLoggerSettings.topics containsObject:topic];
 }
 
++ (void)setTopics:(NSMutableSet<id<EMSLogTopicProtocol>> *)topics {
+    EMSLoggerSettings.topics = topics;
+}
+
++ (NSMutableSet<id<EMSLogTopicProtocol>> *)topics {
+    return EMSLoggerSettings.topics;
+}
+
 @end

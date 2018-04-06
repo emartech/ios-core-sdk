@@ -47,7 +47,7 @@
 
 + (void)log:(NSString *)topicTag
     message:(NSString *)message {
-    NSLog([NSString stringWithFormat:@"\n💡 Log - Topic: %@\nMessage: %@\n🔮️ Thread: %@\nCalling stack: %@", topicTag, message, [EMSLogger currentThread], [EMSLogger callingStack]]);
+    NSLog(@"\n💡 Log - Topic: %@\nMessage: %@\n🔮️ Thread: %@\nCalling stack: %@", topicTag, message, [EMSLogger currentThread], [EMSLogger callingStack]);
 }
 
 + (NSString *)currentThread {

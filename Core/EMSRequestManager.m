@@ -7,7 +7,7 @@
 #import "EMSWorkerProtocol.h"
 #import "EMSDefaultWorker.h"
 
-typedef void (^RunnerBlock)();
+typedef void (^RunnerBlock)(void);
 
 @interface EMSRequestManager () <NSURLSessionDelegate>
 
