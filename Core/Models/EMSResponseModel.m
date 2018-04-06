@@ -37,7 +37,12 @@
 
 - (id)parsedBody {
     if (!_parsedBody && _body) {
-        _parsedBody = [NSJSONSerialization JSONObjectWithData:_body options:0 error:nil];
+        _parsedBody = [NSJSONSerialization JSONObjectWithData:_body
+                                                      options:0
+                                                        error:nil];
+    }
+    if (_parsedBody == nil) {
+        _parsedBody = @{};
     }
     return _parsedBody;
 }

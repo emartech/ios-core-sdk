@@ -23,12 +23,12 @@
     NSString *requestId = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
     NSString *method = [NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 1)];
     NSURL *url = [NSURL URLWithString:[NSString stringWithUTF8String:(const char *) sqlite3_column_text(statement, 2)]];
-    NSDictionary<NSString *, NSString *> *headers;
+    NSDictionary<NSString *, NSString *> *headers = @{};
     if ([self notNull:statement atIndex:3]) {
         headers = [NSDictionary dictionaryWithData:[self dataFromStatement:statement
                                                                      index:3]];
     }
-    NSDictionary<NSString *, id> *payload;
+    NSDictionary<NSString *, id> *payload = @{};
     if ([self notNull:statement atIndex:4]) {
         payload = [NSDictionary dictionaryWithData:[self dataFromStatement:statement
                                                                      index:4]];

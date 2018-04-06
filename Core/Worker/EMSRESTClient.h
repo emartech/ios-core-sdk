@@ -15,7 +15,7 @@ typedef void (^EMSRestClientCompletionBlock)(BOOL shouldContinue);
 
 @interface EMSRESTClient : NSObject
 
-@property(nonatomic, strong) id <EMSLogRepositoryProtocol> logRepository;
+@property(nonatomic, strong, nullable) id <EMSLogRepositoryProtocol> logRepository;
 
 + (EMSRESTClient *)clientWithSession:(NSURLSession *)session;
 
