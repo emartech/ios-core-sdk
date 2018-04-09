@@ -27,6 +27,7 @@ Pod::Spec.new do |spec|
                 'Core/Log/EMSLoggerSettings.h',
                 'Core/Categories/NSError+EMSCore.h',
                 'Core/Categories/NSDate+EMSCore.h',
+                'Core/Categories/NSDictionary+EMSCore.h',
                 'Core/EMSAuthentication.h',
                 'Core/EMSDeviceInfo.h',
                 'Core/EMSCoreCompletion.h',

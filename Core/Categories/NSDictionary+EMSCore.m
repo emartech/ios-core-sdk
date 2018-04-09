@@ -31,9 +31,38 @@
     return [NSKeyedArchiver archivedDataWithRootObject:self];
 }
 
+- (nullable id)valueForKey:(id)key
+                      type:(Class)expectedClass {
+    id result;
+    id object = self[key];
+    if (object && [object isKindOfClass:expectedClass]) {
+        result = object;
+    }
+    return result;
+}
+
+- (nullable NSString *)stringValueForKey:(id)key {
+    return [self valueForKey:key
+                        type:[NSString class]];
+}
+
+- (nullable NSNumber *)numberValueForKey:(id)key {
+    return [self valueForKey:key
+                        type:[NSNumber class]];
+}
+
+- (nullable NSDictionary *)dictionaryValueForKey:(id)key {
+    return [self valueForKey:key
+                        type:[NSDictionary class]];
+}
+
+- (nullable NSArray *)arrayValueForKey:(id)key {
+    return [self valueForKey:key
+                        type:[NSArray class]];
+}
+
 + (NSDictionary *)dictionaryWithData:(NSData *)data {
     return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
-
 
 @end

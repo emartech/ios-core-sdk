@@ -66,4 +66,123 @@ SPEC_BEGIN(NSDictionaryCoreTests)
         });
     });
 
+        context(@"optValue", ^{
+            describe(@"valueForKey:type:", ^{
+                it(@"should return with nil, if the value is not string when the expected value type is string", ^{
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": @{}
+                    };
+
+                    NSString *returnedValue = [dict valueForKey:@"nameOfTheKey"
+                                                           type:[NSString class]];
+
+                    [[returnedValue should] beNil];
+                });
+
+                it(@"should return with stringValue, if the value is string when the expected value type is string", ^{
+                    NSString *expectedStringValue = @"expectedStringValue";
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": expectedStringValue
+                    };
+
+                    NSString *returnedValue = [dict valueForKey:@"nameOfTheKey"
+                                                           type:[NSString class]];
+
+                    [[returnedValue should] equal:expectedStringValue];
+                });
+            });
+
+            describe(@"stringValueForKey:", ^{
+                it(@"should return with nil, if the value is not string when the expected value type is string", ^{
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": @{}
+                    };
+
+                    NSString *returnedValue = [dict stringValueForKey:@"nameOfTheKey"];
+
+                    [[returnedValue should] beNil];
+                });
+
+                it(@"should return with stringValue, if the value is string when the expected value type is string", ^{
+                    NSString *expectedStringValue = @"expectedStringValue";
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": expectedStringValue
+                    };
+
+                    NSString *returnedValue = [dict stringValueForKey:@"nameOfTheKey"];
+
+                    [[returnedValue should] equal:expectedStringValue];
+                });
+            });
+
+            describe(@"numberValueForKey:", ^{
+                it(@"should return with nil, if the value is not number when the expected value type is number", ^{
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": @{}
+                    };
+
+                    NSNumber *returnedValue = [dict numberValueForKey:@"nameOfTheKey"];
+
+                    [[returnedValue should] beNil];
+                });
+
+                it(@"should return with numberValue, if the value is number when the expected value type is number", ^{
+                    NSNumber *expectedNumberValue = @3.14;
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": expectedNumberValue
+                    };
+
+                    NSNumber *returnedValue = [dict numberValueForKey:@"nameOfTheKey"];
+
+                    [[returnedValue should] equal:expectedNumberValue];
+                });
+            });
+
+            describe(@"dictionaryValueForKey:", ^{
+                it(@"should return with nil, if the value is not dictionary when the expected value type is dictionary", ^{
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": @12345
+                    };
+
+                    NSDictionary *returnedValue = [dict dictionaryValueForKey:@"nameOfTheKey"];
+
+                    [[returnedValue should] beNil];
+                });
+
+                it(@"should return with dictionaryValue, if the value is dictionary when the expected value type is dictionary", ^{
+                    NSDictionary *expectedDictionaryValue = @{@"expectedKey": @"expectedValue"};
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": expectedDictionaryValue
+                    };
+
+                    NSDictionary *returnedValue = [dict dictionaryValueForKey:@"nameOfTheKey"];
+
+                    [[returnedValue should] equal:expectedDictionaryValue];
+                });
+            });
+
+            describe(@"arrayValueForKey:", ^{
+                it(@"should return with nil, if the value is not array when the expected value type is array", ^{
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": @12345
+                    };
+
+                    NSArray *returnedValue = [dict arrayValueForKey:@"nameOfTheKey"];
+
+                    [[returnedValue should] beNil];
+                });
+
+                it(@"should return with arrayValue, if the value is array when the expected value type is array", ^{
+                    NSArray *expectedArrayValue = @[@"asd", @"dfg"];
+                    NSDictionary *dict = @{
+                        @"nameOfTheKey": expectedArrayValue
+                    };
+
+                    NSArray *returnedValue = [dict arrayValueForKey:@"nameOfTheKey"];
+
+                    [[returnedValue should] equal:expectedArrayValue];
+                });
+            });
+        });
+
 SPEC_END

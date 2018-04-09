@@ -12,6 +12,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSData *)archive;
 
+- (nullable id)valueForKey:(id)key
+                      type:(Class)expectedClass;
+
+- (nullable NSString *)stringValueForKey:(id)key;
+
+- (nullable NSNumber *)numberValueForKey:(id)key;
+
+- (nullable NSDictionary *)dictionaryValueForKey:(id)key;
+
+- (nullable NSArray *)arrayValueForKey:(id)key;
+
 + (NSDictionary *)dictionaryWithData:(NSData *)data;
 
 @end
