@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
 	spec.name                 = 'CoreSDK'
-	spec.version              = '1.4.1'
+	spec.version              = '1.5.0'
 	spec.homepage             = 'https://help.emarsys.com/hc/en-us/articles/115002410625'
 	spec.license              = 'Mozilla Public License 2.0'
 	spec.author               = { 'Emarsys Technologies' => 'mobile-team@emarsys.com' }
