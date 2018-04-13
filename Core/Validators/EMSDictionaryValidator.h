@@ -11,7 +11,7 @@
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 
-- (void)keyExist:(NSString *)string;
+- (void)keyExists:(id)key withType:(Class)type;
 
 @end
 

@@ -29,9 +29,11 @@ SPEC_BEGIN(EMSDictionaryValidatorTests)
         describe(@"validate", ^{
 
             __block NSDictionary *emptyDictionary;
+            __block NSDictionary *dictionary;
 
             beforeEach(^{
                 emptyDictionary = @{};
+                dictionary = @{@"someKey": @"someValue"};
             });
 
             it(@"should return true if no validation rules are set", ^{
@@ -41,30 +43,45 @@ SPEC_BEGIN(EMSDictionaryValidatorTests)
                 [[theValue(validationPassed) should] beTrue];
             });
 
-            context(@"keyExist", ^{
+            context(@"keyExists:withType:", ^{
                 it(@"should fail validation when there is no such key in the dictionary", ^{
                     BOOL validationPassed = [emptyDictionary validate:^(EMSDictionaryValidator *validate) {
-                        [validate keyExist:@"someKey"];
+                        [validate keyExists:@"someKey" withType:[NSString class]];
                     }];
 
                     [[theValue(validationPassed) should] beFalse];
                 });
 
-                it(@"should pass validation when called with nil parameter", ^{
+                it(@"should pass validation when called with nil key parameter", ^{
                     BOOL validationPassed = [emptyDictionary validate:^(EMSDictionaryValidator *validate) {
-                        [validate keyExist:nil];
+                        [validate keyExists:nil withType:[NSString class]];
+                    }];
+
+                    [[theValue(validationPassed) should] beTrue];
+                });
+
+                it(@"should pass validation when called with nil type parameter", ^{
+                    BOOL validationPassed = [dictionary validate:^(EMSDictionaryValidator *validate) {
+                        [validate keyExists:@"someKey" withType:nil];
                     }];
 
                     [[theValue(validationPassed) should] beTrue];
                 });
 
                 it(@"should pass validation when there is such key in the dictionary", ^{
-                    NSDictionary *dictionary = @{@"someKey": @"someValue"};
                     BOOL validationPassed = [dictionary validate:^(EMSDictionaryValidator *validate) {
-                        [validate keyExist:@"someKey"];
+                        [validate keyExists:@"someKey" withType:[NSString class]];
                     }];
 
                     [[theValue(validationPassed) should] beTrue];
+                });
+
+                it(@"should pass validation when there is such key in the dictionary with different type", ^{
+                    BOOL validationPassed = [dictionary validate:^(EMSDictionaryValidator *validate) {
+                        [validate keyExists:@"someKey" withType:[NSArray class]];
+                    }];
+
+                    [[theValue(validationPassed) should] beFalse];
                 });
             });
 

@@ -21,9 +21,15 @@
     return self;
 }
 
-- (void)keyExist:(NSString *)string {
-    if (string) {
-        self.passedValidation = self.dictionary[string] != nil;
+- (void)keyExists:(id)key withType:(Class)type {
+    if (key) {
+        id value = self.dictionary[key];
+        BOOL containsKey = value != nil;
+        BOOL typeMatches = YES;
+        if(type) {
+            typeMatches = [value isKindOfClass:type];
+        }
+        self.passedValidation = containsKey && typeMatches;
     }
 }
 
