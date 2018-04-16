@@ -35,7 +35,7 @@
                 [_failureReasons addObject:[NSString stringWithFormat:@"Type mismatch for key '%@', expected type: %@, but was: %@.",
                                                                       key,
                                                                       NSStringFromClass(type),
-                                                                      NSStringFromClass([NSString class])]];
+                                                                      NSStringFromClass([value class])]];
             }
         } else {
             if (type) {

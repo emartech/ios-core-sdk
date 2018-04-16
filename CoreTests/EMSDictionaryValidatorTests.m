@@ -96,14 +96,26 @@ SPEC_BEGIN(EMSDictionaryValidatorTests)
 
                     [[theValue([failureReasons count]) should] equal:@1];
                     NSString *arrayTypeName = NSStringFromClass([NSArray class]);
-                    NSString *stringTypeName = NSStringFromClass([NSString class]);
+                    NSString *valueTypeName = NSStringFromClass([dictionary[@"someKey"] class]);
+                    NSString *error = [NSString stringWithFormat:@"Type mismatch for key 'someKey', expected type: %@, but was: %@.", arrayTypeName, valueTypeName];
+                    [[[failureReasons firstObject] should] equal:error];
+                });
+
+                it(@"should fail validation with failure reason when there is such key in the dictionary with other different type", ^{
+                    NSArray *failureReasons = [@{@"someKey" : @{}} validate:^(EMSDictionaryValidator *validate) {
+                        [validate keyExists:@"someKey" withType:[NSArray class]];
+                    }];
+
+                    [[theValue([failureReasons count]) should] equal:@1];
+                    NSString *arrayTypeName = NSStringFromClass([NSArray class]);
+                    NSString *stringTypeName = NSStringFromClass([@{} class]);
                     NSString *error = [NSString stringWithFormat:@"Type mismatch for key 'someKey', expected type: %@, but was: %@.", arrayTypeName, stringTypeName];
                     [[[failureReasons firstObject] should] equal:error];
                 });
 
                 it(@"should fail validation with multiple failure reasons", ^{
                     NSString *arrayTypeName = NSStringFromClass([NSArray class]);
-                    NSString *stringTypeName = NSStringFromClass([NSString class]);
+                    NSString *valueTypeName = NSStringFromClass([dictionary[@"someKey"] class]);
                     NSArray *failureReasons = [dictionary validate:^(EMSDictionaryValidator *validate) {
                         [validate keyExists:@"missingKey" withType:nil];
                         [validate keyExists:@"missingKey2" withType:[NSArray class]];
@@ -113,7 +125,7 @@ SPEC_BEGIN(EMSDictionaryValidatorTests)
                     [[theValue([failureReasons count]) should] equal:@3];
                     [[failureReasons[0] should] equal:@"Missing 'missingKey' key."];
                     [[failureReasons[1] should] equal:[NSString stringWithFormat:@"Missing 'missingKey2' key with type: %@.", arrayTypeName]];
-                    [[failureReasons[2] should] equal:[NSString stringWithFormat:@"Type mismatch for key 'someKey', expected type: %@, but was: %@.", arrayTypeName, stringTypeName]];
+                    [[failureReasons[2] should] equal:[NSString stringWithFormat:@"Type mismatch for key 'someKey', expected type: %@, but was: %@.", arrayTypeName, valueTypeName]];
                 });
 
             });
