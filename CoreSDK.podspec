@@ -28,6 +28,7 @@ Pod::Spec.new do |spec|
                 'Core/Categories/NSError+EMSCore.h',
                 'Core/Categories/NSDate+EMSCore.h',
                 'Core/Categories/NSDictionary+EMSCore.h',
+                'Core/Validators/EMSDictionaryValidator.h',
                 'Core/EMSAuthentication.h',
                 'Core/EMSDeviceInfo.h',
                 'Core/EMSCoreCompletion.h',

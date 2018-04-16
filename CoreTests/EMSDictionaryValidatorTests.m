@@ -37,52 +37,85 @@ SPEC_BEGIN(EMSDictionaryValidatorTests)
             });
 
             it(@"should return true if no validation rules are set", ^{
-                BOOL validationPassed = [emptyDictionary validate:^(EMSDictionaryValidator *validate) {
+                NSArray *failureReasons = [emptyDictionary validate:^(EMSDictionaryValidator *validate) {
                 }];
 
-                [[theValue(validationPassed) should] beTrue];
+                [[failureReasons should] beEmpty];
             });
 
             context(@"keyExists:withType:", ^{
-                it(@"should fail validation when there is no such key in the dictionary", ^{
-                    BOOL validationPassed = [emptyDictionary validate:^(EMSDictionaryValidator *validate) {
-                        [validate keyExists:@"someKey" withType:[NSString class]];
-                    }];
-
-                    [[theValue(validationPassed) should] beFalse];
-                });
 
                 it(@"should pass validation when called with nil key parameter", ^{
-                    BOOL validationPassed = [emptyDictionary validate:^(EMSDictionaryValidator *validate) {
+                    NSArray *failureReasons = [emptyDictionary validate:^(EMSDictionaryValidator *validate) {
                         [validate keyExists:nil withType:[NSString class]];
                     }];
 
-                    [[theValue(validationPassed) should] beTrue];
+                    [[failureReasons should] beEmpty];
                 });
 
-                it(@"should pass validation when called with nil type parameter", ^{
-                    BOOL validationPassed = [dictionary validate:^(EMSDictionaryValidator *validate) {
+                it(@"should pass validation when there is such key with nil type parameter", ^{
+                    NSArray *failureReasons = [dictionary validate:^(EMSDictionaryValidator *validate) {
                         [validate keyExists:@"someKey" withType:nil];
                     }];
 
-                    [[theValue(validationPassed) should] beTrue];
+                    [[failureReasons should] beEmpty];
                 });
 
-                it(@"should pass validation when there is such key in the dictionary", ^{
-                    BOOL validationPassed = [dictionary validate:^(EMSDictionaryValidator *validate) {
+                it(@"should pass validation when there is such key in the dictionary with the correct type.", ^{
+                    NSArray *failureReasons = [dictionary validate:^(EMSDictionaryValidator *validate) {
                         [validate keyExists:@"someKey" withType:[NSString class]];
                     }];
 
-                    [[theValue(validationPassed) should] beTrue];
+                    [[failureReasons should] beEmpty];
                 });
 
-                it(@"should pass validation when there is such key in the dictionary with different type", ^{
-                    BOOL validationPassed = [dictionary validate:^(EMSDictionaryValidator *validate) {
+                it(@"should fail validation with failure reason when there is no such key in the dictionary and type is not specified", ^{
+                    NSArray *failureReasons = [emptyDictionary validate:^(EMSDictionaryValidator *validate) {
+                        [validate keyExists:@"missingKey" withType:nil];
+                    }];
+
+                    [[theValue([failureReasons count]) should] equal:@1];
+                    [[[failureReasons firstObject] should] equal:@"Missing 'missingKey' key."];
+                });
+
+                it(@"should fail validation with failure reason when there is no such key in the dictionary with the specified type", ^{
+                    NSArray *failureReasons = [emptyDictionary validate:^(EMSDictionaryValidator *validate) {
+                        [validate keyExists:@"missingKey" withType:[NSArray class]];
+                    }];
+
+                    [[theValue([failureReasons count]) should] equal:@1];
+                    NSString *arrayTypeName = NSStringFromClass([NSArray class]);
+                    NSString *error = [NSString stringWithFormat:@"Missing 'missingKey' key with type: %@.", arrayTypeName];
+                    [[[failureReasons firstObject] should] equal:error];
+                });
+
+                it(@"should fail validation with failure reason when there is such key in the dictionary with different type", ^{
+                    NSArray *failureReasons = [dictionary validate:^(EMSDictionaryValidator *validate) {
                         [validate keyExists:@"someKey" withType:[NSArray class]];
                     }];
 
-                    [[theValue(validationPassed) should] beFalse];
+                    [[theValue([failureReasons count]) should] equal:@1];
+                    NSString *arrayTypeName = NSStringFromClass([NSArray class]);
+                    NSString *stringTypeName = NSStringFromClass([NSString class]);
+                    NSString *error = [NSString stringWithFormat:@"Type mismatch for key 'someKey', expected type: %@, but was: %@.", arrayTypeName, stringTypeName];
+                    [[[failureReasons firstObject] should] equal:error];
                 });
+
+                it(@"should fail validation with multiple failure reasons", ^{
+                    NSString *arrayTypeName = NSStringFromClass([NSArray class]);
+                    NSString *stringTypeName = NSStringFromClass([NSString class]);
+                    NSArray *failureReasons = [dictionary validate:^(EMSDictionaryValidator *validate) {
+                        [validate keyExists:@"missingKey" withType:nil];
+                        [validate keyExists:@"missingKey2" withType:[NSArray class]];
+                        [validate keyExists:@"someKey" withType:[NSArray class]];
+                    }];
+
+                    [[theValue([failureReasons count]) should] equal:@3];
+                    [[failureReasons[0] should] equal:@"Missing 'missingKey' key."];
+                    [[failureReasons[1] should] equal:[NSString stringWithFormat:@"Missing 'missingKey2' key with type: %@.", arrayTypeName]];
+                    [[failureReasons[2] should] equal:[NSString stringWithFormat:@"Type mismatch for key 'someKey', expected type: %@, but was: %@.", arrayTypeName, stringTypeName]];
+                });
+
             });
 
         });

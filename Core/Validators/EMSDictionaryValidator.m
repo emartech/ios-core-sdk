@@ -7,7 +7,7 @@
 
 @interface EMSDictionaryValidator ()
 @property(nonatomic, strong) NSDictionary *dictionary;
-@property(nonatomic, assign) BOOL passedValidation;
+@property(nonatomic, strong) NSMutableArray *failureReasons;
 @end
 
 @implementation EMSDictionaryValidator
@@ -16,7 +16,7 @@
     self = [super init];
     if (self) {
         _dictionary = dictionary;
-        _passedValidation = YES;
+        _failureReasons = [NSMutableArray new];
     }
     return self;
 }
@@ -26,10 +26,24 @@
         id value = self.dictionary[key];
         BOOL containsKey = value != nil;
         BOOL typeMatches = YES;
-        if(type) {
+        if (type) {
             typeMatches = [value isKindOfClass:type];
         }
-        self.passedValidation = containsKey && typeMatches;
+
+        if (containsKey) {
+            if (!typeMatches) {
+                [_failureReasons addObject:[NSString stringWithFormat:@"Type mismatch for key '%@', expected type: %@, but was: %@.",
+                                                                      key,
+                                                                      NSStringFromClass(type),
+                                                                      NSStringFromClass([NSString class])]];
+            }
+        } else {
+            if (type) {
+                [_failureReasons addObject:[NSString stringWithFormat:@"Missing '%@' key with type: %@.", key, NSStringFromClass(type)]];
+            } else {
+                [_failureReasons addObject:[NSString stringWithFormat:@"Missing '%@' key.", key]];
+            }
+        }
     }
 }
 
@@ -38,10 +52,10 @@
 
 @implementation NSDictionary (Validator)
 
-- (BOOL)validate:(ValidatorBlock)validator {
+- (NSArray *)validate:(ValidatorBlock)validator {
     EMSDictionaryValidator *dictionaryValidator = [[EMSDictionaryValidator alloc] initWithDictionary:self];
     validator(dictionaryValidator);
-    return [dictionaryValidator passedValidation];
+    return [dictionaryValidator failureReasons];
 }
 
 

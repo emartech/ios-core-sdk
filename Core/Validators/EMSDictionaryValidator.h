@@ -7,11 +7,10 @@
 @interface EMSDictionaryValidator : NSObject
 
 @property(nonatomic, readonly) NSDictionary *dictionary;
-@property(nonatomic, readonly) BOOL passedValidation;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
-
 - (void)keyExists:(id)key withType:(Class)type;
+- (NSArray *)failureReasons;
 
 @end
 
@@ -20,6 +19,6 @@ typedef void (^ValidatorBlock)(EMSDictionaryValidator *validate);
 
 @interface NSDictionary (Validator)
 
-- (BOOL)validate:(ValidatorBlock)validator;
+- (NSArray *)validate:(ValidatorBlock)validator;
 
 @end
