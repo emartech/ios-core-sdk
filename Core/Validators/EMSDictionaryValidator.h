@@ -9,7 +9,8 @@
 @property(nonatomic, readonly) NSDictionary *dictionary;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
-- (void)keyExists:(id)key withType:(Class)type;
+
+- (void)valueExistsForKey:(id)key withType:(Class)type;
 - (NSArray *)failureReasons;
 
 @end

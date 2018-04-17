@@ -21,7 +21,7 @@
     return self;
 }
 
-- (void)keyExists:(id)key withType:(Class)type {
+- (void)valueExistsForKey:(id)key withType:(Class)type {
     if (key) {
         id value = self.dictionary[key];
         BOOL containsKey = value != nil;
