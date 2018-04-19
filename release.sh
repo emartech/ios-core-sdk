@@ -23,6 +23,7 @@ function release {
 
   TEMPLATE="`cat CoreSDK.podspec.template`"
   PODSPEC="${TEMPLATE/<VERSION_NUMBER>/$VERSION_NUMBER}"
+  PODSPEC="${PODSPEC/<COMMIT_REF>/:tag => spec.version}"
   printf "$PODSPEC" > CoreSDK.podspec
 
   git add CoreSDK.podspec
