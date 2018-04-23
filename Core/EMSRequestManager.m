@@ -6,6 +6,8 @@
 #import "EMSResponseModel.h"
 #import "EMSWorkerProtocol.h"
 #import "EMSDefaultWorker.h"
+#import "EMSLogger.h"
+#import "EMSCoreTopic.h"
 
 typedef void (^RunnerBlock)(void);
 
@@ -48,6 +50,10 @@ typedef void (^RunnerBlock)(void);
 
 - (void)submit:(EMSRequestModel *)model {
     NSParameterAssert(model);
+    [EMSLogger logWithTopic:EMSCoreTopic.networkingTopic
+                    message:@"Argument: %@"
+                  arguments:model];
+
     __weak typeof(self) weakSelf = self;
     [self runInCoreQueueWithBlock:^{
         EMSRequestModel *requestModel = model;
@@ -72,6 +78,14 @@ typedef void (^RunnerBlock)(void);
         [weakSelf.worker run];
     }];
 }
+
+- (void)setAdditionalHeaders:(NSDictionary<NSString *, NSString *> *)additionalHeaders {
+    [EMSLogger logWithTopic:EMSCoreTopic.networkingTopic
+                    message:@"Argument: %@"
+                  arguments:additionalHeaders];
+    _additionalHeaders = additionalHeaders;
+}
+
 
 #pragma mark - Private methods
 
