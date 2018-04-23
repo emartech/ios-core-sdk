@@ -7,6 +7,8 @@
 #import "NSError+EMSCore.h"
 #import "EMSRequestModelSelectFirstSpecification.h"
 #import "EMSRequestModelDeleteByIdsSpecification.h"
+#import "EMSLogger.h"
+#import "EMSCoreTopic.h"
 
 @interface EMSDefaultWorker ()
 
@@ -59,9 +61,16 @@
 #pragma mark - WorkerProtocol
 
 - (void)run {
+    [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
+                    message:@"Entered run"];
     if (![self isLocked] && [self.connectionWatchdog isConnected] && ![self.repository isEmpty]) {
+        [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
+                        message:@"Connection is OK and repository is not empty"];
         [self lock];
         EMSRequestModel *model = [self nextNonExpiredModel];
+        [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
+                        message:@"First non expired model: %@"
+                      arguments:model];
         __weak typeof(self) weakSelf = self;
         if (model) {
             [self.client executeTaskWithOfflineCallbackStrategyWithRequestModel:model
@@ -83,14 +92,24 @@
 #pragma mark - LockableProtocol
 
 - (void)lock {
+    [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
+                    message:@"Lock status change from: %@, to: %@"
+                  arguments:_locked ? @"Locked" : @"Not locked", "Locked"];
     _locked = YES;
 }
 
 - (void)unlock {
+    [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
+                    message:@"Lock status change from: %@, to: %@"
+                  arguments:_locked ? @"Locked" : @"Not locked", "Not locked"];
+
     _locked = NO;
 }
 
 - (BOOL)isLocked {
+    [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
+                    message:@"Current locked status: %@"
+                  arguments:_locked ? @"Locked" : @"Not locked"];
     return _locked;
 }
 
@@ -116,7 +135,13 @@
 }
 
 - (BOOL)isExpired:(EMSRequestModel *)model {
-    return [[NSDate date] timeIntervalSince1970] - [[model timestamp] timeIntervalSince1970] > [model ttl];
+    BOOL expired = [[NSDate date] timeIntervalSince1970] - [[model timestamp] timeIntervalSince1970] > [model ttl];
+    if (expired) {
+        [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
+                        message:@"Model expired: %@"
+                      arguments:model];
+    }
+    return expired;
 }
 
 @end

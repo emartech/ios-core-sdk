@@ -4,16 +4,24 @@
 
 #import "EMSSqliteQueueSchemaHandler.h"
 #import "EMSRequestContract.h"
-#import "EMSRequestModelBuilder.h"
+#import "EMSLogger.h"
+#import "EMSCoreTopic.h"
 
 @implementation EMSSqliteQueueSchemaHandler
 
 - (void)onCreateWithDbHelper:(EMSSQLiteHelper *)dbHelper {
+    [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
+                    message:@"Creating new database"];
     [dbHelper executeCommand:SQL_CREATE_TABLE];
 }
 
-- (void)onUpgradeWithDbHelper:(EMSSQLiteHelper *)dbHelper oldVersion:(int)oldversion newVersion:(int)newVersion {
-    switch (oldversion) {
+- (void)onUpgradeWithDbHelper:(EMSSQLiteHelper *)dbHelper
+                   oldVersion:(int)oldVersion
+                   newVersion:(int)newVersion {
+    [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
+                    message:@"Upgrading existing database from: %@ to: %@"
+                  arguments:@(oldVersion), @(newVersion)];
+    switch (oldVersion) {
         case 1:
             [dbHelper executeCommand:SCHEMA_UPGRADE_FROM_1_TO_2];
             [dbHelper executeCommand:SET_DEFAULT_VALUES_FROM_1_TO_2 withTimeIntervalValue:DEFAULT_REQUESTMODEL_EXPIRY];
