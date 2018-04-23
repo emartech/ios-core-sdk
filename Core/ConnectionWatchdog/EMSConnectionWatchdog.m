@@ -3,6 +3,7 @@
 //
 
 #import "EMSConnectionWatchdog.h"
+#import "EMSCoreTopic.h"
 
 @interface EMSConnectionWatchdog ()
 
@@ -32,7 +33,11 @@
 
 - (BOOL)isConnected {
     int state = [self connectionState];
-    return state == ReachableViaWiFi || state == ReachableViaWWAN;
+    BOOL result = state == ReachableViaWiFi || state == ReachableViaWWAN;
+    [EMSLogger logWithTopic:EMSCoreTopic.connectivityTopic
+                    message:@"Connected to network: %@"
+                  arguments:result ? @"Connected" : @"Not connected"];
+    return result;
 }
 
 - (void)setConnectionChangeListener:(id <EMSConnectionChangeListener>)connectionChangeListener {
@@ -53,9 +58,35 @@
 
 - (void)startObserving {
     __weak typeof(self) weakSelf = self;
-    self.notificationToken = [[NSNotificationCenter defaultCenter] addObserverForName:kEMSReachabilityChangedNotification object:self.reachability queue:[NSOperationQueue currentQueue] usingBlock:^(NSNotification *note) {
-        [weakSelf.connectionChangeListener connectionChangedToNetworkStatus:[weakSelf connectionState] connectionStatus:[weakSelf isConnected]];
-    }];
+    self.notificationToken = [[NSNotificationCenter defaultCenter] addObserverForName:kEMSReachabilityChangedNotification
+                                                                               object:self.reachability
+                                                                                queue:[NSOperationQueue currentQueue]
+                                                                           usingBlock:^(NSNotification *note) {
+                                                                               NSString *connected = [weakSelf isConnected] ? @"Connected" : @"Not connected";
+                                                                               NSString *networkStatus;
+                                                                               switch ([weakSelf connectionState]) {
+                                                                                   case NotReachable: {
+                                                                                       networkStatus = @"Not reachable";
+                                                                                   }
+                                                                                       break;
+                                                                                   case ReachableViaWiFi: {
+                                                                                       networkStatus = @"WiFi";
+                                                                                   }
+                                                                                       break;
+                                                                                   case ReachableViaWWAN: {
+                                                                                       networkStatus = @"Mobile network";
+                                                                                   }
+                                                                                       break;
+                                                                                   default: {
+                                                                                       networkStatus = @"Not reachable";
+                                                                                   }
+                                                                               }
+                                                                               [EMSLogger logWithTopic:EMSCoreTopic.connectivityTopic
+                                                                                               message:@"Network status: %@, Connected to network: %@"
+                                                                                             arguments:networkStatus, connected];
+                                                                               [weakSelf.connectionChangeListener connectionChangedToNetworkStatus:[weakSelf connectionState]
+                                                                                                                                  connectionStatus:[weakSelf isConnected]];
+                                                                           }];
     [self.reachability startNotifier];
 }
 
