@@ -33,10 +33,6 @@
     return [[EMSCoreTopic alloc] initWithTag:@"ems_offline"];
 }
 
-+ (id <EMSLogTopicProtocol>)concurrencyTopic {
-    return [[EMSCoreTopic alloc] initWithTag:@"ems_concurrency"];
-}
-
 + (id <EMSLogTopicProtocol>)utilTopic {
     return [[EMSCoreTopic alloc] initWithTag:@"ems_util"];
 }

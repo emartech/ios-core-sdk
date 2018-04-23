@@ -10,7 +10,6 @@
 @property(nonatomic, readonly, class) id <EMSLogTopicProtocol> networkingTopic;
 @property(nonatomic, readonly, class) id <EMSLogTopicProtocol> connectivityTopic;
 @property(nonatomic, readonly, class) id <EMSLogTopicProtocol> offlineTopic;
-@property(nonatomic, readonly, class) id <EMSLogTopicProtocol> concurrencyTopic;
 @property(nonatomic, readonly, class) id <EMSLogTopicProtocol> utilTopic;
 
 @end
