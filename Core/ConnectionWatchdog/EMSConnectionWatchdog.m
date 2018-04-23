@@ -35,8 +35,7 @@
     int state = [self connectionState];
     BOOL result = state == ReachableViaWiFi || state == ReachableViaWWAN;
     [EMSLogger logWithTopic:EMSCoreTopic.connectivityTopic
-                    message:@"Connected to network: %@"
-                  arguments:result ? @"Connected" : @"Not connected"];
+                    message:[NSString stringWithFormat:@"Connected to network: %@", result ? @"Connected" : @"Not connected"]];
     return result;
 }
 
@@ -82,8 +81,7 @@
                                                                                    }
                                                                                }
                                                                                [EMSLogger logWithTopic:EMSCoreTopic.connectivityTopic
-                                                                                               message:@"Network status: %@, Connected to network: %@"
-                                                                                             arguments:networkStatus, connected];
+                                                                                               message:[NSString stringWithFormat:@"Network status: %@, Connected to network: %@", networkStatus, connected]];
                                                                                [weakSelf.connectionChangeListener connectionChangedToNetworkStatus:[weakSelf connectionState]
                                                                                                                                   connectionStatus:[weakSelf isConnected]];
                                                                            }];

@@ -27,22 +27,6 @@
     }
 }
 
-+ (void)logWithTopic:(id <EMSLogTopicProtocol>)topic
-             message:(NSString *)message
-           arguments:(NSObject *)arguments, ... {
-    va_list args;
-    va_start(args, arguments);
-    while ((va_arg(args, NSObject *)));
-    NSString *formattedMessage = [[NSString alloc] initWithFormat:message
-                                                        arguments:args];
-    if ([EMSLoggerSettings isEnabled:topic]) {
-        [EMSLogger log:topic.topicTag
-               message:formattedMessage];
-    }
-    va_end(args);
-}
-
-
 #pragma mark - Private methods
 
 + (void)log:(NSString *)topicTag

@@ -14,8 +14,4 @@
 + (void)logWithTopic:(id <EMSLogTopicProtocol>)topic
              message:(NSString *)message;
 
-+ (void)logWithTopic:(id <EMSLogTopicProtocol>)topic
-             message:(NSString *)message
-           arguments:(NSObject *)arguments, ...;
-
 @end

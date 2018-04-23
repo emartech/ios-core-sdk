@@ -19,8 +19,7 @@
                    oldVersion:(int)oldVersion
                    newVersion:(int)newVersion {
     [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
-                    message:@"Upgrading existing database from: %@ to: %@"
-                  arguments:@(oldVersion), @(newVersion)];
+                    message:[NSString stringWithFormat:@"Upgrading existing database from: %@ to: %@", @(oldVersion), @(newVersion)]];
     switch (oldVersion) {
         case 1:
             [dbHelper executeCommand:SCHEMA_UPGRADE_FROM_1_TO_2];

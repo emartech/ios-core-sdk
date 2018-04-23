@@ -4,27 +4,26 @@
 #import "EMSLoggerSettings.h"
 #import "EMSLogger.h"
 
-@interface EMSLoggerSettings ()
-
-@property(nonatomic, strong, class) NSMutableSet<NSString *> *topics;
-@property(nonatomic, assign, class) BOOL allEnabled;
-
-@end
-
 @implementation EMSLoggerSettings
 
+static NSMutableSet<NSString *> *_topics;
+static BOOL _allEnabled;
+
 + (void)enableLogging:(NSArray<id <EMSLogTopicProtocol>> *)topics {
+    if (!_topics) {
+        _topics = [NSMutableSet new];
+    }
     for (id <EMSLogTopicProtocol> topic in topics) {
-        [EMSLoggerSettings.topics addObject:topic.topicTag];
+        [_topics addObject:topic.topicTag];
     }
 }
 
 + (void)enableLoggingForAllTopics {
-    EMSLoggerSettings.allEnabled = YES;
+    _allEnabled = YES;
 }
 
 + (BOOL)isEnabled:(id <EMSLogTopicProtocol>)topic {
-    return EMSLoggerSettings.allEnabled || [EMSLoggerSettings.topics containsObject:topic.topicTag];
+    return _allEnabled || [_topics containsObject:topic.topicTag];
 }
 
 @end

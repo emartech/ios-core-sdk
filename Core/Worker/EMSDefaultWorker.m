@@ -69,8 +69,7 @@
         [self lock];
         EMSRequestModel *model = [self nextNonExpiredModel];
         [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
-                        message:@"First non expired model: %@"
-                      arguments:model];
+                        message:[NSString stringWithFormat:@"First non expired model: %@", model]];
         __weak typeof(self) weakSelf = self;
         if (model) {
             [self.client executeTaskWithOfflineCallbackStrategyWithRequestModel:model
@@ -93,23 +92,20 @@
 
 - (void)lock {
     [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
-                    message:@"Lock status change from: %@, to: %@"
-                  arguments:_locked ? @"Locked" : @"Not locked", "Locked"];
+                    message:[NSString stringWithFormat:@"Lock status change from: %@, to: Locked", _locked ? @"Locked" : @"Not locked"]];
     _locked = YES;
 }
 
 - (void)unlock {
     [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
-                    message:@"Lock status change from: %@, to: %@"
-                  arguments:_locked ? @"Locked" : @"Not locked", "Not locked"];
+                    message:[NSString stringWithFormat:@"Lock status change from: %@, to: Not locked", _locked ? @"Locked" : @"Not locked"]];
 
     _locked = NO;
 }
 
 - (BOOL)isLocked {
     [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
-                    message:@"Current locked status: %@"
-                  arguments:_locked ? @"Locked" : @"Not locked"];
+                    message:[NSString stringWithFormat:@"Current locked status: %@", _locked ? @"Locked" : @"Not locked"]];
     return _locked;
 }
 
@@ -138,8 +134,7 @@
     BOOL expired = [[NSDate date] timeIntervalSince1970] - [[model timestamp] timeIntervalSince1970] > [model ttl];
     if (expired) {
         [EMSLogger logWithTopic:EMSCoreTopic.offlineTopic
-                        message:@"Model expired: %@"
-                      arguments:model];
+                        message:[NSString stringWithFormat:@"Model expired: %@", model]];
     }
     return expired;
 }

@@ -51,8 +51,7 @@ typedef void (^RunnerBlock)(void);
 - (void)submit:(EMSRequestModel *)model {
     NSParameterAssert(model);
     [EMSLogger logWithTopic:EMSCoreTopic.networkingTopic
-                    message:@"Argument: %@"
-                  arguments:model];
+                    message:[NSString stringWithFormat:@"Argument: %@", model]];
 
     __weak typeof(self) weakSelf = self;
     [self runInCoreQueueWithBlock:^{
@@ -81,8 +80,7 @@ typedef void (^RunnerBlock)(void);
 
 - (void)setAdditionalHeaders:(NSDictionary<NSString *, NSString *> *)additionalHeaders {
     [EMSLogger logWithTopic:EMSCoreTopic.networkingTopic
-                    message:@"Argument: %@"
-                  arguments:additionalHeaders];
+                    message:[NSString stringWithFormat:@"Argument: %@", additionalHeaders]];
     _additionalHeaders = additionalHeaders;
 }
 
