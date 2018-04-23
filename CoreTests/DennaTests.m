@@ -99,6 +99,17 @@ SPEC_BEGIN(DennaTest)
             }];
             shouldEventuallySucceed(model, @"POST", inputHeaders, payload);
         });
+
+        it(@"should respond with the DELETE request's headers/body", ^{
+            EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
+                [builder setUrl:echo];
+                [builder setMethod:HTTPMethodDELETE];
+                [builder setHeaders:inputHeaders];
+            }];
+            shouldEventuallySucceed(model, @"DELETE", inputHeaders, nil);
+        });
+
+
     });
 
 SPEC_END

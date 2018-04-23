@@ -24,6 +24,9 @@
         case HTTPMethodGET:
             _requestMethod = @"GET";
             break;
+        case HTTPMethodDELETE:
+            _requestMethod = @"DELETE";
+            break;
     }
     return self;
 }

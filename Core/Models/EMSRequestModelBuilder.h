@@ -6,7 +6,8 @@
 
 typedef enum {
     HTTPMethodPOST,
-    HTTPMethodGET
+    HTTPMethodGET,
+    HTTPMethodDELETE
 } HTTPMethod;
 
 #define DEFAULT_REQUESTMODEL_EXPIRY FLT_MAX
