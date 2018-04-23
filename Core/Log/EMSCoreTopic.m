@@ -33,9 +33,4 @@
     return [[EMSCoreTopic alloc] initWithTag:@"ems_offline"];
 }
 
-+ (id <EMSLogTopicProtocol>)utilTopic {
-    return [[EMSCoreTopic alloc] initWithTag:@"ems_util"];
-}
-
-
 @end
