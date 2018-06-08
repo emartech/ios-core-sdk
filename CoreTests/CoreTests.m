@@ -30,7 +30,6 @@ SPEC_BEGIN(CoreTest)
         });
 
         afterEach(^{
-            [helper close];
             [[NSFileManager defaultManager] removeItemAtPath:TEST_DB_PATH
                                                        error:nil];
         });
