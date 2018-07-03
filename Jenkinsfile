@@ -43,8 +43,8 @@ node('master') {
       stage('Git Clone') {
         parallel iPhone_5S: {
             clone env.IPHONE_5S
-        // }, iPhone_6S: {
-        //     clone env.IPHONE_6S
+         }, iPhone_6S: {
+             clone env.IPHONE_6S
         }, iPad_Pro: {
             clone env.IPAD_PRO
         }, iOS_9_3_Simulator: {
@@ -65,8 +65,8 @@ node('master') {
     stage('Pod lint'){
             parallel iPhone_5S: {
                 podiLinti env.IPHONE_5S
-            // }, iPhone_6S: {
-            //     podiLinti env.IPHONE_6S
+             }, iPhone_6S: {
+                 podiLinti env.IPHONE_6S
             }, iPad_Pro: {
                 podiLinti env.IPAD_PRO
             }, iOS_9_3_Simulator: {
@@ -76,9 +76,9 @@ node('master') {
       stage('Build and Test'){
             parallel iPhone_5S: {
                 buildAndTest 'iOS', env.IPHONE_5S
-            // }, iPhone_6S: {
-            //     // echo "Skipped, please trust mac mini when you can open the rack."
-            //     buildAndTest 'iOS', env.IPHONE_6S
+             }, iPhone_6S: {
+                 // echo "Skipped, please trust mac mini when you can open the rack."
+                 buildAndTest 'iOS', env.IPHONE_6S
             }, iPad_Pro: {
                 buildAndTest 'iOS', env.IPAD_PRO
             }, iOS_9_3_Simulator: {
