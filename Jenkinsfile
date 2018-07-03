@@ -54,8 +54,8 @@ node('master') {
       stage('Pod install') {
         parallel iPhone_5S: {
             podi env.IPHONE_5S
-        // }, iPhone_6S: {
-        //     podi env.IPHONE_6S
+         }, iPhone_6S: {
+             podi env.IPHONE_6S
         }, iPad_Pro: {
             podi env.IPAD_PRO
         }, iOS_9_3_Simulator: {
