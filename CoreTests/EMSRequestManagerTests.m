@@ -13,7 +13,7 @@
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
-SPEC_BEGIN(CoreTest)
+SPEC_BEGIN(EMSRequestManagerTests)
 
     __block EMSSQLiteHelper *helper;
     __block EMSRequestModelRepository *repository;
