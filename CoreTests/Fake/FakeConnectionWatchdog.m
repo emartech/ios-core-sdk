@@ -12,8 +12,9 @@
 
 @implementation FakeConnectionWatchdog
 
-- (instancetype)initWithConnectionResponses:(NSArray<NSNumber *> *)connectionResponses {
-    if (self = [super init]) {
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue
+                   connectionResponses:(NSArray *)connectionResponses {
+    if (self = [super initWithOperationQueue:operationQueue]) {
         _isConnectedCallCount = @0;
         _connectionResponses = [connectionResponses mutableCopy];
     }

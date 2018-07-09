@@ -32,6 +32,7 @@
 		32C6F6701394A28C71893298 /* EMSRequestManager.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32C6F9CD5D62584032E40BFB /* EMSRequestManager.h */; };
 		32C6F6952B1EA10C8058A38E /* EMSRequestModelDeleteByIdsSpecification.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F0ECC2743BC080E19DC9 /* EMSRequestModelDeleteByIdsSpecification.m */; };
 		32C6F6BE32204D4B4C8F616C /* NSURLRequest+CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F820FF84A7ADD346F5FD /* NSURLRequest+CoreTests.m */; };
+		32C6F6F6C1E5A0A78DF9574E /* FakeConnectionChangeListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F5FAC61626C69D231243 /* FakeConnectionChangeListener.m */; };
 		32C6F790E54F02AF55BDFC8D /* EMSRequestModelCountSpecification.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F32D3585F005ED0F93E5 /* EMSRequestModelCountSpecification.m */; };
 		32C6F798157E033DA7DA0A1B /* ResponseModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F7A45D1CA8547D0258CD /* ResponseModelTests.m */; };
 		32C6F7A575496C6A8D240074 /* EMSLoggerSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 32C6F80A003EC5E78FDD4F8D /* EMSLoggerSettings.m */; };
@@ -152,6 +153,7 @@
 		32C6F4C29054CE7757EA056D /* CoreSDK.podspec */ = {isa = PBXFileReference; lastKnownFileType = file.podspec; path = CoreSDK.podspec; sourceTree = "<group>"; };
 		32C6F4D6E9DEE8A40F84EA6B /* EMSLoggerSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSLoggerSettings.h; sourceTree = "<group>"; };
 		32C6F559D6E18040B4CCECCD /* EMSLogRepository.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSLogRepository.h; sourceTree = "<group>"; };
+		32C6F5FAC61626C69D231243 /* FakeConnectionChangeListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FakeConnectionChangeListener.m; sourceTree = "<group>"; };
 		32C6F6634173E40470124FF7 /* NSDictionary+EMSCoreTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+EMSCoreTests.m"; sourceTree = "<group>"; };
 		32C6F66809C81A37538F5153 /* EMSCoreTopic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMSCoreTopic.m; sourceTree = "<group>"; };
 		32C6F6CE325C26423039F0F6 /* NSError+EMSCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+EMSCore.h"; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 		32C6FD45657DA2A21B4748E1 /* OfflineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OfflineTests.m; sourceTree = "<group>"; };
 		32C6FD4EE114E5EA75DB8697 /* EMSRequestContract.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestContract.h; sourceTree = "<group>"; };
 		32C6FDE7CD35ECBDE6839F74 /* EMSRequestModelMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSRequestModelMapper.h; sourceTree = "<group>"; };
+		32C6FDE89D4F291B1D54F9BE /* FakeConnectionChangeListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FakeConnectionChangeListener.h; sourceTree = "<group>"; };
 		32C6FE234D67C69E4A193273 /* EMSModelMapperProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSModelMapperProtocol.h; sourceTree = "<group>"; };
 		32C6FE535FF2475E3DB9B061 /* EMSConnectionWatchdog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSConnectionWatchdog.h; sourceTree = "<group>"; };
 		32C6FE65CA8B0637C616ADB3 /* EMSSqliteQueueSchemaHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMSSqliteQueueSchemaHandler.h; sourceTree = "<group>"; };
@@ -481,6 +484,8 @@
 				32C6FA302A4E2A55C7C81EFB /* FakeLogRepository.h */,
 				32C6F3311E413FC18A07DDE4 /* FakeTimeStampProvider.m */,
 				32C6F1EF360A7481DFA02BD2 /* FakeTimeStampProvider.h */,
+				32C6F5FAC61626C69D231243 /* FakeConnectionChangeListener.m */,
+				32C6FDE89D4F291B1D54F9BE /* FakeConnectionChangeListener.h */,
 			);
 			path = Fake;
 			sourceTree = "<group>";
@@ -746,6 +751,7 @@
 				32C6F3231F60A66431CFF428 /* NSDictionary+EMSCoreTests.m in Sources */,
 				32C6F9867842B991409D56D1 /* NSDate+EMSCoreTests.m in Sources */,
 				37460E96991AE03A5E2912E3 /* EMSDictionaryValidatorTests.m in Sources */,
+				32C6F6F6C1E5A0A78DF9574E /* FakeConnectionChangeListener.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,9 +8,10 @@
 
 @interface EMSDefaultWorker (Private)
 
-- (instancetype)initWithRequestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
-                       connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
-                               restClient:(EMSRESTClient *)client;
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue
+                     requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
+                    connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
+                            restClient:(EMSRESTClient *)client;
 
 - (void)setConnectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog;
 

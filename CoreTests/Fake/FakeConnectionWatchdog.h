@@ -9,6 +9,7 @@
 
 @property(nonatomic, strong) NSNumber *isConnectedCallCount;
 
-- (instancetype)initWithConnectionResponses:(NSArray *)connectionResponses;
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue
+                   connectionResponses:(NSArray *)connectionResponses;
 
 @end

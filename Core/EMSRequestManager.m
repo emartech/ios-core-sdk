@@ -14,14 +14,13 @@ typedef void (^RunnerBlock)(void);
 @interface EMSRequestManager () <NSURLSessionDelegate>
 
 @property(nonatomic, strong) id <EMSWorkerProtocol> worker;
+@property(nonatomic, strong) NSOperationQueue *coreQueue;
 
 - (void)runInCoreQueueWithBlock:(RunnerBlock)runnerBlock;
 
 @end
 
-@implementation EMSRequestManager {
-    NSOperationQueue *_coreQueue;
-}
+@implementation EMSRequestManager
 
 #pragma mark - Init
 
@@ -29,22 +28,40 @@ typedef void (^RunnerBlock)(void);
                              errorBlock:(nullable CoreErrorBlock)errorBlock
                       requestRepository:(id <EMSRequestModelRepositoryProtocol>)requestRepository
                           logRepository:(id <EMSLogRepositoryProtocol>)logRepository {
-    return [[EMSRequestManager alloc] initWithWorker:[[EMSDefaultWorker alloc] initWithSuccessBlock:successBlock
-                                                                                         errorBlock:errorBlock
-                                                                                  requestRepository:requestRepository
-                                                                                      logRepository:logRepository]
-                                   requestRepository:requestRepository];
+    return [[EMSRequestManager alloc] initWithSuccessBlock:successBlock
+                                                errorBlock:errorBlock
+                                         requestRepository:requestRepository
+                                             logRepository:logRepository];
 }
 
-- (instancetype)initWithWorker:(id <EMSWorkerProtocol>)worker
-             requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository {
+- (instancetype)initWithSuccessBlock:(nullable CoreSuccessBlock)successBlock
+                          errorBlock:(nullable CoreErrorBlock)errorBlock
+                   requestRepository:(id <EMSRequestModelRepositoryProtocol>)requestRepository
+                       logRepository:(id <EMSLogRepositoryProtocol>)logRepository {
     if (self = [super init]) {
+        _coreQueue = [NSOperationQueue new];
+        _coreQueue.maxConcurrentOperationCount = 1;
+        _coreQueue.qualityOfService = NSQualityOfServiceUtility;
+        _worker = [[EMSDefaultWorker alloc] initWithOperationQueue:_coreQueue
+                                                 requestRepository:requestRepository
+                                                     logRepository:logRepository
+                                                      successBlock:successBlock
+                                                        errorBlock:errorBlock];
+        _repository = requestRepository;
+    }
+    return self;
+}
+
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue
+                                worker:(id <EMSWorkerProtocol>)worker
+                     requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository {
+    if (self = [super init]) {
+        _coreQueue = operationQueue;
         _repository = repository;
         _worker = worker;
     }
     return self;
 }
-
 
 #pragma mark - Public methods
 
@@ -88,13 +105,7 @@ typedef void (^RunnerBlock)(void);
 #pragma mark - Private methods
 
 - (void)runInCoreQueueWithBlock:(RunnerBlock)runnerBlock {
-    if (!_coreQueue) {
-        _coreQueue = [NSOperationQueue new];
-        _coreQueue.maxConcurrentOperationCount = 1;
-        _coreQueue.qualityOfService = NSQualityOfServiceUtility;
-    }
-
-    [_coreQueue addOperationWithBlock:runnerBlock];
+    [self.coreQueue addOperationWithBlock:runnerBlock];
 }
 
 @end

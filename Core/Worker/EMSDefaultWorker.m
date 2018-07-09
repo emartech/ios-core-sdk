@@ -17,6 +17,7 @@
 @property(nonatomic, strong) id <EMSRequestModelRepositoryProtocol> repository;
 @property(nonatomic, strong) EMSRESTClient *client;
 @property(nonatomic, strong) CoreErrorBlock errorBlock;
+@property(nonatomic, strong) NSOperationQueue *coreQueue;
 
 - (EMSRequestModel *)nextNonExpiredModel;
 
@@ -28,28 +29,31 @@
 
 #pragma mark - Init
 
-- (instancetype)initWithSuccessBlock:(CoreSuccessBlock)successBlock
-                          errorBlock:(CoreErrorBlock)errorBlock
-                   requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
-                       logRepository:(id <EMSLogRepositoryProtocol>)logRepository {
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue
+                     requestRepository:(id <EMSRequestModelRepositoryProtocol>)requestRepository
+                         logRepository:(id <EMSLogRepositoryProtocol>)logRepository
+                          successBlock:(CoreSuccessBlock)successBlock
+                            errorBlock:(CoreErrorBlock)errorBlock {
     NSParameterAssert(successBlock);
     NSParameterAssert(errorBlock);
     _errorBlock = errorBlock;
-    return [self initWithRequestRepository:repository
-                        connectionWatchdog:[EMSConnectionWatchdog new]
-                                restClient:[EMSRESTClient clientWithSuccessBlock:successBlock
-                                                                      errorBlock:errorBlock
-                                                                   logRepository:logRepository]];
+    return [self initWithOperationQueue:operationQueue
+                      requestRepository:requestRepository
+                     connectionWatchdog:[[EMSConnectionWatchdog alloc] initWithOperationQueue:operationQueue]
+                             restClient:[EMSRESTClient clientWithSuccessBlock:successBlock
+                                                                   errorBlock:errorBlock
+                                                                logRepository:logRepository]];
 }
 
-- (instancetype)initWithRequestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
-                       connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
-                               restClient:(EMSRESTClient *)client {
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue
+                     requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
+                    connectionWatchdog:(EMSConnectionWatchdog *)connectionWatchdog
+                            restClient:(EMSRESTClient *)client {
     if (self = [super init]) {
         NSParameterAssert(repository);
         NSParameterAssert(connectionWatchdog);
         NSParameterAssert(client);
-
+        _coreQueue = operationQueue;
         _connectionWatchdog = connectionWatchdog;
         [_connectionWatchdog setConnectionChangeListener:self];
         _repository = repository;
@@ -77,7 +81,7 @@
                                                                          [weakSelf unlock];
                                                                          if (shouldContinue) {
                                                                              [weakSelf.repository remove:[[EMSRequestModelDeleteByIdsSpecification alloc] initWithRequestModel:model]];
-                                                                             [[NSOperationQueue currentQueue] addOperationWithBlock:^{
+                                                                             [weakSelf.coreQueue addOperationWithBlock:^{
                                                                                  [weakSelf run];
                                                                              }];
                                                                          }

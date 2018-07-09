@@ -9,19 +9,24 @@
 
 @property(nonatomic, strong) EMSReachability *reachability;
 @property(nonatomic, strong) id notificationToken;
+@property(nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
 
 @implementation EMSConnectionWatchdog
 
-- (instancetype)init {
-    return [self initWithReachability:[EMSReachability reachabilityForInternetConnection]];
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue {
+    return [self initWithReachability:[EMSReachability reachabilityForInternetConnection]
+                       operationQueue:operationQueue];
 }
 
-- (instancetype)initWithReachability:(EMSReachability *)reachability {
-    self = [super init];
-    if (self) {
+- (instancetype)initWithReachability:(EMSReachability *)reachability
+                      operationQueue:(NSOperationQueue *)operationQueue {
+    NSParameterAssert(reachability);
+    NSParameterAssert(operationQueue);
+    if (self = [super init]) {
         _reachability = reachability;
+        _operationQueue = operationQueue;
     }
 
     return self;
@@ -58,12 +63,12 @@
 - (void)startObserving {
     __weak typeof(self) weakSelf = self;
     self.notificationToken = [[NSNotificationCenter defaultCenter] addObserverForName:kEMSReachabilityChangedNotification
-                                                                               object:self.reachability
-                                                                                queue:[NSOperationQueue currentQueue]
+                                                                               object:nil
+                                                                                queue:self.operationQueue
                                                                            usingBlock:^(NSNotification *note) {
-                                                                               NSString *connected = [weakSelf isConnected] ? @"Connected" : @"Not connected";
+                                                                               EMSNetworkStatus connectionStatus = [note.object currentReachabilityStatus];
                                                                                NSString *networkStatus;
-                                                                               switch ([weakSelf connectionState]) {
+                                                                               switch (connectionStatus) {
                                                                                    case NotReachable: {
                                                                                        networkStatus = @"Not reachable";
                                                                                    }
@@ -80,10 +85,14 @@
                                                                                        networkStatus = @"Not reachable";
                                                                                    }
                                                                                }
+                                                                               BOOL connected = connectionStatus == ReachableViaWiFi || connectionStatus == ReachableViaWWAN;
+                                                                               NSString *connectionStatusString = connected ? @"Connected" : @"Not connected";
                                                                                [EMSLogger logWithTopic:EMSCoreTopic.connectivityTopic
-                                                                                               message:[NSString stringWithFormat:@"Network status: %@, Connected to network: %@", networkStatus, connected]];
-                                                                               [weakSelf.connectionChangeListener connectionChangedToNetworkStatus:[weakSelf connectionState]
-                                                                                                                                  connectionStatus:[weakSelf isConnected]];
+                                                                                               message:[NSString stringWithFormat:@"Network status: %@, Connected to network: %@", networkStatus, connectionStatusString]];
+                                                                               [weakSelf.operationQueue addOperationWithBlock:^{
+                                                                                   [weakSelf.connectionChangeListener connectionChangedToNetworkStatus:connectionStatus
+                                                                                                                                      connectionStatus:connected];
+                                                                               }];
                                                                            }];
     [self.reachability startNotifier];
 }

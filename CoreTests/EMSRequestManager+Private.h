@@ -9,7 +9,8 @@
 
 @interface EMSRequestManager (Private)
 
-- (instancetype)initWithWorker:(id <EMSWorkerProtocol>)worker
-             requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository;
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue
+                                worker:(id <EMSWorkerProtocol>)worker
+                     requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository;
 
 @end

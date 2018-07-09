@@ -15,7 +15,12 @@
 
 @property(nonatomic, weak) id <EMSConnectionChangeListener> connectionChangeListener;
 
-- (instancetype)initWithReachability:(EMSReachability *)reachability;
+- (instancetype)init NS_UNAVAILABLE;
+
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue;
+
+- (instancetype)initWithReachability:(EMSReachability *)reachability
+                      operationQueue:(NSOperationQueue *)operationQueue;
 
 - (EMSNetworkStatus)connectionState;
 

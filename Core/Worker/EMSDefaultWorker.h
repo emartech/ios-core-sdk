@@ -13,10 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EMSDefaultWorker : NSObject <EMSWorkerProtocol, EMSConnectionChangeListener>
 
-- (instancetype)initWithSuccessBlock:(CoreSuccessBlock)successBlock
-                          errorBlock:(CoreErrorBlock)errorBlock
-                   requestRepository:(id <EMSRequestModelRepositoryProtocol>)repository
-                       logRepository:(id <EMSLogRepositoryProtocol>)logRepository;
+- (instancetype)initWithOperationQueue:(NSOperationQueue *)operationQueue
+                     requestRepository:(id <EMSRequestModelRepositoryProtocol>)requestRepository
+                         logRepository:(id <EMSLogRepositoryProtocol>)logRepository
+                          successBlock:(CoreSuccessBlock)successBlock
+                            errorBlock:(CoreErrorBlock)errorBlock;
 @end
 
 NS_ASSUME_NONNULL_END
