@@ -3,18 +3,23 @@
 //
 
 #import "EMSRequestModelBuilder.h"
+#import "EMSTimestampProvider.h"
+#import "EMSUUIDProvider.h"
 
 @implementation EMSRequestModelBuilder
 
-- (id)init {
+
+- (instancetype)initWithTimestampProvider:(EMSTimestampProvider *)timestampProvider
+                             uuidProvider:(EMSUUIDProvider *)uuidProvider {
     if (self = [super init]) {
-        _requestId = [[NSUUID UUID] UUIDString];
-        _timestamp = [NSDate date];
+        _requestId = [[uuidProvider provideUUID] UUIDString];
+        _timestamp = [timestampProvider provideTimestamp];
         _requestMethod = @"POST";
         _expiry = DEFAULT_REQUESTMODEL_EXPIRY;
     }
     return self;
 }
+
 
 - (EMSRequestModelBuilder *)setMethod:(HTTPMethod)method {
     switch (method) {

@@ -4,12 +4,16 @@
 
 #import "EMSRequestModel.h"
 #import "EMSRequestModelBuilder.h"
+#import "EMSTimestampProvider.h"
+#import "EMSUUIDProvider.h"
+
 
 @implementation EMSRequestModel
 
 + (nonnull instancetype)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock {
     NSParameterAssert(builderBlock);
-    EMSRequestModelBuilder *builder = [EMSRequestModelBuilder new];
+    EMSRequestModelBuilder *builder = [[EMSRequestModelBuilder alloc] initWithTimestampProvider:[EMSTimestampProvider new]
+                                                                                   uuidProvider:[EMSUUIDProvider new]];
     builderBlock(builder);
     NSParameterAssert(builder.requestUrl);
     return [[self alloc] initWithBuilder:builder];

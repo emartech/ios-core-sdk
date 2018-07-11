@@ -4,6 +4,9 @@
 
 #import <Foundation/Foundation.h>
 
+@class EMSTimestampProvider;
+@class EMSUUIDProvider;
+
 typedef enum {
     HTTPMethodPOST,
     HTTPMethodGET,
@@ -24,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, readonly) NSDictionary<NSString *, id> *payload;
 @property(nonatomic, readonly) NSDictionary<NSString *, NSString *> *headers;
 @property(nonatomic, readonly) NSDictionary<NSString *, NSString *> *extras;
+
+- (instancetype)initWithTimestampProvider:(EMSTimestampProvider *)timestampProvider
+                             uuidProvider:(EMSUUIDProvider *)uuidProvider;
 
 - (EMSRequestModelBuilder *)setMethod:(HTTPMethod)method;
 

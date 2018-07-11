@@ -6,7 +6,7 @@
 #import "EMSRequestModel.h"
 #import "EMSRequestModelBuilder.h"
 
-SPEC_BEGIN(BuilderTest)
+SPEC_BEGIN(EMSRequestModelTests)
 
     describe(@"Builder", ^{
 
