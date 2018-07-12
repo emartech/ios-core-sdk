@@ -6,6 +6,8 @@
 #import "EMSRequestModel.h"
 #import "EMSRequestModelBuilder.h"
 #import "NSURLRequest+EMSCore.h"
+#import "EMSTimestampProvider.h"
+#import "EMSUUIDProvider.h"
 
 SPEC_BEGIN(NSURLRequestCoreTests)
 
@@ -22,7 +24,7 @@ SPEC_BEGIN(NSURLRequestCoreTests)
                 [builder setMethod:HTTPMethodPOST];
                 [builder setHeaders:headers];
                 [builder setPayload:payload];
-            }];
+            }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
             NSURLRequest *request = [NSURLRequest requestWithRequestModel:model
                                                         additionalHeaders:nil];
@@ -50,7 +52,7 @@ SPEC_BEGIN(NSURLRequestCoreTests)
                 [builder setMethod:HTTPMethodPOST];
                 [builder setHeaders:headers];
                 [builder setPayload:payload];
-            }];
+            }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
             NSURLRequest *request = [NSURLRequest requestWithRequestModel:model
                                                         additionalHeaders:additionalHeaders];
@@ -78,7 +80,7 @@ SPEC_BEGIN(NSURLRequestCoreTests)
                 [builder setUrl:url];
                 [builder setMethod:HTTPMethodPOST];
                 [builder setPayload:payload];
-            }];
+            }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
             NSURLRequest *request = [NSURLRequest requestWithRequestModel:model
                                                         additionalHeaders:additionalHeaders];
@@ -103,7 +105,7 @@ SPEC_BEGIN(NSURLRequestCoreTests)
                 [builder setUrl:url];
                 [builder setMethod:HTTPMethodPOST];
                 [builder setPayload:payload];
-            }];
+            }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
             NSURLRequest *request = [NSURLRequest requestWithRequestModel:model
                                                         additionalHeaders:nil];
@@ -130,7 +132,7 @@ SPEC_BEGIN(NSURLRequestCoreTests)
                 [builder setUrl:url];
                 [builder setMethod:HTTPMethodPOST];
                 [builder setPayload:payload];
-            }];
+            }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
             NSURLRequest *request = [NSURLRequest requestWithRequestModel:model];
 

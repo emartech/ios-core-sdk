@@ -16,6 +16,8 @@
 #import "EMSRESTClient.h"
 #import "EMSDefaultWorker+Private.h"
 #import "EMSRequestManager+Private.h"
+#import "EMSTimestampProvider.h"
+#import "EMSUUIDProvider.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
@@ -67,15 +69,15 @@ SPEC_BEGIN(OfflineTests)
                 EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.google.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.yahoo.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.wolframalpha.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
                 __block NSString *checkableRequestId1;
                 __block NSString *checkableRequestId2;
@@ -106,15 +108,15 @@ SPEC_BEGIN(OfflineTests)
                 EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.google.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.yahoo.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.wolframalpha.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
                 NSOperationQueue *operationQueue = testQueue();
                 FakeConnectionWatchdog *watchdog = [[FakeConnectionWatchdog alloc] initWithOperationQueue:operationQueue
@@ -137,15 +139,15 @@ SPEC_BEGIN(OfflineTests)
                 EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.google.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.yahoo.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.wolframalpha.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 NSOperationQueue *operationQueue = testQueue();
                 FakeConnectionWatchdog *watchdog = [[FakeConnectionWatchdog alloc] initWithOperationQueue:operationQueue
                                                                                       connectionResponses:@[@YES, @YES, @NO]];
@@ -168,15 +170,15 @@ SPEC_BEGIN(OfflineTests)
                 EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.google.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:[NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", @"/error500"]];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.wolframalpha.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
                 NSOperationQueue *operationQueue = testQueue();
                 FakeConnectionWatchdog *watchdog = [[FakeConnectionWatchdog alloc] initWithOperationQueue:operationQueue
@@ -199,15 +201,15 @@ SPEC_BEGIN(OfflineTests)
                 EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.google.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://alma.korte.szilva/egyeb/palinkagyumolcsok"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.wolframalpha.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
                 NSOperationQueue *operationQueue = testQueue();
                 operationQueue.maxConcurrentOperationCount = 1;
@@ -231,15 +233,15 @@ SPEC_BEGIN(OfflineTests)
                 EMSRequestModel *model1 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.google.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:[NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", @"/408"]];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:@"https://www.wolframalpha.com"];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
                 NSOperationQueue *operationQueue = testQueue();
                 FakeConnectionWatchdog *watchdog = [[FakeConnectionWatchdog alloc] initWithOperationQueue:operationQueue

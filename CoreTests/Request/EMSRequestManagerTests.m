@@ -11,6 +11,8 @@
 #import "EMSRequestModelRepository.h"
 #import "FakeLogRepository.h"
 #import "EMSReachability.h"
+#import "EMSTimestampProvider.h"
+#import "EMSUUIDProvider.h"
 
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
@@ -42,7 +44,7 @@ SPEC_BEGIN(EMSRequestManagerTests)
                 EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:url];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
                 __block NSString *checkableRequestId;
 
@@ -64,7 +66,7 @@ SPEC_BEGIN(EMSRequestManagerTests)
                 EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                     [builder setUrl:url];
                     [builder setMethod:HTTPMethodGET];
-                }];
+                }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
                 __block NSString *checkableRequestId;
                 __block NSError *checkableError;
@@ -145,7 +147,7 @@ SPEC_BEGIN(EMSRequestManagerTests)
                     EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                         [builder setUrl:@"https://ems-denna.herokuapp.com/echo"];
                         [builder setMethod:HTTPMethodGET];
-                    }];
+                    }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                     [requestManager submit:model];
                 }
 

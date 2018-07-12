@@ -13,6 +13,7 @@
 #import "FakeLogRepository.h"
 #import "EMSTimestampProvider.h"
 #import "FakeTimeStampProvider.h"
+#import "EMSUUIDProvider.h"
 
 SPEC_BEGIN(EMSRESTClientTests)
 
@@ -26,7 +27,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                 [builder setUrl:url];
                 [builder setMethod:HTTPMethodPOST];
                 [builder setPayload:payload];
-            }];
+            }                     timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
         };
 
         id (^compositeRequestModel)(NSString *url, NSDictionary *payload, NSArray<EMSRequestModel *> *originals) = ^id(NSString *url, NSDictionary *payload, NSArray<EMSRequestModel *> *originals) {
@@ -34,7 +35,7 @@ SPEC_BEGIN(EMSRESTClientTests)
                 [builder setUrl:url];
                 [builder setMethod:HTTPMethodPOST];
                 [builder setPayload:payload];
-            }];
+            }                                                         timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
             model.originalRequests = originals;
 
             return model;

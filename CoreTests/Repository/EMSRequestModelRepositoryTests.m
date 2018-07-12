@@ -12,6 +12,8 @@
 #import "EMSRequestModelSelectAllSpecification.h"
 #import "EMSRequestModelDeleteByIdsSpecification.h"
 #import "EMSCompositeRequestModel.h"
+#import "EMSTimestampProvider.h"
+#import "EMSUUIDProvider.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
@@ -39,7 +41,7 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
             [builder setUrl:url];
             [builder setMethod:HTTPMethodPOST];
             [builder setPayload:payload];
-        }];
+        }                     timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
     };
 
     id (^requestModelWithTTL)(NSString *url, NSTimeInterval ttl) = ^id(NSString *url, NSTimeInterval ttl) {
@@ -47,7 +49,7 @@ SPEC_BEGIN(EMSRequestModelRepositoryTests)
             [builder setUrl:url];
             [builder setMethod:HTTPMethodGET];
             [builder setExpiry:ttl];
-        }];
+        }                     timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
     };
 
     describe(@"query", ^{

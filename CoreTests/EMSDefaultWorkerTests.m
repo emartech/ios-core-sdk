@@ -13,6 +13,8 @@
 #import "EMSRequestModelRepository.h"
 #import "EMSRequestModelSelectAllSpecification.h"
 #import "FakeLogRepository.h"
+#import "EMSTimestampProvider.h"
+#import "EMSUUIDProvider.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
@@ -121,7 +123,7 @@ SPEC_BEGIN(EMSDefaultWorkerTests)
                     if (expired) {
                         [builder setExpiry:-1];
                     }
-                }];
+                }                     timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
             };
 
             it(@"should lock", ^{

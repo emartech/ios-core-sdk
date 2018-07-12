@@ -5,6 +5,8 @@
 #import <Foundation/Foundation.h>
 
 @class EMSRequestModelBuilder;
+@class EMSTimestampProvider;
+@class EMSUUIDProvider;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef void(^EMSRequestBuilderBlock)(EMSRequestModelBuilder *builder);
 
-+ (instancetype)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock;
++ (instancetype)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock
+              timestampProvider:(EMSTimestampProvider *)timestampProvider
+                   uuidProvider:(EMSUUIDProvider *)uuidProvider;
 
 - (instancetype)initWithRequestId:(NSString *)requestId
                         timestamp:(NSDate *)timestamp

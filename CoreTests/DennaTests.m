@@ -10,6 +10,8 @@
 #import "NSDictionary+EMSCore.h"
 #import "EMSSQLiteHelper.h"
 #import "EMSRequestModelRepository.h"
+#import "EMSTimestampProvider.h"
+#import "EMSUUIDProvider.h"
 
 #define DennaUrl(ending) [NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", ending];
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
@@ -64,7 +66,7 @@ SPEC_BEGIN(DennaTest)
             EMSRequestModel *model = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
                 [builder setUrl:error500];
                 [builder setMethod:HTTPMethodGET];
-            }];
+            }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
 
             __block NSString *checkableRequestId;
 
@@ -86,7 +88,7 @@ SPEC_BEGIN(DennaTest)
                 [builder setUrl:echo];
                 [builder setMethod:HTTPMethodGET];
                 [builder setHeaders:inputHeaders];
-            }];
+            }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
             shouldEventuallySucceed(model, @"GET", inputHeaders, nil);
         });
 
@@ -96,7 +98,7 @@ SPEC_BEGIN(DennaTest)
                 [builder setMethod:HTTPMethodPOST];
                 [builder setHeaders:inputHeaders];
                 [builder setPayload:payload];
-            }];
+            }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
             shouldEventuallySucceed(model, @"POST", inputHeaders, payload);
         });
 
@@ -105,7 +107,7 @@ SPEC_BEGIN(DennaTest)
                 [builder setUrl:echo];
                 [builder setMethod:HTTPMethodDELETE];
                 [builder setHeaders:inputHeaders];
-            }];
+            }                                       timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
             shouldEventuallySucceed(model, @"DELETE", inputHeaders, nil);
         });
 

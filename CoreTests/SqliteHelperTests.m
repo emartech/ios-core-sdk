@@ -9,6 +9,8 @@
 #import "EMSRequestModelBuilder.h"
 #import "EMSRequestContract.h"
 #import "EMSRequestModelMapper.h"
+#import "EMSTimestampProvider.h"
+#import "EMSUUIDProvider.h"
 
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 
@@ -32,7 +34,7 @@ SPEC_BEGIN(SQLiteHelperTests)
             [builder setMethod:HTTPMethodPOST];
             [builder setPayload:payload];
             [builder setHeaders:@{@"headerKey": @"headerValue"}];
-        }];
+        }                     timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
     };
 
     void (^runCommandOnTestDB)(NSString *sql) = ^(NSString *sql) {

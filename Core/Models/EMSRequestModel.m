@@ -10,10 +10,14 @@
 
 @implementation EMSRequestModel
 
-+ (nonnull instancetype)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock {
++ (instancetype)makeWithBuilder:(EMSRequestBuilderBlock)builderBlock
+              timestampProvider:(EMSTimestampProvider *)timestampProvider
+                   uuidProvider:(EMSUUIDProvider *)uuidProvider {
+    NSParameterAssert(timestampProvider);
+    NSParameterAssert(uuidProvider);
     NSParameterAssert(builderBlock);
-    EMSRequestModelBuilder *builder = [[EMSRequestModelBuilder alloc] initWithTimestampProvider:[EMSTimestampProvider new]
-                                                                                   uuidProvider:[EMSUUIDProvider new]];
+    EMSRequestModelBuilder *builder = [[EMSRequestModelBuilder alloc] initWithTimestampProvider:timestampProvider
+                                                                                   uuidProvider:uuidProvider];
     builderBlock(builder);
     NSParameterAssert(builder.requestUrl);
     return [[self alloc] initWithBuilder:builder];
