@@ -6,6 +6,7 @@
 #import <sys/utsname.h>
 #import <UIKit/UIKit.h>
 #import <AdSupport/AdSupport.h>
+#import <UserNotifications/UserNotifications.h>
 
 @implementation EMSDeviceInfo
 
@@ -62,6 +63,97 @@
     }
 
     return hardwareId;
+}
+
+
++ (NSDictionary *)pushSettings {
+    NSMutableDictionary *pushSettings = [NSMutableDictionary dictionary];
+    if (@available(iOS 11.0, *)) {
+        __weak typeof(self) weakSelf = self;
+        [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings) {
+            pushSettings[@"authorizationStatus"] = [weakSelf authorizationStatusStringRepresentation:settings.authorizationStatus];
+            pushSettings[@"soundSetting"] = [weakSelf notificationSettingStringRepresentation:settings.soundSetting];
+            pushSettings[@"badgeSetting"] = [weakSelf notificationSettingStringRepresentation:settings.badgeSetting];
+            pushSettings[@"alertSetting"] = [weakSelf notificationSettingStringRepresentation:settings.alertSetting];
+            pushSettings[@"notificationCenterSetting"] = [weakSelf notificationSettingStringRepresentation:settings.notificationCenterSetting];
+            pushSettings[@"lockScreenSetting"] = [weakSelf notificationSettingStringRepresentation:settings.lockScreenSetting];
+            pushSettings[@"carPlaySetting"] = [weakSelf notificationSettingStringRepresentation:settings.carPlaySetting];
+            pushSettings[@"alertStyle"] = [weakSelf alertStyleStringRepresentation:settings.alertStyle];
+            pushSettings[@"showPreviewsSetting"] = [weakSelf showPreviewsSettingStringRepresentation:settings.showPreviewsSetting];
+            if (@available(iOS 12.0, *)) {
+                pushSettings[@"criticalAlertSetting"] = [weakSelf notificationSettingStringRepresentation:settings.criticalAlertSetting];
+                pushSettings[@"providesAppNotificationSettings"] = @(settings.providesAppNotificationSettings);
+            }
+        }];
+    }
+    return pushSettings;
+}
+
++ (NSString *)showPreviewsSettingStringRepresentation:(UNShowPreviewsSetting)setting {
+    NSString *result = @"never";
+    switch (setting) {
+        case UNShowPreviewsSettingNever:
+            result = @"never";
+            break;
+        case UNShowPreviewsSettingWhenAuthenticated:
+            result = @"whenAuthenticated";
+            break;
+        case UNShowPreviewsSettingAlways:
+            result = @"always";
+            break;
+    }
+    return result;
+}
+
++ (NSString *)alertStyleStringRepresentation:(UNAlertStyle)setting {
+    NSString *alertStyle = @"none";
+    switch (setting) {
+        case UNAlertStyleAlert:
+            alertStyle = @"alert";
+            break;
+        case UNAlertStyleBanner:
+            alertStyle = @"banner";
+            break;
+        case UNAlertStyleNone:
+            alertStyle = @"none";
+            break;
+    }
+    return alertStyle;
+}
+
++ (NSString *)notificationSettingStringRepresentation:(UNNotificationSetting)setting {
+    NSString *notificationSetting = @"notSupported";
+    switch (setting) {
+        case UNNotificationSettingEnabled:
+            notificationSetting = @"enabled";
+            break;
+        case UNNotificationSettingDisabled:
+            notificationSetting = @"disabled";
+            break;
+        case UNNotificationSettingNotSupported:
+            notificationSetting = @"notSupported";
+            break;
+    }
+    return notificationSetting;
+}
+
++ (NSString *)authorizationStatusStringRepresentation:(UNAuthorizationStatus)status {
+    NSString *authorizationStatus = @"notDetermined";
+    switch (status) {
+        case UNAuthorizationStatusAuthorized:
+            authorizationStatus = @"authorized";
+            break;
+        case UNAuthorizationStatusDenied:
+            authorizationStatus = @"denied";
+            break;
+        case UNAuthorizationStatusProvisional:
+            authorizationStatus = @"provisional";
+            break;
+        case UNAuthorizationStatusNotDetermined:
+            authorizationStatus = @"notDetermined";
+            break;
+    }
+    return authorizationStatus;
 }
 
 + (NSString *)getNewHardwareId {

@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)osVersion;
 + (NSString *)hardwareId;
 
++ (NSDictionary *)pushSettings;
+
 @end
 
 NS_ASSUME_NONNULL_END
