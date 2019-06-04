@@ -88,7 +88,7 @@
             }
             dispatch_group_leave(dispatchGroup);
         }];
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
+        dispatch_group_wait(dispatchGroup, dispatch_time(DISPATCH_TIME_NOW, (int64_t) (5.0 * NSEC_PER_SEC)));
     }
     return pushSettings;
 }
