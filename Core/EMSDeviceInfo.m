@@ -73,18 +73,18 @@
         dispatch_group_t dispatchGroup = dispatch_group_create();
         dispatch_group_enter(dispatchGroup);
         [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings) {
-            pushSettings[@"authorizationStatus"] = [weakSelf authorizationStatusStringRepresentation:settings.authorizationStatus];
-            pushSettings[@"soundSetting"] = [weakSelf notificationSettingStringRepresentation:settings.soundSetting];
-            pushSettings[@"badgeSetting"] = [weakSelf notificationSettingStringRepresentation:settings.badgeSetting];
-            pushSettings[@"alertSetting"] = [weakSelf notificationSettingStringRepresentation:settings.alertSetting];
-            pushSettings[@"notificationCenterSetting"] = [weakSelf notificationSettingStringRepresentation:settings.notificationCenterSetting];
-            pushSettings[@"lockScreenSetting"] = [weakSelf notificationSettingStringRepresentation:settings.lockScreenSetting];
-            pushSettings[@"carPlaySetting"] = [weakSelf notificationSettingStringRepresentation:settings.carPlaySetting];
-            pushSettings[@"alertStyle"] = [weakSelf alertStyleStringRepresentation:settings.alertStyle];
-            pushSettings[@"showPreviewsSetting"] = [weakSelf showPreviewsSettingStringRepresentation:settings.showPreviewsSetting];
+            pushSettings[@"authorization_status"] = [weakSelf authorizationStatusStringRepresentation:settings.authorizationStatus];
+            pushSettings[@"sound_setting"] = [weakSelf notificationSettingStringRepresentation:settings.soundSetting];
+            pushSettings[@"badge_setting"] = [weakSelf notificationSettingStringRepresentation:settings.badgeSetting];
+            pushSettings[@"alert_setting"] = [weakSelf notificationSettingStringRepresentation:settings.alertSetting];
+            pushSettings[@"notification_center_setting"] = [weakSelf notificationSettingStringRepresentation:settings.notificationCenterSetting];
+            pushSettings[@"lock_screen_setting"] = [weakSelf notificationSettingStringRepresentation:settings.lockScreenSetting];
+            pushSettings[@"car_play_setting"] = [weakSelf notificationSettingStringRepresentation:settings.carPlaySetting];
+            pushSettings[@"alert_style"] = [weakSelf alertStyleStringRepresentation:settings.alertStyle];
+            pushSettings[@"show_previews_setting"] = [weakSelf showPreviewsSettingStringRepresentation:settings.showPreviewsSetting];
             if (@available(iOS 12.0, *)) {
-                pushSettings[@"criticalAlertSetting"] = [weakSelf notificationSettingStringRepresentation:settings.criticalAlertSetting];
-                pushSettings[@"providesAppNotificationSettings"] = @(settings.providesAppNotificationSettings);
+                pushSettings[@"critical_alert_setting"] = [weakSelf notificationSettingStringRepresentation:settings.criticalAlertSetting];
+                pushSettings[@"provides_app_notification_settings"] = @(settings.providesAppNotificationSettings);
             }
             dispatch_group_leave(dispatchGroup);
         }];
