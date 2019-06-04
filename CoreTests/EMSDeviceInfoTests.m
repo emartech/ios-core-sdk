@@ -3,6 +3,7 @@
 //
 
 #import "Kiwi.h"
+#import <OCMock/OCMock.h>
 #import <UserNotifications/UNNotificationSettings.h>
 #import "EMSDeviceInfo.h"
 #import <AdSupport/AdSupport.h>
@@ -87,21 +88,18 @@ SPEC_BEGIN(EMSDeviceInfoTests)
             describe(@"pushSettings", ^{
 
                 NSDictionary *(^setupNotificationSetting)(SEL sel, NSInteger returnValue) = ^NSDictionary *(SEL sel, NSInteger returnValue) {
-                    UNUserNotificationCenter *mockCenter = [UNUserNotificationCenter mock];
-                    [UNUserNotificationCenter stub:@selector(currentNotificationCenter) andReturn:mockCenter];
-                    KWCaptureSpy *spy = [mockCenter captureArgument:@selector(getNotificationSettingsWithCompletionHandler:)
-                                                            atIndex:0];
-
-                    NSDictionary *result = [EMSDeviceInfo pushSettings];
-
-                    void (^notificationSettingsBlock)(UNNotificationSettings *notificationSetting) = spy.argument;
-
-
                     UNNotificationSettings *mockNotificationSetting = [UNNotificationSettings nullMock];
                     [mockNotificationSetting stub:sel
                                         andReturn:theValue(returnValue)];
 
-                    notificationSettingsBlock(mockNotificationSetting);
+                    id mockCenter = OCMClassMock([UNUserNotificationCenter class]);
+
+                    OCMStub(ClassMethod([mockCenter currentNotificationCenter])).andReturn(mockCenter);
+
+                    OCMStub([mockCenter getNotificationSettingsWithCompletionHandler:[OCMArg invokeBlockWithArgs:mockNotificationSetting]]);
+
+                    NSDictionary *result = [EMSDeviceInfo pushSettings];
+
                     return result;
                 };
 
