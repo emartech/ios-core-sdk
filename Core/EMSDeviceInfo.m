@@ -5,8 +5,8 @@
 #import "EMSDeviceInfo.h"
 #import <sys/utsname.h>
 #import <UIKit/UIKit.h>
-#import <AdSupport/AdSupport.h>
 #import <UserNotifications/UserNotifications.h>
+#import "EMSUUIDProvider.h"
 
 @implementation EMSDeviceInfo
 
@@ -161,11 +161,7 @@
 }
 
 + (NSString *)getNewHardwareId {
-    if ([[ASIdentifierManager sharedManager] isAdvertisingTrackingEnabled]) {
-        return [[[ASIdentifierManager sharedManager] advertisingIdentifier]
-            UUIDString];
-    }
-    return [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    return [[[EMSUUIDProvider new] provideUUID] UUIDString];
 }
 
 @end

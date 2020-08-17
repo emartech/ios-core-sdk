@@ -13,7 +13,7 @@
 #import "EMSTimestampProvider.h"
 #import "EMSUUIDProvider.h"
 
-#define DennaUrl(ending) [NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", ending];
+#define DennaUrl(ending) [NSString stringWithFormat:@"https://denna.gservice.emarsys.net%@", ending];
 #define TEST_DB_PATH [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"TestDB.db"]
 #define DB_PATH [[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"EMSSQLiteQueueDB.db"]
 
@@ -21,7 +21,7 @@ SPEC_BEGIN(DennaTest)
 
     NSString *error500 = DennaUrl(@"/error500");
     NSString *echo = DennaUrl(@"/echo");
-    NSDictionary *inputHeaders = @{@"Header1": @"value1", @"Header2": @"value2"};
+    NSDictionary *inputHeaders = @{@"header1": @"value1", @"header2": @"value2"};
     NSDictionary *payload = @{@"key1": @"val1", @"key2": @"val2", @"key3": @"val3"};
 
     void (^shouldEventuallySucceed)(EMSRequestModel *model, NSString *method, NSDictionary<NSString *, NSString *> *headers, NSDictionary<NSString *, id> *body) = ^(EMSRequestModel *model, NSString *method, NSDictionary<NSString *, NSString *> *headers, NSDictionary<NSString *, id> *body) {

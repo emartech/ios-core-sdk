@@ -172,7 +172,7 @@ SPEC_BEGIN(OfflineTests)
                     [builder setMethod:HTTPMethodGET];
                 }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                    [builder setUrl:[NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", @"/error500"]];
+                    [builder setUrl:[NSString stringWithFormat:@"https://denna.gservice.emarsys.net%@", @"/error500"]];
                     [builder setMethod:HTTPMethodGET];
                 }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
@@ -235,7 +235,7 @@ SPEC_BEGIN(OfflineTests)
                     [builder setMethod:HTTPMethodGET];
                 }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model2 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
-                    [builder setUrl:[NSString stringWithFormat:@"https://ems-denna.herokuapp.com%@", @"/408"]];
+                    [builder setUrl:[NSString stringWithFormat:@"https://denna.gservice.emarsys.net%@", @"/408"]];
                     [builder setMethod:HTTPMethodGET];
                 }                                        timestampProvider:[EMSTimestampProvider new] uuidProvider:[EMSUUIDProvider new]];
                 EMSRequestModel *model3 = [EMSRequestModel makeWithBuilder:^(EMSRequestModelBuilder *builder) {
