@@ -37,7 +37,7 @@
 }
 
 - (BOOL)isConnected {
-    int state = [self connectionState];
+    NSInteger state = [self connectionState];
     BOOL result = state == ReachableViaWiFi || state == ReachableViaWWAN;
     [EMSLogger logWithTopic:EMSCoreTopic.connectivityTopic
                     message:[NSString stringWithFormat:@"Connected to network: %@", result ? @"Connected" : @"Not connected"]];

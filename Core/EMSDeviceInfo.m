@@ -8,6 +8,8 @@
 #import <UserNotifications/UserNotifications.h>
 #import "EMSUUIDProvider.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
 @implementation EMSDeviceInfo
 
 #define kHardwareIdKey @"kHardwareIdKey"
@@ -73,6 +75,7 @@
         dispatch_group_t dispatchGroup = dispatch_group_create();
         dispatch_group_enter(dispatchGroup);
         [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings *settings) {
+
             pushSettings[@"authorization_status"] = [weakSelf authorizationStatusStringRepresentation:settings.authorizationStatus];
             pushSettings[@"sound_setting"] = [weakSelf notificationSettingStringRepresentation:settings.soundSetting];
             pushSettings[@"badge_setting"] = [weakSelf notificationSettingStringRepresentation:settings.badgeSetting];
@@ -165,3 +168,5 @@
 }
 
 @end
+
+#pragma clang diagnostic pop
